@@ -1,3 +1,6 @@
+import { Secret } from "jsonwebtoken";
+import config from "../../../config";
+import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import prisma from "../../../shared/prisma"
 import ApiError from "../../errors/ApiError"
 import bcrypt, { hash } from "bcrypt";
@@ -69,15 +72,35 @@ const login = async (payload: TLogin) => {
   // check whether password correct
   // generate access and refresh token 
   // return data
+  const { email, password} =  payload
 
-  const userData = await prisma.user.findUniqueOrThrow({
-    where: { email: payload.email}, include: {
+  const user = await prisma.user.findUnique({
+    where: { email}, include: {
       vendor: true,
       customer: true,
     },
   })
 
-  console.log(userData)
+  if(!user) throw new ApiError(404, "User Not Found")
+
+  const isPasswordValid = await bcrypt.compare(password, user.password)
+
+  if(!isPasswordValid) throw new ApiError(401, "Invalid Credentials.")
+
+  if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
+
+
+  if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
+
+  const { password: _, ...userWithoutPassword} = user
+
+  const accessToken = jwtHelpers.generateToken(userWithoutPassword, config.jwt.jwt_secret as Secret, config.jwt.expires_in as string)
+  
+  const refreshToken = jwtHelpers.generateToken(userWithoutPassword, config.jwt.refresh_token_secret as Secret, config.jwt.refresh_token_expires_in as string)
+
+  return {
+    accessToken, refreshToken, userWithoutPassword
+  }
 
 }
 const changePassword = async () => {
