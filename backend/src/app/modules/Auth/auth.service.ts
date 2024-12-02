@@ -1,5 +1,13 @@
 
-const register = async () => {
+type TRegister = {
+  name: string,
+  email: string,
+  password: string,
+  role: string
+}
+
+const register = async (payload: TRegister) => {
+  console.log('in service payload', payload)
   
 }
 const login = async () => {
