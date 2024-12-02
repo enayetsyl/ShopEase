@@ -20,3 +20,17 @@ Frontend route
 Frontend component group
 Frontend shared component
 Pages develop and integration with be
+
+Route Planning
+
+User
+  <!-- get all (get)
+  get single (get) -->
+  update profile (patch)
+
+Auth
+  login (post)
+  register(post)
+  change-password(post)
+  reset-password(post)
+  
