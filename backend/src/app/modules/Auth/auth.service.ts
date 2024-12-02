@@ -3,7 +3,7 @@ import config from "../../../config";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import prisma from "../../../shared/prisma"
 import ApiError from "../../errors/ApiError"
-import bcrypt, { hash } from "bcrypt";
+import bcrypt from "bcrypt";
 type TRegister = {
   name: string,
   email: string,
@@ -13,6 +13,10 @@ type TRegister = {
 type TLogin = {
   email: string,
   password: string,
+}
+type TChangePassword = {
+  oldPassword: string,
+  newPassword: string,
 }
 
 const register = async (payload: TRegister) => {
@@ -103,7 +107,40 @@ const login = async (payload: TLogin) => {
   }
 
 }
-const changePassword = async () => {
+const changePassword = async (user: any, payload: TChangePassword) => {
+  // find user
+  // check old password
+  // hash new password
+  // update new password
+  const { newPassword, oldPassword} =  payload
+  const { id, email } = user;
+
+  console.log('user', user)
+  console.log('payload', payload)
+
+  const userData = await prisma.user.findUnique({
+    where: { email}
+  })
+
+  if(!userData) throw new ApiError(404, "User Not Found")
+
+  const isPasswordValid = await bcrypt.compare(oldPassword, userData.password)
+
+  if(!isPasswordValid) throw new ApiError(401, "Invalid Credentials.")
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+
+
+  await prisma.user.update({
+    where: {email: userData.email},
+    data: {
+      password: hashedPassword,
+
+    }
+  })
+
+  return
 
 }
 const resetPassword = async () => {
