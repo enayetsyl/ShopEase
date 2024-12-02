@@ -14,7 +14,22 @@ const register  = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const login  = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthServices.login(req.body)
 
+  // const { refreshToken } = result;
+
+  // res.cookie('refreshToken', refreshToken, {
+  //     secure: false,
+  //     httpOnly: true
+  // });
+
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User Successfully logged in.",
+    data: result
+  })
 })
 const changePassword  = catchAsync(async (req: Request, res: Response) => {
 
