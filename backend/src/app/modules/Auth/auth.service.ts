@@ -1,10 +1,11 @@
 import prisma from "../../../shared/prisma"
-
+import ApiError from "../../errors/ApiError"
+import bcrypt, { hash } from "bcrypt";
 type TRegister = {
   name: string,
   email: string,
   password: string,
-  role: string
+  role: "CUSTOMER" | "VENDOR"
 }
 
 const register = async (payload: TRegister) => {
@@ -21,11 +22,21 @@ const register = async (payload: TRegister) => {
 })
 
 if(existingUser){
-  
+  throw new ApiError(400, "User with this email already exists" )
 }
 
+const hashedPassword = await bcrypt.hash(password, 10)
 
-  
+const newUser = await prisma.user.create({
+  data: {
+    name, email, password: hashedPassword, role
+  }
+})
+
+const {password: _, ...userWithoutPassword} = newUser
+
+return userWithoutPassword
+
 }
 const login = async () => {
 
