@@ -1,3 +1,4 @@
+import prisma from "../../../shared/prisma"
 
 type TRegister = {
   name: string,
@@ -7,7 +8,23 @@ type TRegister = {
 }
 
 const register = async (payload: TRegister) => {
+  // Check user exist with email
+  // hash password
+  // save user
   console.log('in service payload', payload)
+  const { name, email, password, role} = payload
+
+  const existingUser = await prisma.user.findUnique({
+    where:{
+      email
+    }
+})
+
+if(existingUser){
+  
+}
+
+
   
 }
 const login = async () => {
