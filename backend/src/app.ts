@@ -1,9 +1,10 @@
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+require('dotenv').config();
 // import router from './app/routes';
 // import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import cookieParser from 'cookie-parser';
-
+console.log(process.env.DATABASE_URL)
 
 const app: Application = express();
 app.use(cors());
