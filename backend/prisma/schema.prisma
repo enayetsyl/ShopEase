@@ -48,6 +48,7 @@ model Vendor {
   follows      Follow[]
   orders       Order[]
   products     Product[]
+  shop         Shop?
   user         User      @relation(fields: [email], references: [email])
 
   @@map("vendors")
@@ -71,6 +72,24 @@ model Customer {
   @@map("customers")
 }
 
+model Shop {
+  id String @id @default(uuid())
+  name String
+  description String?
+  logo String?
+  vendorId String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+  isBlackListed Boolean @default(false)
+
+  vendor Vendor @relation(fields:[vendorId], references: [id])
+  products  Product[]
+
+  @@map("shops")
+
+}
+
 model Product {
   id          String      @id @default(uuid())
   name        String
@@ -81,6 +100,7 @@ model Product {
   inventory   Int
   image       String[]
   vendorId    String
+  shopId    String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   deletedAt   DateTime?
@@ -90,6 +110,7 @@ model Product {
   vendor      Vendor      @relation(fields: [vendorId], references: [id])
   reviews     Review[]
   orders      Order[]     @relation("OrderToProduct")
+  shop    Shop @relation(fields:[shopId], references:[id])
 
   @@map("products")
 }
