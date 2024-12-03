@@ -15,7 +15,7 @@ const getAllUser = async (
   params: TAdminFilterRequest,
   options: TPaginationOptions
 ) => {
-  // create search and filter condition 
+  // create search and filter condition
   // get user data
   // get meta data
   const { page, limit, skip } = paginationHelper.calculatePagination(options);
@@ -103,7 +103,7 @@ const updateUserIntoDB = async (
   // update data in the user collection
   // response
 
-  const {  isSuspended } = payload;
+  const { isSuspended } = payload;
 
   const user = await prisma.user.findUnique({
     where: { id },
@@ -129,31 +129,79 @@ const updateUserIntoDB = async (
   )
     throw new ApiError(403, "Customer account is suspended or deleted. ");
 
-      if (role === "VENDOR") {
-       
-          await prisma.vendor.update({
-            where: { id: vendor!.id },
-            data: { isSuspended },
-          });
-        }
-      
-      else if (role === "CUSTOMER") {
-        
-          await prisma.customer.update({
-            where: { id: customer!.id },
-            data: { isSuspended },
-          });
-        }
+  if (role === "VENDOR") {
+    await prisma.vendor.update({
+      where: { id: vendor!.id },
+      data: { isSuspended },
+    });
+  } else if (role === "CUSTOMER") {
+    await prisma.customer.update({
+      where: { id: customer!.id },
+      data: { isSuspended },
+    });
+  }
 
-  
-    return { message: "User updated successfully." };
-
+  return 
 };
 
-const blacklistVendor = async (id: string, payload:{isBlacklisted : boolean}) => {};
+const blacklistVendor = async (
+  id: string,
+  payload: { isBlacklisted: boolean }
+) => {};
 
 const deleteUserFromDB = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    include: {
+      vendor: true,
+      customer: true,
+    },
+  });
 
+  if (!user) throw new ApiError(404, "User Not Found");
+
+  const { role, vendor, customer } = user;
+
+  if (
+    user.role === "VENDOR" &&
+    (user.vendor?.isDeleted || user.vendor?.isSuspended)
+  )
+    throw new ApiError(403, "Vendor account is suspended or deleted. ");
+
+  if (
+    user.role === "CUSTOMER" &&
+    (user.customer?.isDeleted || user.customer?.isSuspended)
+  )
+    throw new ApiError(403, "Customer account is suspended or deleted. ");
+
+  // Perform the updates in a transaction
+  await prisma.$transaction(async (tx) => {
+    if (role === "VENDOR") {
+      await tx.vendor.update({
+        where: { id: vendor!.id },
+        data: { isDeleted: true },
+      });
+
+      // Update the user record's deletedAt field
+
+      await tx.user.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+      });
+    } else if (role === "CUSTOMER") {
+      await tx.customer.update({
+        where: { id: customer!.id },
+        data: { isDeleted: true },
+      });
+
+      await tx.user.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+      });
+    }
+  });
+
+  return
 };
 
 export const AdminServices = {

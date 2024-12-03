@@ -42,7 +42,6 @@ Admin (5)
   delete user (/admin/users/:id)(delete)
   blacklist vendor (/admin/vendor/:vendorId/blacklist)(patch){  "isBlacklisted": true/ false}
 
-
 Category (5)
   get all categories (/admin/categories)(get)
   get single category (/admin/categories/:id)(get)

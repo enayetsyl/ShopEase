@@ -57,13 +57,13 @@ const blacklistVendor  = catchAsync(async (req: Request, res: Response) => {
 
 const { vendorId } = req.params;
 
-const result = await AdminServices.blacklistVendor(vendorId, req.body)
+ await AdminServices.blacklistVendor(vendorId, req.body)
 
 sendResponse(res,{
     statusCode: 200,
     success: true,
     message: "Vendor blacklisted successfully",
-    data: result
+    data: null
   })
 
 })
@@ -72,13 +72,13 @@ sendResponse(res,{
 const deleteUserFromDB  = catchAsync(async (req: Request, res: Response) => {
 const { userId } = req.params;
 
-const result = await AdminServices.deleteUserFromDB(userId)
+await AdminServices.deleteUserFromDB(userId)
 
 sendResponse(res,{
     statusCode: 200,
     success: true,
     message: "User successfully deleted",
-    data: result
+    data: null
   })
 
 })
