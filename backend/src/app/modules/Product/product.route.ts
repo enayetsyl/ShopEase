@@ -22,7 +22,13 @@ router.get("/",   ProductController.getAllProducts)
 
 router.get("/:productId",   ProductController.getAProduct)
 
-router.patch("/:productId", auth(UserRole.VENDOR), validateRequest(productValidation.updateProduct), ProductController.updateAProduct)
+router.patch("/:productId", auth(UserRole.VENDOR),
+fileUploader.upload.array("images", 10), 
+(req: Request, res: Response, next: NextFunction)=>{
+  // console.log('rew.file', req.file) 
+  req.body = productValidation.updateProduct.parse(JSON.parse(req.body.data))
+  return ProductController.updateAProduct(req, res, next)
+})
 
 
 export const ProductRoutes = router;

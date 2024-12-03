@@ -108,6 +108,9 @@ const getAProduct = async (id: string) => {
 };
 
 const duplicateAProduct = async (id: string) => {
+  // find existing product
+  // remove id, createdAt, updatedAt, deletedAt
+  // add the data to db
   const result = await findProductById(id);
 
   const {id: _, updatedAt: __, createdAt: ___, deletedAt: ____, ...duplicateData} = result
@@ -119,13 +122,35 @@ const duplicateAProduct = async (id: string) => {
 
 };
 
-const updateAProduct = async (
-  id: string,
-  payload: any
-) => {
-  // get category
+const updateAProduct = async ( id: string, user: any, req: Request) => {
+  // get product
   // update data
+
+  const result = await findProductById(id);
   
+  const files = req.files as TFile[];
+  let imageUrls: string[] = [];
+
+  if(files?.length > 0){
+    const uploadedFiles = await fileUploader.uploadMultipleToCloudinary(files)
+
+  imageUrls = uploadedFiles.map(file=> file.secure_url)
+  }
+
+  const updatedImages = [...result.image, ...imageUrls];
+
+  const productData = {
+    ...req.body, image: updatedImages
+  }
+
+
+  const updatedProduct = await prisma.product.update({
+    where: { id },
+    data: productData,
+  });
+
+  return updatedProduct
+
 };
 
 
