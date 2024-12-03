@@ -3,11 +3,11 @@ import { paginationHelper } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 import ApiError from "../../errors/ApiError";
 import { TPaginationOptions } from "../../types/pagination";
-import { adminSearchableFields } from "./product.constant";
-
 import { Request } from "express";
 import { TFile } from "../../types/file";
 import { fileUploader } from "../../../helpers/fileUploader";
+import { TProductFilterRequest } from "./product.type";
+import { productSearchableFields } from "./product.constant";
 
 
 
@@ -47,18 +47,18 @@ const createAProduct = async (user: any, req: Request) => {
   return product;
 };
 
-const getAllProducts = async (options: TPaginationOptions) => {
+const getAllProducts = async (params: TProductFilterRequest,options: TPaginationOptions) => {
   // create filter condition
-  // get category data
+  // get product data
   // get meta data
   const { page, limit, skip } = paginationHelper.calculatePagination(options);
   const { searchTerm, ...filterData } = params;
 
-  const andConditions: Prisma.UserWhereInput[] = [];
+  const andConditions: Prisma.ProductWhereInput[] = [];
 
   if (params.searchTerm) {
     andConditions.push({
-      OR: adminSearchableFields.map((field) => ({
+      OR: productSearchableFields.map((field) => ({
         [field]: {
           contains: params.searchTerm,
           mode: "insensitive",
@@ -77,9 +77,9 @@ const getAllProducts = async (options: TPaginationOptions) => {
     });
   }
 
-  const whereConditions: Prisma.UserWhereInput = { AND: andConditions };
+  const whereConditions: Prisma.ProductWhereInput = { AND: andConditions };
 
-  const result = await prisma.user.findMany({
+  const result = await prisma.product.findMany({
     where: whereConditions,
     skip,
     take: limit,
@@ -89,7 +89,7 @@ const getAllProducts = async (options: TPaginationOptions) => {
         : { createdAt: "desc" },
   });
 
-  const total = await prisma.user.count({
+  const total = await prisma.product.count({
     where: whereConditions,
   });
 
@@ -101,9 +101,9 @@ const getAllProducts = async (options: TPaginationOptions) => {
 };
 
 const getAProduct = async (id: string) => {
-  const result = await findCategoryById(id);
+  // const result = await findCategoryById(id);
 
-  return result;
+  // return result;
 };
 
 const duplicateAProduct = async (

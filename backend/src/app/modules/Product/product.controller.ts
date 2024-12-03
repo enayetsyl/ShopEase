@@ -3,6 +3,7 @@ import catchAsync from "../../../shared/catchAsync";
 import {  ProductServices } from "./product.service";
 import sendResponse from "../../../shared/sendResponse";
 import pick from "../../../shared/pick";
+import { productFilterableFields } from "./product.constant";
 
 const createAProduct = catchAsync(async (req: Request &{user?: any}, res: Response) => {
   const result = await ProductServices.createAProduct(req.user, req);
@@ -16,9 +17,10 @@ const createAProduct = catchAsync(async (req: Request &{user?: any}, res: Respon
 });
 
 const getAllProducts = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, productFilterableFields)
   const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
 
-  const result = await ProductServices.getAllProducts(options);
+  const result = await ProductServices.getAllProducts(filters, options);
 
   sendResponse(res, {
     statusCode: 200,

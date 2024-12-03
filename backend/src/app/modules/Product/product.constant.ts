@@ -1,2 +1,2 @@
-export const  adminFilterableFields  =  ["name", "email", "searchTerm"]
-export const  adminSearchableFields  =  ["name", "email"]
+export const  productFilterableFields  =  ["name", "price", "discount", "searchTerm"]
+export const  productSearchableFields  =  ["name", "description"]

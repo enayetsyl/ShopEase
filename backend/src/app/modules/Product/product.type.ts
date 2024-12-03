@@ -1,9 +1,11 @@
 
-export type TAdminFilterRequest = {
+export type TProductFilterRequest = {
   name?: string | undefined;
-  email?: string | undefined;
+  price?: number | undefined;
+  discount?: number | undefined;
   searchTerm?: string | undefined;
 };
+
 
 export type TCategory = {
   name: string;
