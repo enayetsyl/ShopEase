@@ -107,12 +107,18 @@ const getAProduct = async (id: string) => {
   return result;
 };
 
-const duplicateAProduct = async (
-  payload: any) => {
-  // get category
-  // update data
+const duplicateAProduct = async (id: string) => {
+  const result = await findProductById(id);
+
+  const {id: _, updatedAt: __, createdAt: ___, deletedAt: ____, ...duplicateData} = result
+
+  return await prisma.product.create({
+    data: duplicateData,
+  });
   
+
 };
+
 const updateAProduct = async (
   id: string,
   payload: any

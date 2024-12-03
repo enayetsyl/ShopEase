@@ -16,7 +16,7 @@ fileUploader.upload.array("images", 10),
   return ProductController.createAProduct(req, res, next)
 })
 
-router.post("/duplicate", auth(UserRole.VENDOR), validateRequest(productValidation.duplicateProduct), ProductController.duplicateAProduct)
+router.post("/duplicate/:productId", auth(UserRole.VENDOR), ProductController.duplicateAProduct)
 
 router.get("/",   ProductController.getAllProducts)
 

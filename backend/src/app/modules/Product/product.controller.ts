@@ -45,8 +45,9 @@ const getAProduct = catchAsync(async (req: Request, res: Response) => {
 });
 
 const duplicateAProduct = catchAsync(async (req: Request, res: Response) => {
-  
-  const result = await ProductServices.duplicateAProduct(req.body);
+  const { productId } = req.params;
+
+  const result = await ProductServices.duplicateAProduct(productId);
 
   sendResponse(res, {
     statusCode: 200,
@@ -55,6 +56,7 @@ const duplicateAProduct = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 const updateAProduct = catchAsync(async (req: Request, res: Response) => {
   const { productId } = req.params;
 
