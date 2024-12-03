@@ -4,13 +4,11 @@ import prisma from "../../../shared/prisma";
 import ApiError from "../../errors/ApiError";
 import { TPaginationOptions } from "../../types/pagination";
 import { adminSearchableFields } from "./admin.constant";
+import { checkAccountStatus, findUserById } from "../../../helpers/userHelpers";
+import { TAdminFilterRequest, TCategory } from "./admin.type";
 
-type TAdminFilterRequest = {
-  name?: string | undefined;
-  email?: string | undefined;
-  searchTerm?: string | undefined;
-};
 
+// ! User related service function
 const getAllUser = async (
   params: TAdminFilterRequest,
   options: TPaginationOptions
@@ -69,27 +67,31 @@ const getAllUser = async (
 const getUserById = async (id: string) => {
   // get user
   // send result
-  const user = await prisma.user.findUnique({
-    where: { id },
-    include: {
-      vendor: true,
-      customer: true,
-    },
-  });
 
-  if (!user) throw new ApiError(404, "User Not Found");
+  const user = await findUserById(id)
 
-  if (
-    user.role === "VENDOR" &&
-    (user.vendor?.isDeleted || user.vendor?.isSuspended)
-  )
-    throw new ApiError(403, "Vendor account is suspended or deleted. ");
+  checkAccountStatus(user)
+  // const user = await prisma.user.findUnique({
+  //   where: { id },
+  //   include: {
+  //     vendor: true,
+  //     customer: true,
+  //   },
+  // });
 
-  if (
-    user.role === "CUSTOMER" &&
-    (user.customer?.isDeleted || user.customer?.isSuspended)
-  )
-    throw new ApiError(403, "Customer account is suspended or deleted. ");
+  // if (!user) throw new ApiError(404, "User Not Found");
+
+  // if (
+  //   user.role === "VENDOR" &&
+  //   (user.vendor?.isDeleted || user.vendor?.isSuspended)
+  // )
+  //   throw new ApiError(403, "Vendor account is suspended or deleted. ");
+
+  // if (
+  //   user.role === "CUSTOMER" &&
+  //   (user.customer?.isDeleted || user.customer?.isSuspended)
+  // )
+  //   throw new ApiError(403, "Customer account is suspended or deleted. ");
 
   return user;
 };
@@ -104,30 +106,33 @@ const updateUserIntoDB = async (
   // response
 
   const { isSuspended } = payload;
+  const user = await findUserById(id)
 
-  const user = await prisma.user.findUnique({
-    where: { id },
-    include: {
-      vendor: true,
-      customer: true,
-    },
-  });
+  checkAccountStatus(user)
+  // const user = await prisma.user.findUnique({
+  //   where: { id },
+  //   include: {
+  //     vendor: true,
+  //     customer: true,
+  //   },
+  // });
 
-  if (!user) throw new ApiError(404, "User Not Found");
+  // if (!user) throw new ApiError(404, "User Not Found");
 
   const { role, vendor, customer } = user;
 
-  if (
-    user.role === "VENDOR" &&
-    (user.vendor?.isDeleted || user.vendor?.isSuspended)
-  )
-    throw new ApiError(403, "Vendor account is suspended or deleted. ");
 
-  if (
-    user.role === "CUSTOMER" &&
-    (user.customer?.isDeleted || user.customer?.isSuspended)
-  )
-    throw new ApiError(403, "Customer account is suspended or deleted. ");
+  // if (
+  //   user.role === "VENDOR" &&
+  //   (user.vendor?.isDeleted || user.vendor?.isSuspended)
+  // )
+  //   throw new ApiError(403, "Vendor account is suspended or deleted. ");
+
+  // if (
+  //   user.role === "CUSTOMER" &&
+  //   (user.customer?.isDeleted || user.customer?.isSuspended)
+  // )
+  //   throw new ApiError(403, "Customer account is suspended or deleted. ");
 
   if (role === "VENDOR") {
     await prisma.vendor.update({
@@ -144,35 +149,32 @@ const updateUserIntoDB = async (
   return 
 };
 
-const blacklistVendor = async (
-  id: string,
-  payload: { isBlacklisted: boolean }
-) => {};
-
 const deleteUserFromDB = async (id: string) => {
-  const user = await prisma.user.findUnique({
-    where: { id },
-    include: {
-      vendor: true,
-      customer: true,
-    },
-  });
+  const user = await findUserById(id)
+  checkAccountStatus(user)
+  // const user = await prisma.user.findUnique({
+  //   where: { id },
+  //   include: {
+  //     vendor: true,
+  //     customer: true,
+  //   },
+  // });
 
-  if (!user) throw new ApiError(404, "User Not Found");
+  // if (!user) throw new ApiError(404, "User Not Found");
 
   const { role, vendor, customer } = user;
 
-  if (
-    user.role === "VENDOR" &&
-    (user.vendor?.isDeleted || user.vendor?.isSuspended)
-  )
-    throw new ApiError(403, "Vendor account is suspended or deleted. ");
+  // if (
+  //   user.role === "VENDOR" &&
+  //   (user.vendor?.isDeleted || user.vendor?.isSuspended)
+  // )
+  //   throw new ApiError(403, "Vendor account is suspended or deleted. ");
 
-  if (
-    user.role === "CUSTOMER" &&
-    (user.customer?.isDeleted || user.customer?.isSuspended)
-  )
-    throw new ApiError(403, "Customer account is suspended or deleted. ");
+  // if (
+  //   user.role === "CUSTOMER" &&
+  //   (user.customer?.isDeleted || user.customer?.isSuspended)
+  // )
+  //   throw new ApiError(403, "Customer account is suspended or deleted. ");
 
   // Perform the updates in a transaction
   await prisma.$transaction(async (tx) => {
@@ -204,10 +206,57 @@ const deleteUserFromDB = async (id: string) => {
   return
 };
 
+// ! Vendor related service function
+const blacklistVendor = async (
+  id: string,
+  payload: { isBlacklisted: boolean }
+) => {};
+
+// ! Category related service function
+
+const createACategory = async (payload: TCategory) => {
+  // check whether category exist
+  // add it into db
+  const {name, description} = payload
+
+
+  const existingCategory = await prisma.category.findUnique({
+      where: { name },
+    });
+  
+    if (existingCategory) {
+      throw new ApiError(400, "Category with this name already exists.");
+    }
+  
+    // Create a new category
+    const newCategory = await prisma.category.create({
+      data: {
+        name,
+        description: description || null,
+      },
+    });
+  
+    return newCategory;
+
+};
+
+const getAllCategories = async () => {};
+
+const getACategory = async (id: string) => {};
+
+const updateACategory = async (id: string, payload:any) => {};
+
+const deleteACategory = async (id: string) => {};
+
 export const AdminServices = {
   getAllUser,
   getUserById,
   deleteUserFromDB,
   updateUserIntoDB,
   blacklistVendor,
+  createACategory,
+  getAllCategories,
+  getACategory,
+  updateACategory,
+  deleteACategory
 };

@@ -1,88 +1,144 @@
-import  {Request, Response} from "express"
-import catchAsync from "../../../shared/catchAsync"
-import { AdminServices } from "./admin.service"
-import sendResponse from "../../../shared/sendResponse"
-import pick from "../../../shared/pick"
-import { adminFilterableFields } from "./admin.constant"
+import { Request, Response } from "express";
+import catchAsync from "../../../shared/catchAsync";
+import { AdminServices } from "./admin.service";
+import sendResponse from "../../../shared/sendResponse";
+import pick from "../../../shared/pick";
+import { adminFilterableFields } from "./admin.constant";
 
-const getAllUser  = catchAsync(async (req: Request, res: Response) => {
-const filters = pick(req.query, adminFilterableFields)
-const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"])
+// ! User related controller
+const getAllUser = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, adminFilterableFields);
+  const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
 
-const result = await AdminServices.getAllUser(filters, options)
+  const result = await AdminServices.getAllUser(filters, options);
 
-sendResponse(res,{
+  sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "User data fetched successfully",
     data: result.data,
-    meta: result.meta
-  })
-})
+    meta: result.meta,
+  });
+});
 
+const getUserById = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
 
-const getUserById  = catchAsync(async (req: Request, res: Response) => {
+  const result = await AdminServices.getUserById(userId);
 
-const { userId } = req.params;
- 
-const result = await AdminServices.getUserById(userId)
-
-sendResponse(res,{
+  sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "User data fetched successfully",
-    data: result
-  })
+    data: result,
+  });
+});
 
-})
+const updateUserIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
 
+  const result = await AdminServices.updateUserIntoDB(userId, req.body);
 
-const updateUserIntoDB  = catchAsync(async (req: Request, res: Response) => {
-
-const { userId } = req.params;
-
-const result = await AdminServices.updateUserIntoDB(userId, req.body)
-
-sendResponse(res,{
+  sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "User Data Updated Successfully",
-    data: result
-  })
+    data: result,
+  });
+});
 
-})
+const deleteUserFromDB = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
 
+  await AdminServices.deleteUserFromDB(userId);
 
-const blacklistVendor  = catchAsync(async (req: Request, res: Response) => {
-
-const { vendorId } = req.params;
-
- await AdminServices.blacklistVendor(vendorId, req.body)
-
-sendResponse(res,{
-    statusCode: 200,
-    success: true,
-    message: "Vendor blacklisted successfully",
-    data: null
-  })
-
-})
-
-
-const deleteUserFromDB  = catchAsync(async (req: Request, res: Response) => {
-const { userId } = req.params;
-
-await AdminServices.deleteUserFromDB(userId)
-
-sendResponse(res,{
+  sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "User successfully deleted",
-    data: null
-  })
+    data: null,
+  });
+});
 
-})
+// ! Vendor related controller
+const blacklistVendor = catchAsync(async (req: Request, res: Response) => {
+  const { vendorId } = req.params;
 
+  await AdminServices.blacklistVendor(vendorId, req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Vendor blacklisted successfully",
+    data: null,
+  });
+});
+
+// ! Category related controller
+
+const createACategory = catchAsync(async (req: Request, res: Response) => {
+
+const   result = await AdminServices.createACategory( req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category created successfully",
+    data: result,
+  });
+});
+
+const getAllCategories = catchAsync(async (req: Request, res: Response) => {
+
+
+  const result = await AdminServices.getAllCategories();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Categories fetched successfully",
+    data: result,
+  });
+});
+
+const getACategory = catchAsync(async (req: Request, res: Response) => {
+  const { categoryId } = req.params;
+
+  const result = await AdminServices.getACategory(categoryId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category fetched successfully",
+    data: result,
+  });
+});
+
+const updateACategory = catchAsync(async (req: Request, res: Response) => {
+  const { categoryId } = req.params;
+
+  const result = await AdminServices.updateACategory(categoryId, req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category updated successfully",
+    data: result,
+  });
+});
+
+const deleteACategory = catchAsync(async (req: Request, res: Response) => {
+  const { categoryId } = req.params;
+
+  const result = await AdminServices.deleteACategory(categoryId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category deleted successfully",
+    data: result,
+  });
+});
 
 export const AdminController = {
   getAllUser,
@@ -90,4 +146,9 @@ export const AdminController = {
   updateUserIntoDB,
   blacklistVendor,
   deleteUserFromDB,
-}
+  createACategory,
+  getAllCategories,
+  getACategory,
+  updateACategory,
+  deleteACategory,
+};
