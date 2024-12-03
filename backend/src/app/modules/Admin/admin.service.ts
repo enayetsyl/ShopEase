@@ -267,7 +267,11 @@ const getAllCategories = async (options: TPaginationOptions) => {
 
 };
 
-const getACategory = async (id: string) => {};
+const getACategory = async (id: string) => {
+  return await prisma.category.findUniqueOrThrow({
+    where: {id}
+  })
+};
 
 const updateACategory = async (id: string, payload:any) => {};
 
