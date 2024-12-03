@@ -10,6 +10,7 @@ const router = express.Router();
 router.post("/register", validateRequest(userValidation.registerUser), AuthController.register);
 router.post("/login", AuthController.login);
 router.post("/change-password", auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.VENDOR), AuthController.changePassword);
+router.post("/forgot-password", AuthController.forgotPassword);
 router.post("/reset-password", AuthController.resetPassword);
 
 export const AuthRoutes = router;
