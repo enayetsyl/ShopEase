@@ -89,15 +89,16 @@ const   result = await AdminServices.createACategory( req.body);
 });
 
 const getAllCategories = catchAsync(async (req: Request, res: Response) => {
+  const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"])
 
-
-  const result = await AdminServices.getAllCategories();
+  const result = await AdminServices.getAllCategories(options);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Categories fetched successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta
   });
 });
 

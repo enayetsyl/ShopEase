@@ -240,7 +240,32 @@ const createACategory = async (payload: TCategory) => {
 
 };
 
-const getAllCategories = async () => {};
+const getAllCategories = async (options: TPaginationOptions) => {
+  // create filter condition
+  // get category data
+  // get meta data
+  const { page, limit, skip } = paginationHelper.calculatePagination(options)
+
+
+   const result =  await prisma.category.findMany({
+    where: {
+      deletedAt: null, 
+    },
+    skip,
+    take: limit,
+    orderBy: options.sortBy && options.sortOrder ? {[options.sortBy] : options.sortOrder} : {createdAt: "desc"}
+  });
+
+  const total = await prisma.category.count({
+    where: {deletedAt: null}
+  })
+
+  return { 
+    data: result,
+    meta: {page, limit, total}
+  }
+
+};
 
 const getACategory = async (id: string) => {};
 
