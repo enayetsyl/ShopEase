@@ -61,7 +61,20 @@ const getAllUser = async (params: TAdminFilterRequest, options: TPaginationOptio
 
 }
 
-const getUserById = async () => {
+const getUserById = async (id: string ) => {
+  const user = await prisma.user.findUnique(
+    { where: {id},include:{
+      vendor: true, customer: true
+    }}
+  )
+
+  if(!user) throw new ApiError(404, "User Not Found")
+
+    if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
+      
+    if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
+
+  return user
 
 }
 
