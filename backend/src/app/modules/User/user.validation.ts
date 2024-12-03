@@ -15,8 +15,8 @@ const registerUser = z.object({
 
 })
 const updateUser = z.object({
-isDeleted: z.boolean().optional(),
-isSuspended :  z.boolean().optional(),
+
+isSuspended :  z.boolean()
 
 })
 const blacklistVendor = z.object({

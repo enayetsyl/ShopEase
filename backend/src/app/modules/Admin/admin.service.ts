@@ -96,14 +96,14 @@ const getUserById = async (id: string) => {
 
 const updateUserIntoDB = async (
   id: string,
-  payload: { isDeleted: boolean; isSuspended: boolean }
+  payload: { isSuspended: boolean }
 ) => {
   // get user
   // update data in the vendor/ customer collection
   // update data in the user collection
   // response
 
-  const { isDeleted, isSuspended } = payload;
+  const {  isSuspended } = payload;
 
   const user = await prisma.user.findUnique({
     where: { id },
@@ -129,63 +129,32 @@ const updateUserIntoDB = async (
   )
     throw new ApiError(403, "Customer account is suspended or deleted. ");
 
-    await prisma.$transaction(async (tx) => {
       if (role === "VENDOR") {
-        // Update the vendor record
-        if (isDeleted !== undefined) {
-          await tx.vendor.update({
-            where: { id: vendor!.id },
-            data: { isDeleted },
-          });
-  
-          // Update the user record's deletedAt field
-          if (isDeleted) {
-            await tx.user.update({
-              where: { id },
-              data: { deletedAt: new Date() },
-            });
-          }
-        }
-  
-        if (isSuspended !== undefined) {
-          await tx.vendor.update({
+       
+          await prisma.vendor.update({
             where: { id: vendor!.id },
             data: { isSuspended },
           });
         }
-      } else if (role === "CUSTOMER") {
-        // Update the customer record
-        if (isDeleted !== undefined) {
-          await tx.customer.update({
-            where: { id: customer!.id },
-            data: { isDeleted },
-          });
-  
-          // Update the user record's deletedAt field
-          if (isDeleted) {
-            await tx.user.update({
-              where: { id },
-              data: { deletedAt: new Date() },
-            });
-          }
-        }
-  
-        if (isSuspended !== undefined) {
-          await tx.customer.update({
+      
+      else if (role === "CUSTOMER") {
+        
+          await prisma.customer.update({
             where: { id: customer!.id },
             data: { isSuspended },
           });
         }
-      }
-    });
+
   
     return { message: "User updated successfully." };
 
 };
 
-const blacklistVendor = async () => {};
+const blacklistVendor = async (id: string, payload:{isBlacklisted : boolean}) => {};
 
-const deleteUserFromDB = async () => {};
+const deleteUserFromDB = async (id: string) => {
+
+};
 
 export const AdminServices = {
   getAllUser,
