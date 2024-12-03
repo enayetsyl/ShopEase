@@ -8,6 +8,7 @@ import { TFile } from "../../types/file";
 import { fileUploader } from "../../../helpers/fileUploader";
 import { TProductFilterRequest } from "./product.type";
 import { productSearchableFields } from "./product.constant";
+import { findProductById } from "../../../helpers/productHelpers";
 
 
 
@@ -101,9 +102,9 @@ const getAllProducts = async (params: TProductFilterRequest,options: TPagination
 };
 
 const getAProduct = async (id: string) => {
-  // const result = await findCategoryById(id);
+  const result = await findProductById(id);
 
-  // return result;
+  return result;
 };
 
 const duplicateAProduct = async (
