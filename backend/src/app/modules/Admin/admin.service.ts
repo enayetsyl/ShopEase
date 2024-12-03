@@ -6,6 +6,7 @@ import { TPaginationOptions } from "../../types/pagination";
 import { adminSearchableFields } from "./admin.constant";
 import { checkAccountStatus, findUserById } from "../../../helpers/userHelpers";
 import { TAdminFilterRequest, TCategory } from "./admin.type";
+import { findCategoryById } from "../../../helpers/adminHelpers";
 
 
 // ! User related service function
@@ -268,14 +269,43 @@ const getAllCategories = async (options: TPaginationOptions) => {
 };
 
 const getACategory = async (id: string) => {
-  return await prisma.category.findUniqueOrThrow({
-    where: {id}
-  })
+  const result = await findCategoryById(id)
+
+  return result
 };
 
-const updateACategory = async (id: string, payload:any) => {};
+const updateACategory = async (id: string, payload: {name?: string, description?:string}) => {
+  // get category
+  // update data
+  const { name, description }= payload
 
-const deleteACategory = async (id: string) => {};
+  const category = await findCategoryById(id)
+
+  if(name) {
+    const existingCategory = await prisma.category.findFirst({
+      where:{name, NOT: {id}}
+    })
+    if(existingCategory) throw new ApiError(400, "Category name already exists.")
+  }
+
+  const result = await prisma.category.update({
+    where:{id},
+    data: {name: name || category.name, 
+      description: description || category.description}
+  })
+
+  return result
+
+};
+
+const deleteACategory = async (id: string) => {
+ await findCategoryById(id)
+  return  await prisma.category.update({
+    where:{id},
+    data: {deletedAt: new Date()}
+  })
+
+};
 
 export const AdminServices = {
   getAllUser,

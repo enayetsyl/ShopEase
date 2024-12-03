@@ -6,8 +6,12 @@ const createCategory = z.object({
   }),
   description: z.string().optional()
 })
+const updateCategory = z.object({
+  name: z.string().optional(),
+  description: z.string().optional()
+})
 
 
 export const adminValidation = {
-  createCategory
+  createCategory, updateCategory
 }

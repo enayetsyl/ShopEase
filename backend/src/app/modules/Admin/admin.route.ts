@@ -21,7 +21,7 @@ router.patch("/vendor/:vendorId", auth(UserRole.ADMIN), validateRequest(userVali
 router.post("/categories", auth(UserRole.ADMIN), validateRequest(adminValidation.createCategory), AdminController.createACategory)
 router.get("/categories", auth(UserRole.ADMIN), AdminController.getAllCategories)
 router.get("/categories/:categoryId", auth(UserRole.ADMIN), AdminController.getACategory)
-router.patch("/categories/:categoryId", auth(UserRole.ADMIN), AdminController.updateACategory)
+router.patch("/categories/:categoryId", auth(UserRole.ADMIN), validateRequest(adminValidation.updateCategory), AdminController.updateACategory)
 router.delete("/categories/:categoryId", auth(UserRole.ADMIN), AdminController.deleteACategory)
 
 export const AdminRoutes = router;
