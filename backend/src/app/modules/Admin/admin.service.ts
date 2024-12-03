@@ -1,100 +1,196 @@
-import { Prisma } from "@prisma/client"
-import { paginationHelper } from "../../../helpers/paginationHelper"
-import prisma from "../../../shared/prisma"
-import ApiError from "../../errors/ApiError"
-import { TPaginationOptions } from "../../types/pagination"
-import { adminSearchableFields } from "./admin.constant"
-
+import { Prisma } from "@prisma/client";
+import { paginationHelper } from "../../../helpers/paginationHelper";
+import prisma from "../../../shared/prisma";
+import ApiError from "../../errors/ApiError";
+import { TPaginationOptions } from "../../types/pagination";
+import { adminSearchableFields } from "./admin.constant";
 
 type TAdminFilterRequest = {
-  name?: string | undefined,
-  email?: string | undefined,
-  searchTerm?: string | undefined,
-}
+  name?: string | undefined;
+  email?: string | undefined;
+  searchTerm?: string | undefined;
+};
 
+const getAllUser = async (
+  params: TAdminFilterRequest,
+  options: TPaginationOptions
+) => {
+  // create search and filter condition 
+  // get user data
+  // get meta data
+  const { page, limit, skip } = paginationHelper.calculatePagination(options);
+  const { searchTerm, ...filterData } = params;
 
+  const andConditions: Prisma.UserWhereInput[] = [];
 
-const getAllUser = async (params: TAdminFilterRequest, options: TPaginationOptions) => {
-  const { page, limit, skip } = paginationHelper.calculatePagination(options)
-  const { searchTerm, ...filterData } = params
-
-  const andConditions : Prisma.UserWhereInput[] = []
-  
-  if(params.searchTerm){
-    andConditions.push ({
-      OR: adminSearchableFields.map(field => ({
-        [field] : {
-          contains : params.searchTerm,
-          mode: "insensitive"
-        }
-      }))
-    })
-  }
-
-  if( Object.keys(filterData).length > 0) {
+  if (params.searchTerm) {
     andConditions.push({
-      AND: Object.keys(filterData).map(key => ({
-        [key]: {
-          equals: (filterData as any)[key]
-        }
-      }))
-    })
+      OR: adminSearchableFields.map((field) => ({
+        [field]: {
+          contains: params.searchTerm,
+          mode: "insensitive",
+        },
+      })),
+    });
   }
 
-  const whereConditions : Prisma.UserWhereInput = { AND: andConditions}
+  if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+      AND: Object.keys(filterData).map((key) => ({
+        [key]: {
+          equals: (filterData as any)[key],
+        },
+      })),
+    });
+  }
+
+  const whereConditions: Prisma.UserWhereInput = { AND: andConditions };
 
   const result = await prisma.user.findMany({
-    where : whereConditions,
+    where: whereConditions,
     skip,
     take: limit,
-    orderBy: options.sortBy && options.sortOrder ? {[options.sortBy] : options.sortOrder} : {createdAt : 'desc'}
-  })
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : { createdAt: "desc" },
+  });
 
   const total = await prisma.user.count({
-    where: whereConditions
-  })
+    where: whereConditions,
+  });
 
   return {
-    meta: {page, limit, total},
-    data: result
-  }
+    meta: { page, limit, total },
+    data: result,
+  };
+};
 
-}
+const getUserById = async (id: string) => {
+  // get user
+  // send result
+  const user = await prisma.user.findUnique({
+    where: { id },
+    include: {
+      vendor: true,
+      customer: true,
+    },
+  });
 
-const getUserById = async (id: string ) => {
-  const user = await prisma.user.findUnique(
-    { where: {id},include:{
-      vendor: true, customer: true
-    }}
+  if (!user) throw new ApiError(404, "User Not Found");
+
+  if (
+    user.role === "VENDOR" &&
+    (user.vendor?.isDeleted || user.vendor?.isSuspended)
   )
+    throw new ApiError(403, "Vendor account is suspended or deleted. ");
 
-  if(!user) throw new ApiError(404, "User Not Found")
+  if (
+    user.role === "CUSTOMER" &&
+    (user.customer?.isDeleted || user.customer?.isSuspended)
+  )
+    throw new ApiError(403, "Customer account is suspended or deleted. ");
 
-    if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
-      
-    if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
+  return user;
+};
 
-  return user
+const updateUserIntoDB = async (
+  id: string,
+  payload: { isDeleted: boolean; isSuspended: boolean }
+) => {
+  // get user
+  // update data in the vendor/ customer collection
+  // update data in the user collection
+  // response
 
-}
+  const { isDeleted, isSuspended } = payload;
 
-const deleteUserFromDB = async () => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    include: {
+      vendor: true,
+      customer: true,
+    },
+  });
 
-}
+  if (!user) throw new ApiError(404, "User Not Found");
 
-const updateUserIntoDB = async () => {
+  const { role, vendor, customer } = user;
 
-}
+  if (
+    user.role === "VENDOR" &&
+    (user.vendor?.isDeleted || user.vendor?.isSuspended)
+  )
+    throw new ApiError(403, "Vendor account is suspended or deleted. ");
 
-const blacklistVendor = async () => {
+  if (
+    user.role === "CUSTOMER" &&
+    (user.customer?.isDeleted || user.customer?.isSuspended)
+  )
+    throw new ApiError(403, "Customer account is suspended or deleted. ");
 
-}
+    await prisma.$transaction(async (tx) => {
+      if (role === "VENDOR") {
+        // Update the vendor record
+        if (isDeleted !== undefined) {
+          await tx.vendor.update({
+            where: { id: vendor!.id },
+            data: { isDeleted },
+          });
+  
+          // Update the user record's deletedAt field
+          if (isDeleted) {
+            await tx.user.update({
+              where: { id },
+              data: { deletedAt: new Date() },
+            });
+          }
+        }
+  
+        if (isSuspended !== undefined) {
+          await tx.vendor.update({
+            where: { id: vendor!.id },
+            data: { isSuspended },
+          });
+        }
+      } else if (role === "CUSTOMER") {
+        // Update the customer record
+        if (isDeleted !== undefined) {
+          await tx.customer.update({
+            where: { id: customer!.id },
+            data: { isDeleted },
+          });
+  
+          // Update the user record's deletedAt field
+          if (isDeleted) {
+            await tx.user.update({
+              where: { id },
+              data: { deletedAt: new Date() },
+            });
+          }
+        }
+  
+        if (isSuspended !== undefined) {
+          await tx.customer.update({
+            where: { id: customer!.id },
+            data: { isSuspended },
+          });
+        }
+      }
+    });
+  
+    return { message: "User updated successfully." };
 
+};
+
+const blacklistVendor = async () => {};
+
+const deleteUserFromDB = async () => {};
 
 export const AdminServices = {
   getAllUser,
   getUserById,
   deleteUserFromDB,
   updateUserIntoDB,
-  blacklistVendor
-}
+  blacklistVendor,
+};
