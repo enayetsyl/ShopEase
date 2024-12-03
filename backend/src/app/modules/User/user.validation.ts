@@ -14,8 +14,17 @@ const registerUser = z.object({
   role: z.enum([UserRole.CUSTOMER, UserRole.VENDOR])
 
 })
+const updateUser = z.object({
+isDeleted: z.boolean().optional(),
+isSuspended :  z.boolean().optional(),
+
+})
+const blacklistVendor = z.object({
+  isBlacklisted: z.boolean().optional(),
+
+})
 
 
 export const userValidation = {
-  registerUser
+  registerUser, blacklistVendor, updateUser
 }

@@ -5,20 +5,13 @@ import prisma from "../../../shared/prisma"
 import ApiError from "../../errors/ApiError"
 import bcrypt from "bcrypt";
 import emailSender from "../../../helpers/emailSender";
-type TRegister = {
-  name: string,
-  email: string,
-  password: string,
-  role: "CUSTOMER" | "VENDOR"
+
+type TAdminFilterRequest = {
+  name?: string | undefined,
+  email?: string | undefined,
+  searchTerm?: string | undefined,
 }
-type TLogin = {
-  email: string,
-  password: string,
-}
-type TChangePassword = {
-  oldPassword: string,
-  newPassword: string,
-}
+
 
 const register = async (payload: TRegister) => {
   // Check user exist with email
@@ -215,10 +208,10 @@ const resetPassword = async (token: string, payload: {id: string, password: stri
   })
 }
 
-export const AuthServices = {
-  register,
-  login,
-  changePassword,
-  resetPassword,
-  forgotPassword
+export const AdminServices = {
+  getAllUser,
+  getUserById,
+  deleteUserFromDB,
+  updateUserIntoDB,
+  blacklistVendor
 }

@@ -1,81 +1,93 @@
 import  {Request, Response} from "express"
 import catchAsync from "../../../shared/catchAsync"
-import { AuthServices } from "./admin.service"
+import { AdminServices } from "./admin.service"
 import sendResponse from "../../../shared/sendResponse"
+import pick from "../../../shared/pick"
+import { adminFilterableFields } from "./admin.constant"
 
-const register  = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthServices.register(req.body)
+const getAllUser  = catchAsync(async (req: Request, res: Response) => {
+const filters = pick(req.query, adminFilterableFields)
+const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"])
 
-  sendResponse(res, {
-    statusCode: 201,
+const result = await AdminServices.getAllUser(filters, options)
+
+sendResponse(res,{
+    statusCode: 200,
     success: true,
-    message: "User Created Successfully.",
+    message: "User data fetched successfully",
+    data: result.data,
+    meta: result.meta
+  })
+})
+
+
+const getUserById  = catchAsync(async (req: Request, res: Response) => {
+
+const { userId } = req.params;
+ 
+const result = await AdminServices.getUserById(userId)
+
+sendResponse(res,{
+    statusCode: 200,
+    success: true,
+    message: "User data fetched successfully",
     data: result
   })
-})
-const login  = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthServices.login(req.body)
 
-  const {accessToken, refreshToken, userWithoutPassword  } = result;
-
-  res.cookie('refreshToken', refreshToken, {
-      secure: false,
-      httpOnly: true
-  });
-  res.cookie('accessToken', accessToken, {
-      secure: false,
-      httpOnly: true
-  });
-
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "User Successfully logged in.",
-    data: userWithoutPassword
-  })
 })
 
 
-const changePassword  = catchAsync(async (req: Request &{user?: any}, res: Response) => {
-   await AuthServices.changePassword(req.user, req.body)
+const updateUserIntoDB  = catchAsync(async (req: Request, res: Response) => {
 
-  sendResponse(res,{
+const { userId } = req.params;
+
+const result = await AdminServices.updateUserIntoDB(userId, req.body)
+
+sendResponse(res,{
     statusCode: 200,
     success: true,
-    message: "Password changed successfully.",
-    data: ''
-  })
-})
-const forgotPassword  = catchAsync(async (req: Request, res: Response) => {
-  await AuthServices.forgotPassword(req.body)
-
-  sendResponse(res,{
-    statusCode: 200,
-    success: true,
-    message: "Check your email",
-    data: null
-  })
-})
-const resetPassword  = catchAsync(async (req: Request, res: Response) => {
-  const token = req.headers.authorization || ""
-
-  await AuthServices.resetPassword(token, req.body)
-
-  sendResponse(res,{
-    statusCode: 200,
-    success: true,
-    message: "Password reset successfully",
-    data: null
+    message: "User Data Updated Successfully",
+    data: result
   })
 
 })
 
 
-export const AuthController = {
-  register,
-  login,
-  changePassword,
-  resetPassword,
-  forgotPassword
+const blacklistVendor  = catchAsync(async (req: Request, res: Response) => {
+
+const { vendorId } = req.params;
+
+const result = await AdminServices.blacklistVendor(vendorId, req.body)
+
+sendResponse(res,{
+    statusCode: 200,
+    success: true,
+    message: "Vendor blacklisted successfully",
+    data: result
+  })
+
+})
+
+
+const deleteUserFromDB  = catchAsync(async (req: Request, res: Response) => {
+const { userId } = req.params;
+
+const result = await AdminServices.deleteUserFromDB(userId)
+
+sendResponse(res,{
+    statusCode: 200,
+    success: true,
+    message: "User successfully deleted",
+    data: result
+  })
+
+})
+
+
+export const AdminController = {
+  getAllUser,
+  getUserById,
+  updateUserIntoDB,
+  blacklistVendor,
+  deleteUserFromDB,
 }

@@ -1,5 +1,5 @@
 import express from "express";
-import { AuthController } from "./admin.controller";
+import { AdminController } from "./admin.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { userValidation } from "../User/user.validation"
 import auth from "../../middlewares/auth";
@@ -7,10 +7,12 @@ import { UserRole } from "@prisma/client";
 
 const router = express.Router();
 
-router.post("/register", validateRequest(userValidation.registerUser), AuthController.register);
-router.post("/login", AuthController.login);
-router.patch("/change-password", auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.VENDOR), AuthController.changePassword);
-router.post("/forgot-password", AuthController.forgotPassword);
-router.post("/reset-password", AuthController.resetPassword);
+router.get("/users", auth(UserRole.ADMIN), AdminController.getAllUser)
+router.get("/users/:userId", auth(UserRole.ADMIN), AdminController.getUserById)
+router.patch("/users/:userId", auth(UserRole.ADMIN), validateRequest(userValidation.updateUser), AdminController.updateUserIntoDB)
+router.patch("/vendor/:vendorId", auth(UserRole.ADMIN), validateRequest(userValidation.blacklistVendor), AdminController.blacklistVendor)
+router.delete("/users/:userId", auth(UserRole.ADMIN), AdminController.deleteUserFromDB)
 
-export const AuthRoutes = router;
+
+
+export const AdminRoutes = router;
