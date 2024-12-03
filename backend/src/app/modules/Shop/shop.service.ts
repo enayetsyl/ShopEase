@@ -40,7 +40,6 @@ const getAShop = async (payload:any) => {
 
 
 
-
 export const ShopServices = {
   createShop,
   getAShop

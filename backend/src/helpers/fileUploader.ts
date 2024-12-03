@@ -38,7 +38,16 @@ const uploadToCloudinary = async(file: TFile):Promise<TCloudinaryResponse | unde
   })
 }
 
+const uploadMultipleToCloudinary = async (files: TFile[]): Promise<TCloudinaryResponse[]> => {
+  const uploadPromises = files.map((file) => uploadToCloudinary(file));
+
+  
+  const results = await Promise.all(uploadPromises);
+
+  return results.filter((result): result is TCloudinaryResponse => result !== undefined);
+};
+
 
 export const fileUploader = {
-  upload, uploadToCloudinary
+  upload, uploadToCloudinary, uploadMultipleToCloudinary
 }
