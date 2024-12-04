@@ -61,15 +61,15 @@ const deleteUserFromDB = catchAsync(async (req: Request, res: Response) => {
 });
 
 // ! Vendor related controller
-const blacklistVendor = catchAsync(async (req: Request, res: Response) => {
-  const { vendorId } = req.params;
+const blacklistVendorShop = catchAsync(async (req: Request, res: Response) => {
+  const { shopId } = req.params;
 
-  await AdminServices.blacklistVendor(vendorId, req.body);
+  await AdminServices.blacklistVendorShop(shopId, req.body);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Vendor blacklisted successfully",
+    message: "Vendor shop blacklisted successfully",
     data: null,
   });
 });
@@ -145,7 +145,7 @@ export const AdminController = {
   getAllUser,
   getUserById,
   updateUserIntoDB,
-  blacklistVendor,
+  blacklistVendorShop,
   deleteUserFromDB,
   createACategory,
   getAllCategories,

@@ -15,7 +15,7 @@ router.patch("/users/:userId", auth(UserRole.ADMIN), validateRequest(userValidat
 router.delete("/users/:userId", auth(UserRole.ADMIN), AdminController.deleteUserFromDB)
 
 // !Vendor related routes 
-router.patch("/vendor/:vendorId", auth(UserRole.ADMIN), validateRequest(userValidation.blacklistVendor), AdminController.blacklistVendor)
+router.patch("/shop/:shopId", auth(UserRole.ADMIN), validateRequest(adminValidation.blacklistVendorShop), AdminController.blacklistVendorShop)
 
 // !Categories related routes
 router.post("/categories", auth(UserRole.ADMIN), validateRequest(adminValidation.createCategory), AdminController.createACategory)

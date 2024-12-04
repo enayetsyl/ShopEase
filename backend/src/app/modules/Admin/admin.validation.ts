@@ -10,8 +10,11 @@ const updateCategory = z.object({
   name: z.string().optional(),
   description: z.string().optional()
 })
+const blacklistVendorShop = z.object({
+  isBlackListed: z.boolean()
+})
 
 
 export const adminValidation = {
-  createCategory, updateCategory
+  createCategory, updateCategory, blacklistVendorShop
 }

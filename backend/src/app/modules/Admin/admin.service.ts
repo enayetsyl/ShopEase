@@ -208,10 +208,17 @@ const deleteUserFromDB = async (id: string) => {
 };
 
 // ! Vendor related service function
-const blacklistVendor = async (
+const blacklistVendorShop = async (
   id: string,
-  payload: { isBlacklisted: boolean }
-) => {};
+  payload: { isBlackListed: boolean }
+) => {
+  return await prisma.shop.update({
+    where:{id},
+    data:{
+      isBlackListed: payload.isBlackListed
+    }
+  })
+};
 
 // ! Category related service function
 
@@ -312,7 +319,7 @@ export const AdminServices = {
   getUserById,
   deleteUserFromDB,
   updateUserIntoDB,
-  blacklistVendor,
+  blacklistVendorShop,
   createACategory,
   getAllCategories,
   getACategory,
