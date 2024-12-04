@@ -76,12 +76,11 @@ Product (5)
   
   Get a products (/products/:productId)(get)
 
-Order
+Order (2)
 
-Customer	/orders	POST	Create an order.
-Customer	/orders/customer	GET	View their own order history.
-Vendor	/orders/vendor	GET	View orders related to their shop.
-Admin	/admin/orders	GET	View all orders with advanced filtering.
+/orders	POST Customer	Create an order.
+
+/orders/ Customer	GET	View their own order history. Vendor orders related to their shop. Admin	View all orders with advanced filtering.
 
 Payment (4)
 

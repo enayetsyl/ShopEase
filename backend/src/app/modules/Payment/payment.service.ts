@@ -24,9 +24,31 @@ const createPaymentIntent = async (data: {amount: number}) => {
 
 
 const savePaymentInfo = async(data: any) => {
-  return await prisma.payment.create({
-    data:data
-  })
+  const { orderId, status} = data
+
+  return await prisma.$transaction(async (prisma) => {
+    // Step 1: Save the payment info
+    const payment = await prisma.payment.create({
+      data: data,
+    });
+
+    // Step 2: If payment is successful, update the order status and link the payment
+    if (status === "SUCCESS") {
+      await prisma.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          status: "COMPLETED", 
+          payment: {
+            connect: { id: payment.id }, 
+          },
+        },
+      });
+    }
+
+    return payment;
+  });
 }
 
 
