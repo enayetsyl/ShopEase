@@ -21,13 +21,13 @@ User (1) PENDING
   <!-- get all (get)
   get single (get) -->
   update profile (patch)  <!--REMAINED -->
-
+base url localhost:5002/api/v1
 Auth (5) DONE
-  login (post)
-  register(post)
-  change-password(post)
-  forgot-password (post)
-  reset-password(post)
+  login (post) (/auth/login)
+  register(post) (/auth/register)
+  change-password(post) (/auth/change-password)
+  forgot-password (post) (/auth/forget-password)
+  reset-password(post) (/auth/reset-password)
 
 Admin (5) DONE
   Get user (/admin/users)(get)
