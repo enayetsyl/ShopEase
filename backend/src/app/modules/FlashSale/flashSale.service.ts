@@ -80,8 +80,6 @@ const updateAFlashSale = async (id: string, updatedData: Partial<TFlashSale>) =>
 
   const result = await findFlashSaleById(id)
 
-  console.log(result)
-
   const updatedFlashSale = await prisma.flashSale.update({
     where: { id },
     data: {

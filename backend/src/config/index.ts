@@ -22,5 +22,6 @@ export default {
         email: process.env.NODEMAILER_EMAIL,
         app_pass: process.env.NODEMAILER_APP_PASS
     },
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
   
 }
