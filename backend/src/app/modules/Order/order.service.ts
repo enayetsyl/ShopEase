@@ -4,52 +4,49 @@ import prisma from "../../../shared/prisma";
 import ApiError from "../../errors/ApiError";
 import { TPaginationOptions } from "../../types/pagination";
 import { Request } from "express";
-import { TFile } from "../../types/file";
-import { fileUploader } from "../../../helpers/fileUploader";
 import { TProductFilterRequest } from "./order.type";
 import { productSearchableFields } from "./order.constant";
-import { findProductById } from "../../../helpers/productHelpers";
 
-const createAProduct = async (user: any, req: Request) => {
-  // upload files to cloudinary
-  // add cloudinary link to data
-  // add it into db
-  const files = req.files as TFile[];
-  if (files?.length === 0)
-    throw new ApiError(400, "At least one image is required");
+const createOrder = async (user: any, req: Request) => {
+  const { vendorId, totalAmount, products } = req.body;
 
-  const vendorId = user.vendor.id;
+  const customerId = user.customer.id
 
-  const shop = await prisma.shop.findFirst({
-    where: { vendorId },
-    select: {
-      id: true,
-    },
+  console.log('customer id', customerId)
+  console.log('req,body', req.body)
+
+  if (!Array.isArray(products) || products.length === 0) throw new ApiError(400,"Products array must not be empty.");
+  
+  return await prisma.$transaction(async (tx) => {
+    // Create the order first
+    const order = await tx.order.create({
+      data: {
+        customerId: customerId, 
+        vendorId,
+        totalAmount,
+        status: "PENDING",
+      },
+    });
+
+    // Create order items
+    const orderItems = products.map((item) => ({
+      orderId: order.id, 
+      productId: item.productId,
+      quantity: item.quantity,
+      price: item.price,
+      discount: item.discount || 0,
+    }));
+
+    await tx.orderItem.createMany({
+      data: orderItems,
+    });
+
+    return order; 
   });
 
-  if (!shop) throw new ApiError(404, "Shop not found");
-
-  const shopId = shop.id;
-
-  const uploadedFiles = await fileUploader.uploadMultipleToCloudinary(files);
-
-  const imageUrls = uploadedFiles.map((file) => file.secure_url);
-
-  const productData = {
-    ...req.body,
-    image: imageUrls,
-    vendorId,
-    shopId,
-  };
-
-  const product = await prisma.product.create({
-    data: productData,
-  });
-
-  return product;
 };
 
-const getAllProducts = async (
+const getOrders = async (
   params: TProductFilterRequest,
   options: TPaginationOptions
 ) => {
@@ -104,60 +101,7 @@ const getAllProducts = async (
   };
 };
 
-const getAProduct = async (id: string) => {
-  const result = await findProductById(id);
 
-  return result;
-};
-
-const duplicateAProduct = async (id: string) => {
-  // find existing product
-  // remove id, createdAt, updatedAt, deletedAt
-  // add the data to db
-  const result = await findProductById(id);
-
-  const {
-    id: _,
-    updatedAt: __,
-    createdAt: ___,
-    deletedAt: ____,
-    ...duplicateData
-  } = result;
-
-  return await prisma.product.create({
-    data: duplicateData,
-  });
-};
-
-const updateAProduct = async (id: string, user: any, req: Request) => {
-  // get product
-  // update data
-
-  const result = await findProductById(id);
-
-  const files = req.files as TFile[];
-  let imageUrls: string[] = [];
-
-  if (files?.length > 0) {
-    const uploadedFiles = await fileUploader.uploadMultipleToCloudinary(files);
-
-    imageUrls = uploadedFiles.map((file) => file.secure_url);
-  }
-
-  const updatedImages = [...result.image, ...imageUrls];
-
-  const productData = {
-    ...req.body,
-    image: updatedImages,
-  };
-
-  const updatedProduct = await prisma.product.update({
-    where: { id },
-    data: productData,
-  });
-
-  return updatedProduct;
-};
 
 export const OrderServices = {
   createOrder,
