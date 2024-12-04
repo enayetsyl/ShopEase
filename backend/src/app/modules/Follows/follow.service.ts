@@ -29,7 +29,7 @@ const follow = async (user: any, id: {vendorId: string}) => {
   return await prisma.follow.create({ data });
 };
 
-const unfollow = async (
+const getFollowers = async (
   params: TProductFilterRequest,
   options: TPaginationOptions
 ) => {
@@ -84,8 +84,21 @@ const unfollow = async (
   };
 };
 
-const getFollowers = async (id: string) => {
-  const result = await findProductById(id);
+const unfollow = async (vendorId: string, customerId: string) => {
+  const existingFollow = await prisma.follow.findFirst({
+    where: {
+      customerId,
+      vendorId,
+      isDeleted: false,
+    },
+  });
+
+  if (!existingFollow) throw new ApiError(400, "You are not following this vendor.");
+  
+  const result = await prisma.follow.update({
+    where:{id: existingFollow.id},
+    data: {isDeleted: true}
+  })
 
   return result;
 };

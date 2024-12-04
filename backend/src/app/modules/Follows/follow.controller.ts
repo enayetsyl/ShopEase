@@ -32,7 +32,7 @@ const getFollowers = catchAsync(async (req: Request &{user?: any}, res: Response
 const unfollow = catchAsync(async (req: Request & { user?: any }, res: Response) => {
   const { vendorId } = req.params;
 
-  const result = await FollowServices.unfollow(vendorId, user);
+  const result = await FollowServices.unfollow(vendorId, req.user.customer.id);
 
   sendResponse(res, {
     statusCode: 200,
