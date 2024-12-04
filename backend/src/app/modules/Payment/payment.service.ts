@@ -34,17 +34,38 @@ const savePaymentInfo = async(data: any) => {
 
     // Step 2: If payment is successful, update the order status and link the payment
     if (status === "SUCCESS") {
-      await prisma.order.update({
+      // Update order status and link payment
+      const order = await prisma.order.update({
         where: {
           id: orderId,
         },
         data: {
-          status: "COMPLETED", 
+          status: "COMPLETED",
           payment: {
-            connect: { id: payment.id }, 
+            connect: { id: payment.id },
           },
         },
+        include: {
+          order_items: true, // Include order items to process them
+        },
       });
+
+      // Step 3: Reduce inventory for each product in the order
+      for (const orderItem of order.order_items) {
+        const { productId, quantity } = orderItem;
+
+        // Reduce the inventory of the product
+        await prisma.product.update({
+          where: {
+            id: productId,
+          },
+          data: {
+            inventory: {
+              decrement: quantity, // Decrease inventory by the ordered quantity
+            },
+          },
+        });
+      }
     }
 
     return payment;

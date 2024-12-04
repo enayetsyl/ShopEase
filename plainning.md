@@ -88,27 +88,18 @@ POST /create-payment-intent to create a payment intent.
 POST /payment-confirm save payment information.
 <!-- GET /payments/:paymentId -->
 
-Considerations for Scalability
-Asynchronous Processing: Use queues to handle post-payment tasks like inventory deduction and email notifications.
-Database Transactions: Wrap the order creation and inventory update in a transaction to ensure atomicity.
-Audit Logs: Maintain logs for each payment attempt for debugging and reconciliation.
-
-
 
 Vendor (9)
   
-  view orders (/vendor/orders)(get)
   get customer review (/vendor/:productId)(get)
   get followers (/vendor/:vendorId/followers)
   respond to review(/vendor/reviews/:id/respond)(post){  "response": "Thank you for your feedback!"}
 
 Customer (8)
-  checkout (/checkout)(post){  "cartItems": [    { "productId": "productId1", "quantity": 1 },    { "productId": "productId2", "quantity": 3 }  ],  "couponCode": "DISCOUNT10"}
   leave review (/reviews)(post){  "productId": "productId",  "rating": 5,  "comment": "Great product!" }
   follow vendor (/follows)(post){  "vendorId": "vendorId"}
   unfollow vendor (/follows/:id)(delete)
   recent products (/recent-products)(get)
-  order history(/orders)(get)
 
 Flash Sale (4)
   Create a flash sale (/flash-sale/)(post) {  "productId": "2f7a8bf8-9aad-4b09-83fa-fba1b1c45cab", "discount": 15,  "startTime": "2024-12-05T00:00:00Z",  "endTime": "2024-12-10T00:00:00Z"}
@@ -123,8 +114,7 @@ Flash Sale (4)
 Other (3)
   compare products (/products/compare)(post){  "productIds": ["productId1", "productId2", "productId3"]}
 
-  initiate payment (/payment)(post) {  "amount": 200.0,  "currency": "USD",  "paymentMethod": "stripe",  "orderId": "orderId"}
-  verify payment(/payment/verify)(post) {  "paymentId": "paymentId",  "orderId": "orderId"}
+ 
 
 
 
