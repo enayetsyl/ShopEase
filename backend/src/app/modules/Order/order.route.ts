@@ -1,10 +1,9 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import {  OrderController } from "./order.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import auth from "../../middlewares/auth";
 import { UserRole } from "@prisma/client";
 
-import { fileUploader } from "../../../helpers/fileUploader";
 import { OrderValidation } from "./order.validation";
 
 const router = express.Router();

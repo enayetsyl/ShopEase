@@ -10,7 +10,7 @@ type TRegister = {
   name: string,
   email: string,
   password: string,
-  role: "CUSTOMER" | "VENDOR"
+  role: "CUSTOMER" | "VENDOR" | "ADMIN"
 }
 type TLogin = {
   email: string,
@@ -57,6 +57,12 @@ return await prisma.$transaction(async(p) =>{
     });
   } else if (role === "CUSTOMER"){
     await p.customer.create({
+      data:{
+        name, email
+      }
+    })
+  }  else if (role === "ADMIN"){
+    await p.admin.create({
       data:{
         name, email
       }

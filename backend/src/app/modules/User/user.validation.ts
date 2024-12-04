@@ -11,7 +11,7 @@ const registerUser = z.object({
   name: z.string({
     required_error: "Name is required"
   }),
-  role: z.enum([UserRole.CUSTOMER, UserRole.VENDOR])
+  role: z.enum([UserRole.CUSTOMER, UserRole.VENDOR, UserRole.ADMIN])
 
 })
 const updateUser = z.object({

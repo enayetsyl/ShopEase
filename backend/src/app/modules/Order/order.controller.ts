@@ -22,7 +22,7 @@ const getOrders = catchAsync(async (req: Request & { user?: any }, res: Response
   const filters = pick(req.query, orderFilterableFields);
   const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
 
-  const result = await OrderServices.getOrders(filters, options);
+  const result = await OrderServices.getOrders(filters, options, req.user);
 
   sendResponse(res, {
     statusCode: 200,
