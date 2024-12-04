@@ -82,11 +82,11 @@ Order (2)
 
 /orders/ Customer	GET	View their own order history. Vendor orders related to their shop. Admin	View all orders with advanced filtering.
 
-Payment (4)
+Payment (3)
 
 POST /create-payment-intent to create a payment intent.
 POST /payment-confirm save payment information.
-GET /payments/:paymentId
+<!-- GET /payments/:paymentId -->
 
 Considerations for Scalability
 Asynchronous Processing: Use queues to handle post-payment tasks like inventory deduction and email notifications.
