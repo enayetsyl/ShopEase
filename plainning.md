@@ -57,9 +57,7 @@ Category (5)
 
   Delete a category(/admin/categories/:id)(delete)
 
-Monitor (2)
-  get all transactions (/admin/transactions)(get)
-  get all reviews (/admin/reviews)(get)
+ 
 
 Shop (2)
   create a shop (/shop)(post){  "name": "Vendor Shop",  "description": "Shop Description" }
@@ -86,20 +84,7 @@ Payment (3)
 
 POST /create-payment-intent to create a payment intent.
 POST /payment-confirm save payment information.
-<!-- GET /payments/:paymentId -->
-
-
-Vendor (9)
-  
-  get customer review (/vendor/:productId)(get)
-  get followers (/vendor/:vendorId/followers)
-  respond to review(/vendor/reviews/:id/respond)(post){  "response": "Thank you for your feedback!"}
-
-Customer (8)
-  leave review (/reviews)(post){  "productId": "productId",  "rating": 5,  "comment": "Great product!" }
-  follow vendor (/follows)(post){  "vendorId": "vendorId"}
-  unfollow vendor (/follows/:id)(delete)
-  recent products (/recent-products)(get)
+get all transactions (/payment)(get)
 
 Flash Sale (4)
   Create a flash sale (/flash-sale/)(post) {  "productId": "2f7a8bf8-9aad-4b09-83fa-fba1b1c45cab", "discount": 15,  "startTime": "2024-12-05T00:00:00Z",  "endTime": "2024-12-10T00:00:00Z"}
@@ -111,8 +96,29 @@ Flash Sale (4)
   Update a flash sale (/flash-sale/:id)(patch) { "discount": 15,  "startTime": "2024-12-05T00:00:00Z",  "endTime": "2024-12-10T00:00:00Z"}
 
 
-Other (3)
+Reviews (5)
+
+get all reviews (/reviews)(get) for admin
+get review for vendor (/reviews/:vendorId) for vendor
+get single review (/reviews/:reviewId)
+respond to review(/reviews/:id/respond)(post){  "response": "Thank you for your feedback!"}
+leave review (/reviews)(post){  "productId": "productId",  "rating": 5,  "comment": "Great product!" }
+
+Follows (3)
+  
+  get followers (/follows/)
+  follow vendor (/follows)(post){  "vendorId": "vendorId"}
+  unfollow vendor (/follows)(delete)
+ 
+
+Customer (8)
+  
+  recent products (/recent-products)(get)
   compare products (/products/compare)(post){  "productIds": ["productId1", "productId2", "productId3"]}
+
+
+
+
 
  
 
