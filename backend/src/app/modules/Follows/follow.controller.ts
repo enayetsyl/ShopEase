@@ -18,7 +18,7 @@ const follow = catchAsync(
 
 const getFollowers = catchAsync(async (req: Request &{user?: any}, res: Response) => {
 
-  const result = await FollowServices.getFollowers(user);
+  const result = await FollowServices.getFollowers(req.user.vendor.id);
 
   sendResponse(res, {
     statusCode: 200,

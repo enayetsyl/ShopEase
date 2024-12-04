@@ -29,58 +29,13 @@ const follow = async (user: any, id: {vendorId: string}) => {
   return await prisma.follow.create({ data });
 };
 
-const getFollowers = async (
-  params: TProductFilterRequest,
-  options: TPaginationOptions
-) => {
-  // create filter condition
-  // get product data
-  // get meta data
-  const { page, limit, skip } = paginationHelper.calculatePagination(options);
-  const { searchTerm, ...filterData } = params;
-
-  const andConditions: Prisma.ProductWhereInput[] = [];
-
-  if (params.searchTerm) {
-    andConditions.push({
-      OR: productSearchableFields.map((field) => ({
-        [field]: {
-          contains: params.searchTerm,
-          mode: "insensitive",
-        },
-      })),
-    });
-  }
-
-  if (Object.keys(filterData).length > 0) {
-    andConditions.push({
-      AND: Object.keys(filterData).map((key) => ({
-        [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
-    });
-  }
-
-  const whereConditions: Prisma.ProductWhereInput = { AND: andConditions };
-
-  const result = await prisma.product.findMany({
-    where: whereConditions,
-    skip,
-    take: limit,
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? { [options.sortBy]: options.sortOrder }
-        : { createdAt: "desc" },
-  });
-
-  const total = await prisma.product.count({
-    where: whereConditions,
+const getFollowers = async (vendorId: string) => {
+  const total = await prisma.follow.count({
+    where: {vendorId},
   });
 
   return {
-    data: result,
-    meta: { page, limit, total },
+    data: total
   };
 };
 
