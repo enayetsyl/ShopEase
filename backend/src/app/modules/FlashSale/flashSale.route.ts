@@ -16,10 +16,10 @@ router.post(
 
 router.get("/", FlashSaleController.getAllFlashSale);
 
-router.get("/:productId", FlashSaleController.getAFlashSale);
+router.get("/:id", FlashSaleController.getAFlashSale);
 
 router.patch(
-  "/:productId",
+  "/:id",
   auth(UserRole.VENDOR),
   validateRequest(flashSaleValidation.updateFlashSale),
   FlashSaleController.updateAFlashSale

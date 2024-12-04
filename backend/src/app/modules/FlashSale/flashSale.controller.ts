@@ -33,9 +33,9 @@ const getAllFlashSale = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAFlashSale = catchAsync(async (req: Request, res: Response) => {
-  const { productId } = req.params;
+  const { id } = req.params;
 
-  const result = await FlashSaleServices.getAFlashSale(productId);
+  const result = await FlashSaleServices.getAFlashSale(id);
 
   sendResponse(res, {
     statusCode: 200,
@@ -46,13 +46,12 @@ const getAFlashSale = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateAFlashSale = catchAsync(
-  async (req: Request & { user?: any }, res: Response) => {
-    const { productId } = req.params;
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
 
     const result = await FlashSaleServices.updateAFlashSale(
-      productId,
-      req.user,
-      req
+      id,
+      req.body
     );
 
     sendResponse(res, {

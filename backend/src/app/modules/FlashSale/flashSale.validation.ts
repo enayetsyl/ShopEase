@@ -60,12 +60,7 @@ const baseUpdateFlashSaleSchema = z
       .min(0, "Discount must be greater than or equal to 0")
       .optional(),
 
-    productId: z
-      .string({
-        required_error: "Product ID is required",
-        invalid_type_error: "Product ID must be a string",
-      })
-      .optional(),
+   
 
     startTime: z
       .preprocess(

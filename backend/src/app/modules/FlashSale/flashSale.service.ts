@@ -9,6 +9,7 @@ import { fileUploader } from "../../../helpers/fileUploader";
 import { TFlashSale } from "./flashSale.type";
 import { productSearchableFields } from "./flashSale.constant";
 import { findProductById } from "../../../helpers/productHelpers";
+import { findFlashSaleById } from "../../../helpers/flashSaleHelpers";
 
 
 
@@ -66,39 +67,31 @@ const getAllFlashSale = async (
 };
 
 const getAFlashSale = async (id: string) => {
-  const result = await findProductById(id);
 
-  return result;
+  return await findFlashSaleById(id)
+  
+
 };
 
-const updateAFlashSale = async (id: string, user: any, req: Request) => {
+const updateAFlashSale = async (id: string, updatedData: Partial<TFlashSale>) => {
   // get product
   // update data
+  const { discount, startTime, endTime } = updatedData
 
-  const result = await findProductById(id);
+  const result = await findFlashSaleById(id)
 
-  const files = req.files as TFile[];
-  let imageUrls: string[] = [];
+  console.log(result)
 
-  if (files?.length > 0) {
-    const uploadedFiles = await fileUploader.uploadMultipleToCloudinary(files);
-
-    imageUrls = uploadedFiles.map((file) => file.secure_url);
-  }
-
-  const updatedImages = [...result.image, ...imageUrls];
-
-  const productData = {
-    ...req.body,
-    image: updatedImages,
-  };
-
-  const updatedProduct = await prisma.product.update({
+  const updatedFlashSale = await prisma.flashSale.update({
     where: { id },
-    data: productData,
+    data: {
+      ...(discount !== undefined && { discount }),
+      ...(startTime !== undefined && { startTime }),
+      ...(endTime !== undefined && { endTime }),
+    },
   });
 
-  return updatedProduct;
+  return updatedFlashSale;
 };
 
 export const FlashSaleServices = {
