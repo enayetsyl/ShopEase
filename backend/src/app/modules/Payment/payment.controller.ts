@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import { PaymentServices } from "./payment.service";
 import sendResponse from "../../../shared/sendResponse";
+import pick from "../../../shared/pick";
 
 
 const createPaymentIntent = catchAsync(
@@ -30,6 +31,21 @@ const paymentConfirm = catchAsync(
   }
 );
 
+const getAllTransactions = catchAsync (async (req: Request & {user?: any}, res: Response) => {
+    const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+
+    const result = await PaymentServices.getAllTransactions(options, req.user)
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Transactions fetched successfully",
+      data: result.data,
+      meta: result.meta,
+    });
+  }
+)
+
 export const PaymentController = {
-  createPaymentIntent, paymentConfirm
+  createPaymentIntent, paymentConfirm, getAllTransactions
 };

@@ -57,9 +57,6 @@ const getOrders = async (
   const { page, limit, skip } = paginationHelper.calculatePagination(options);
   const { searchTerm, ...filterData } = params;
 
-
-  console.log('user', user, page, limit, skip )
-
   let orders;
   let total = 0;
 

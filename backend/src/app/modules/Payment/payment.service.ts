@@ -5,6 +5,8 @@ import { fileUploader } from "../../../helpers/fileUploader";
 import ApiError from "../../errors/ApiError";
 import Stripe from "stripe";
 import config from "../../../config";
+import { TPaginationOptions } from "../../types/pagination";
+import { paginationHelper } from "../../../helpers/paginationHelper";
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY as string)
 
@@ -72,10 +74,33 @@ const savePaymentInfo = async(data: any) => {
   });
 }
 
+const getAllTransactions = async (options: TPaginationOptions, user: any) => {
+  
+  const { page, limit, skip } = paginationHelper.calculatePagination(options)
+  const result = await prisma.payment.findMany({
+    where: {status: "SUCCESS"},
+    skip,
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : { createdAt: "desc" },
+  })
+
+  const total = await prisma.payment.count({
+    where:{status: "SUCCESS"}
+  })
+
+  return {
+    data: result,
+    meta: { page, limit, total },
+  };
+
+}
 
 
 
 export const PaymentServices = {
-  createPaymentIntent, savePaymentInfo
+  createPaymentIntent, savePaymentInfo, getAllTransactions
 
 }
