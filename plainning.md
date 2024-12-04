@@ -96,13 +96,12 @@ Flash Sale (4)
   Update a flash sale (/flash-sale/:id)(patch) { "discount": 15,  "startTime": "2024-12-05T00:00:00Z",  "endTime": "2024-12-10T00:00:00Z"}
 
 
-Reviews (5)
+Reviews (3)
 
-get all reviews (/reviews)(get) for admin
-get review for vendor (/reviews/:vendorId) for vendor
-get single review (/reviews/:reviewId)
-respond to review(/reviews/:id/respond)(post){  "response": "Thank you for your feedback!"}
-leave review (/reviews)(post){  "productId": "productId",  "rating": 5,  "comment": "Great product!" }
+<!-- get all reviews (/reviews)(get) for admin -->
+get review for vendor (/reviews/) for vendor admin
+<!-- get single review (/reviews/:reviewId) -->
+leave review (/reviews/)(post){  "productId": "productId",  "rating": 5,  "comment": "Great product!" }
 
 Follows (3)
   
