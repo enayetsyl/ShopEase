@@ -1,14 +1,7 @@
+"use client";
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
 import CustomInput from "@/components/shared/CustomInput";
-import {
-  H1,
-  H2,
-  H3,
-  H5,
-  H6,
-  H4,
-  Paragraph,
-} from "@/components/shared/CustomTypography";
+import { H2, Paragraph, H6 } from "@/components/shared/CustomTypography";
 import Image from "next/image";
 import React from "react";
 import { IoBriefcaseOutline } from "react-icons/io5";
@@ -18,8 +11,30 @@ import { CgRename } from "react-icons/cg";
 import Link from "next/link";
 import CustomButton from "@/components/shared/CustomButton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signUpSchema } from "@/schemas/signUpSchema";
 
 const SignUp = () => {
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      role: "CUSTOMER",
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log("Form Data:", data);
+  };
+
   return (
     <div>
       <CustomBreadcrumb
@@ -35,11 +50,10 @@ const SignUp = () => {
             width={300}
             className="object-cover rounded-t-2xl w-full max-h-52"
           />
-          <div className="px-16 pb-16 ">
-            {/* Text div */}
+          <div className="px-16 pb-16">
             <div className="w-full pt-16">
-              <div className="flex justify-start items-start gap-5 ">
-                <div className="bg-white p-3 rounded-lg ">
+              <div className="flex justify-start items-start gap-5">
+                <div className="bg-white p-3 rounded-lg">
                   <IoBriefcaseOutline className="text-3xl text-primary font-bold" />
                 </div>
                 <div>
@@ -51,33 +65,43 @@ const SignUp = () => {
                 </div>
               </div>
             </div>
-            {/* lower  div */}
             <div className="pt-8">
-              <form action="" className="space-y-3">
-                {/* Input field */}
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                 <CustomInput
                   icon={<CgRename />}
                   placeholder="Name"
-                  inputClassName="bg-white py-8 focus-visible:ring-0 "
+                  inputClassName="bg-white py-8 focus-visible:ring-0"
+                  {...register("name")}
+                  error={errors.name?.message as string | undefined}
                 />
+
                 <CustomInput
                   icon={<FaRegEnvelope />}
                   placeholder="Email Address"
                   type="email"
-                  inputClassName="bg-white py-8 focus-visible:ring-0 "
+                  inputClassName="bg-white py-8 focus-visible:ring-0"
+                  {...register("email")}
+                  error={errors.email?.message as string | undefined}
                 />
+
                 <CustomInput
                   icon={<IoKeyOutline />}
                   placeholder="Password"
                   type="password"
-                  inputClassName="bg-white py-8 focus-visible:ring-0 "
+                  inputClassName="bg-white py-8 focus-visible:ring-0"
+                  {...register("password")}
+                  error={errors.password?.message as string | undefined}
                 />
-                {/* Radio button */}
-                <div className=" flex justify-start items-center gap-5">
+
+                <div className="flex justify-start items-center gap-5">
                   <H6 className="font-semibold text-black">Account Type</H6>
                   <RadioGroup className="flex justify-center items-center gap-5">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Customer" id="customer" />
+                      <RadioGroupItem
+                        value="CUSTOMER"
+                        id="customer"
+                        {...register("role")}
+                      />
                       <label
                         htmlFor="customer"
                         className="text-sm font-medium text-gray-700"
@@ -86,7 +110,11 @@ const SignUp = () => {
                       </label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="Vendor" id="vendor" />
+                      <RadioGroupItem
+                        value="VENDOR"
+                        id="vendor"
+                        {...register("role")}
+                      />
                       <label
                         htmlFor="vendor"
                         className="text-sm font-medium text-gray-700"
@@ -96,8 +124,9 @@ const SignUp = () => {
                     </div>
                   </RadioGroup>
                 </div>
-
-                {/* Already have account */}
+                {errors.role && (
+                  <p className="text-red-500 text-sm">{errors.role.message}</p>
+                )}
 
                 <Link href="/sign-in">
                   <Paragraph className="underline font-normal py-5 text-black hover:text-primary">
@@ -105,11 +134,11 @@ const SignUp = () => {
                   </Paragraph>
                 </Link>
 
-                {/* Button */}
                 <CustomButton
                   className="bg-gradient-to-r from-primary to-secondary dark:from-secondary py-8 dark:to-primary w-full rounded-md shadow-md text-foreground hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black gap-2 text-lg"
                   icon={<FaArrowRightLong />}
                   iconPosition="right"
+                  type="submit"
                 >
                   Register Now
                 </CustomButton>
