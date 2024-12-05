@@ -5,6 +5,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 interface ReusableButtonProps extends ButtonProps {
   icon?: React.ReactNode;
   loading?: boolean;
+  iconPosition?: "left" | "right";
 }
 
 const CustomButton: React.FC<ReusableButtonProps> = ({
@@ -14,6 +15,7 @@ const CustomButton: React.FC<ReusableButtonProps> = ({
   className,
   onClick,
   variant,
+  iconPosition = "left",
   ...props
 }) => {
   return (
@@ -31,10 +33,15 @@ const CustomButton: React.FC<ReusableButtonProps> = ({
         <span className="animate-spin">
           <AiOutlineLoading3Quarters />
         </span>
-      ) : (
-        icon && <span>{icon}</span>
-      )}
+      ) : iconPosition === "left" && icon ? (
+        <span>{icon}</span>
+      ) : null}
+
       {children}
+
+      {!loading && iconPosition === "right" && icon ? (
+        <span>{icon}</span>
+      ) : null}
     </Button>
   );
 };

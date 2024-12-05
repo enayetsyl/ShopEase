@@ -1,19 +1,19 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ReactNode } from "react";
-import { cn } from "@/lib/utils"; // Assuming you have a cn utility
+import { cn } from "@/lib/utils"; 
 
 type InputProps = {
-  label?: string; // For variations with labels
-  placeholder?: string; // For variations with placeholders
-  isRequired?: boolean; // For the "*" indicator
-  icon?: ReactNode; // For variations with icons inside the input
-  type?: string; // Input type (e.g., text, email)
+  label?: string; 
+  placeholder?: string; 
+  isRequired?: boolean; 
+  icon?: ReactNode; 
+  type?: string; 
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  inputClassName?: string; // Custom class for the input
-  labelClassName?: string; // Custom class for the label
-  iconClassName?: string; // Custom class for the icon
+  inputClassName?: string; 
+  labelClassName?: string; 
+  iconClassName?: string; 
 };
 
 const CustomInput = ({

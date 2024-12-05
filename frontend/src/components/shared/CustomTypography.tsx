@@ -21,7 +21,7 @@ export const H1: React.FC<TypographyProps> = ({ children, className }) => (
 export const H2: React.FC<TypographyProps> = ({ children, className }) => (
   <h2
     className={clsx(
-      "mt-10 scroll-m-20 text-3xl font-semibold tracking-tight border-b pb-2 transition-colors text-foreground dark:text-primary-foreground",
+      " scroll-m-20 text-3xl font-semibold tracking-tight transition-colors text-foreground dark:text-primary-foreground",
       className,
     )}
   >
@@ -32,12 +32,45 @@ export const H2: React.FC<TypographyProps> = ({ children, className }) => (
 export const H3: React.FC<TypographyProps> = ({ children, className }) => (
   <h3
     className={clsx(
-      "mt-8 scroll-m-20 text-2xl font-semibold tracking-tight text-foreground dark:text-secondary-foreground",
+      "scroll-m-20 text-2xl font-semibold tracking-tight text-foreground dark:text-secondary-foreground",
       className,
     )}
   >
     {children}
   </h3>
+);
+
+export const H4: React.FC<TypographyProps> = ({ children, className }) => (
+  <h4
+    className={clsx(
+      "scroll-m-20 text-xl font-semibold tracking-tight text-foreground dark:text-muted-foreground",
+      className,
+    )}
+  >
+    {children}
+  </h4>
+);
+
+export const H5: React.FC<TypographyProps> = ({ children, className }) => (
+  <h5
+    className={clsx(
+      "scroll-m-20 text-lg font-semibold tracking-tight text-foreground dark:text-muted-foreground",
+      className,
+    )}
+  >
+    {children}
+  </h5>
+);
+
+export const H6: React.FC<TypographyProps> = ({ children, className }) => (
+  <h6
+    className={clsx(
+      "scroll-m-20 text-base font-semibold tracking-tight text-foreground dark:text-muted-foreground",
+      className,
+    )}
+  >
+    {children}
+  </h6>
 );
 
 export const Paragraph: React.FC<TypographyProps> = ({
@@ -46,7 +79,7 @@ export const Paragraph: React.FC<TypographyProps> = ({
 }) => (
   <p
     className={clsx(
-      "leading-7 [&:not(:first-child)]:mt-6 text-muted-foreground dark:text-accent-foreground",
+      "leading-7 text-muted-foreground dark:text-accent-foreground",
       className,
     )}
   >
