@@ -1,5 +1,6 @@
 "use client";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 import { AppStore, makeStore } from "@/redux/store";
 import React, { useRef } from "react";
 import { Provider } from "react-redux";
@@ -17,6 +18,7 @@ const StoreProvider = ({ children }: { children: React.ReactNode }) => {
         disableTransitionOnChange
       >
         {children}
+        <Toaster />
       </ThemeProvider>
     </Provider>
   );
