@@ -7,7 +7,7 @@ interface ReusableButtonProps extends ButtonProps {
   loading?: boolean;
 }
 
-const ReusableButton: React.FC<ReusableButtonProps> = ({
+const CustomButton: React.FC<ReusableButtonProps> = ({
   children,
   icon,
   loading,
@@ -39,4 +39,4 @@ const ReusableButton: React.FC<ReusableButtonProps> = ({
   );
 };
 
-export default ReusableButton;
+export default CustomButton;
