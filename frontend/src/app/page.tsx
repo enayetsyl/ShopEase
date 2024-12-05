@@ -1,4 +1,5 @@
 "use client";
+import ReusableButton from "@/components/shared/ReuseableButton";
 import { useLoginMutation } from "@/redux/api/authApi";
 import Image from "next/image";
 
@@ -22,6 +23,13 @@ export default function Home() {
       <button onClick={handleLogin} disabled={isLoading}>
         {isLoading ? "Logging in..." : "Login"}
       </button>
+      <ReusableButton
+        loading={false}
+        variant="default"
+        className="bg-primary text-primary-foreground hover:bg-primary/60 dark:bg-secondary dark:text-secondary-foreground"
+      >
+        Hello
+      </ReusableButton>
       {data && <p>Welcome, {data.name}!</p>}
     </div>
   );
