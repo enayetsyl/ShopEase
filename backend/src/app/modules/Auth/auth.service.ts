@@ -109,6 +109,7 @@ const login = async (payload: TLogin) => {
   // if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
 
   const { password: _, ...userWithoutPassword} = user
+  console.log('user without password', userWithoutPassword)
 
   const accessToken = jwtHelpers.generateToken(userWithoutPassword, config.jwt.jwt_secret as Secret, config.jwt.expires_in as string)
   

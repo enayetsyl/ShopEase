@@ -119,7 +119,7 @@ Pages develop and integration with be
 Tech
 Next.js, Typescript, Tailwind, Shadcn, Redux, RTK Query, Stripe, Zod, React Hook Form
 
-Folder structure
+### Folder structure
   root/
 ├── public/
 │   ├── images/               # Static images
@@ -230,6 +230,56 @@ Redux store and rtk query Setup
 dark mode setup
 Theme set up
 
+### Pages
+
+Pages
+sign-up
+
+Handles registration for both users and vendors.
+Redirect vendors to their dashboard for shop setup after registration.
+sign-in
+
+Provides authentication for users, vendors, and admins.
+forgot-password
+
+Lets users request a password reset email.
+reset-password
+
+Allows users to reset their password using a token.
+home
+
+Displays products from all vendors.
+Includes filtering, searching, infinite scrolling, and category-based navigation.
+product-details
+
+Shows detailed information about a specific product.
+Related products section, shop link, and customer reviews.
+recent-products
+
+Displays the last 10 products viewed by the user.
+compare products
+
+Lets users compare up to three products in the same category.
+shop-page
+
+Displays vendor-specific details and their products.
+Includes follow/unfollow functionality.
+flash sale
+
+Showcases all products on flash sale.
+cart
+
+Manages a single-vendor cart with warnings for multi-vendor additions.
+checkout
+
+Includes payment processing and coupon application.
+dashboard
+
+Single page with conditional rendering for:
+Admin: User management, category management, and system monitoring.
+Vendor: Shop and inventory management, reviews, and order history.
+Customer: Profile management and order history.
+
 
 1. Authentication Pages
 Signup Page
@@ -319,24 +369,77 @@ Error Pages
 500 Internal Server Error.
 
 
-Page	Rendering Strategy	Reason
-Authentication Pages	CSR	User-specific, no SEO needs.
-Home Page	SSR (with ISR)	SEO and performance-critical; frequently accessed.
-Product Details Page	SSR	SEO-important; metadata for product descriptions.
-Product Comparison Page	CSR	Highly interactive and user-specific.
-Vendor Shop Page	SSR	Vendor-specific SEO benefits.
-Cart Page	CSR	User-specific and no SEO.
-Checkout Page	CSR	Sensitive and interactive; no SEO.
-Order History Page	CSR	User-specific; no SEO.
-Recent Products Page	CSR	User-specific; no SEO.
-Vendor Dashboard	CSR	Vendor-specific, highly interactive.
-Admin Dashboard	CSR	Admin-only, no SEO.
-Flash Sales Page	SSR (with ISR)	SEO-critical; time-sensitive content.
-404 Page	SSR or Static	Immediate feedback required.
-500 Page	SSR or Static	Immediate feedback required.
+Page	                      Rendering Strategy	            Reason
+Authentication Pages	      CSR	                            User-specific, no SEO needs.
+Home Page	                  SSR (with ISR)	                SEO and performance-critical;  frequently accessed.
+Product Details Page	      SSR	                            SEO-important; metadata for product descriptions.
+Product Comparison Page	    CSR	                            Highly interactive and user-specific.
+Vendor Shop Page	          SSR	                            Vendor-specific SEO benefits.
+Cart Page	                  CSR	                            User-specific and no SEO.
+Checkout Page	              CSR	                            Sensitive and interactive; no SEO.
+Order History Page	        CSR	                            User-specific; no SEO.
+Recent Products Page	      CSR	                            User-specific; no SEO.
+Vendor Dashboard	          CSR	                            Vendor-specific, highly interactive.
+Admin Dashboard	            CSR	                            Admin-only, no SEO.
+Flash Sales Page	          SSR (with ISR)	                SEO-critical; time-sensitive content.
+404 Page	                  SSR or Static	                  Immediate feedback required.
+500 Page	                  SSR or Static	                  Immediate feedback required.
+
+### Nav menu 
+
+1. General Nav Menu
+This menu will be visible to all users, whether logged in or not. It includes common functionality:
+
+Home: Link to the homepage.
+Shop: Link to browse products from all vendors.
+Flash Sale: Link to view products on flash sale.
+Sign-In/Profile:
+If logged out, show "Sign-In."
+If logged in, show a dropdown or link to the user's profile/dashboard.
+Cart: Link to the cart page.
+Additional Navigation Flows:
+
+From Sign-In to Sign-Up: Provide a link on the sign-in page for users to navigate to the sign-up page.
+From Sign-In to Forgot Password: Provide a link to the forgot password page.
+From Cart to Checkout: Ensure the cart page has a button to navigate to the checkout page.
+From Shop to Compare Products: Include a button or link in the shop page for comparing products (e.g., "Compare Selected Products").
+2. Admin Sidebar/Nav Menu
+This menu is specific to admins and will typically be in the form of a sidebar for managing platform features. Include the following:
+
+Dashboard: Admin home or main dashboard.
+Manage Users: Link to a component/page for user/vendor management.
+Manage Categories: Link to category management functionality.
+Transactions: Link to view and monitor platform transactions.
+Reports/Analytics: Link to reports and analytics.
+3. Customer Sidebar/Nav Menu
+This menu is for logged-in customers and also works well as a sidebar:
+
+Dashboard: Customer's main dashboard.
+Order History: Link to view past orders.
+Profile Management: Link to update personal details.
+Recent Products: Link to the "Recent Products" page.
+Wishlist (optional): Link to the wishlist, if implemented.
+Cart: Direct access to the cart (if not in the general nav menu).
+4. Vendor Sidebar/Nav Menu
+This menu is for vendors to manage their shop and orders:
+
+Dashboard: Vendor's main dashboard.
+Orders: Link to order history for the shop.
+Manage Products: Link to product management (add/edit/delete).
+Customer Reviews: Link to view and respond to customer reviews.
+Shop Profile: Link to update shop details like name, logo, and description.
+Summary of Total Nav Lists
+General Nav Menu: For all users (home, shop, flash sale, sign-in/profile, cart).
+Admin Nav Menu/Sidebar: For admins to manage the platform.
+Customer Nav Menu/Sidebar: For customers to access their dashboard and related features.
+Vendor Nav Menu/Sidebar: For vendors to manage their shop and orders.
+This structure keeps navigation modular, role-based, and user-friendly, ensuring the right features are shown to the right users. Let me know if you'd like detailed examples or designs for any of these menus!
 
 
- Additional Considerations
+
+
+### Additional Considerations features that can be implemented
+
 Search Functionality Enhancements
 
 Add support for autocomplete suggestions while searching.
@@ -409,29 +512,6 @@ Vendor-customer communication.
 Use libraries like Socket.io for real-time updates.
 Audit Logs (Admin)
 
-Track user and vendor actions:
-Product additions/deletions.
-Order modifications.
-Suspensions or blacklisting.
-API Documentation
-
-Generate API documentation for developers using a tool like Swagger.
-Deployment
-
-Plan deployment:
-Use Vercel for the frontend.
-Use Render or Railway for the backend.
-Ensure CDN support for static files.
-Comprehensive Testing
-
-Write tests for:
-UI (using React Testing Library).
-API (using Jest or Supertest).
-End-to-End workflows (using Playwright or Cypress).
-Code Quality
-
-Add a pre-commit hook for linting and formatting (using Husky and lint-staged).
-Ensure TypeScript types are strictly followed.
 
 
 
