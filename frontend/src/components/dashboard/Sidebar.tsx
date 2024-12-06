@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 const Sidebar = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
-  console.log(user)
+  console.log(user);
 
   return (
     <>
