@@ -9,8 +9,8 @@ import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const user = useSelector((state: RootState) => state.auth.user);
- 
-  const { slug } = useParams(); // Access dynamic route parameter
+
+  const { slug } = useParams();
 
   return (
     <ProtectedRoute allowedRoles={allowedRoles}>
