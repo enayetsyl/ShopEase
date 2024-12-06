@@ -51,3 +51,12 @@ export interface User {
   vendorId: string;
   customerId: string;
 }
+
+export interface NavItem {
+  label: string;
+  component: React.ComponentType;
+}
+
+export type SidebarItems = {
+  [role: string]: NavItem[];
+};
