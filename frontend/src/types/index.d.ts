@@ -77,7 +77,37 @@ export interface ShopApiResponse {
   message: string;
   success: boolean;
 }
+export interface ProductApiResponse {
+  data: {
+    categoryId: string;
+    discount: number;
+    image: string[];
+    inventory: number;
+    price: number;
+    shopId: string;
+    id: string;
+    name: string;
+    description: string;
+    createdAt: string;
+    deletedAt: null | boolean;
+    updatedAt: string;
+    vendorId: string;
+  }[];
+  message: string;
+  success: boolean;
+}
 
+export interface ProductData {
+  categoryId: string;
+  discount: number;
+  image: string[];
+  inventory: number;
+  price: number;
+  shopId: string;
+  productId: string;
+  name: string;
+  description: string;
+}
 export interface ShopData {
   shopId: string;
   name: string;
