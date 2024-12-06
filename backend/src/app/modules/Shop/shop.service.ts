@@ -28,7 +28,7 @@ const getAShop = async (payload: any) => {
   const shop = await prisma.shop.findFirst({
     where: { vendorId: payload.vendor.id },
   });
-
+  console.log('shop data', shop)
   if (!shop) throw new ApiError(404, "Shop not found");
   return shop;
 };

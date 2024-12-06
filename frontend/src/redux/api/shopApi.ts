@@ -1,48 +1,6 @@
+import { CreateShopRequest, ShopApiResponse, ShopData } from "@/types";
 import { baseApi } from "./baseApi";
 
-interface ShopApiResponse {
-  data: {
-    id: string;
-    name: string;
-    logo: string;
-    description: string;
-    createdAt: string;
-    deletedAt: null | boolean;
-    isBlackListed: boolean;
-    updatedAt: string;
-    vendorId: string;
-  };
-  message: string;
-  success: boolean;
-}
-
-interface ShopData {
-  shopId: string;
-  name: string;
-  description: string;
-  logo: string;
-}
-
-interface CreateShopRequest {
-  name: string;
-  description: string;
-  file: File;
-}
-
-// interface CreateShopResponse {
-//   data: {
-//     id: string;
-//     name: string;
-//     logo: string;
-//     description: string;
-//     createdAt: string;
-//     updatedAt: string;
-//     vendorId: string;
-//     deletedAt: string | null;
-//   };
-//   message: string;
-//   success: boolean;
-// }
 
 export const shopApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

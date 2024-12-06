@@ -34,7 +34,7 @@ const Sidebar = ({
     <>
       {/* Sidebar for Large Screens */}
       <div className="hidden lg:block  h-full w-[300px] shadow-lg bg-gradient-to-t from-primary to-accent dark:from-yellow-500 dark:to-yellow-600">
-        <div className="p-4">
+        <div className="p-4 lg:pt-52">
           <h2 className="text-xl font-bold pb-5">Welcome {user?.name}</h2>
           {navItems.map((navItem: NavItem, index: number) => {
             return (

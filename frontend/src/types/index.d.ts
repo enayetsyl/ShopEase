@@ -60,3 +60,33 @@ export interface NavItem {
 export type SidebarItems = {
   [role: string]: NavItem[];
 };
+
+
+export interface ShopApiResponse {
+  data: {
+    id: string;
+    name: string;
+    logo: string;
+    description: string;
+    createdAt: string;
+    deletedAt: null | boolean;
+    isBlackListed: boolean;
+    updatedAt: string;
+    vendorId: string;
+  };
+  message: string;
+  success: boolean;
+}
+
+export interface ShopData {
+  shopId: string;
+  name: string;
+  description: string;
+  logo: string;
+}
+
+export interface CreateShopRequest {
+  name: string;
+  description: string;
+  file: File;
+}

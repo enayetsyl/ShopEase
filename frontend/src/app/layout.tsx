@@ -36,7 +36,7 @@ export default function RootLayout({
           </div>
 
           {/* Main Content */}
-          <div className="max-w-7xl mx-auto">{children}</div>
+          <div >{children}</div>
         </StoreProvider>
       </body>
     </html>
