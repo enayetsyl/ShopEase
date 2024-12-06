@@ -23,6 +23,27 @@ interface ShopData {
   logo: string;
 }
 
+interface CreateShopRequest {
+  name: string;
+  description: string;
+  file: File;
+}
+
+// interface CreateShopResponse {
+//   data: {
+//     id: string;
+//     name: string;
+//     logo: string;
+//     description: string;
+//     createdAt: string;
+//     updatedAt: string;
+//     vendorId: string;
+//     deletedAt: string | null;
+//   };
+//   message: string;
+//   success: boolean;
+// }
+
 export const shopApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getShop: builder.query<ShopData, void>({
@@ -32,8 +53,23 @@ export const shopApi = baseApi.injectEndpoints({
         const shopData = { shopId, name, description, logo };
         return shopData;
       },
+      providesTags: ["Shop"],
+    }),
+    createShop: builder.mutation<ShopApiResponse, CreateShopRequest>({
+      query: ({ name, description, file }) => {
+        const dataObject = JSON.stringify({ name, description });
+        const formData = new FormData();
+        formData.append("data", dataObject);
+        formData.append("file", file);
+        return {
+          url: "/shop",
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Shop"],
     }),
   }),
 });
 
-export const { useGetShopQuery } = shopApi;
+export const { useGetShopQuery, useCreateShopMutation } = shopApi;

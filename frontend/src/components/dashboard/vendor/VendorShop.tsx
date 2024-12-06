@@ -4,14 +4,10 @@ import CustomButton from "@/components/shared/CustomButton";
 import { H1, H2 } from "@/components/shared/CustomTypography";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useGetShopQuery } from "@/redux/api/shopApi";
+import { useState } from "react";
 const VendorShop = () => {
   const { data, isLoading } = useGetShopQuery();
-
-  const handleCreateShop = (name: string, description: string) => {
-    console.log("Shop Name:", name);
-    console.log("Shop Description:", description);
-    // Add logic to create a shop (API call or state update)
-  };
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   if (isLoading) return <div>Loading...</div>;
   // if (error) return <div>Error: {error.message}</div>;
@@ -30,13 +26,15 @@ const VendorShop = () => {
           {!data && (
             <div>
               <div className="flex justify-end items-center mr-10 mt-10">
-                <Dialog>
+                <Dialog  open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
-                    <CustomButton className="bg-primary dark:bg-primary-foreground text-black dark:text-white dark:hover:text-black ">
+                    <CustomButton className="bg-primary dark:bg-primary-foreground text-black dark:text-white dark:hover:text-black "
+                    onClick={() => setIsDialogOpen(true)}
+                    >
                       Add Shop
                     </CustomButton>
                   </DialogTrigger>
-                  <AddShop />
+                  <AddShop onClose={() => setIsDialogOpen(false)}/>
                 </Dialog>
               </div>
               <div className="flex flex-col justify-center items-center mt-32 mx-10">

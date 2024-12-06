@@ -10,6 +10,8 @@ import { CgRename } from "react-icons/cg";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateShopMutation } from "@/redux/api/shopApi";
+import { useToast } from "@/hooks/use-toast";
 
 // Define Zod schema
 const addShopSchema = z.object({
@@ -23,7 +25,9 @@ const addShopSchema = z.object({
 });
 
 type AddShopFormValues = z.infer<typeof addShopSchema>;
-const AddShop = () => {
+const AddShop = ({ onClose }: { onClose: () => void }) => {
+  const [createShop, { isLoading, isSuccess }] = useCreateShopMutation();
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -32,10 +36,27 @@ const AddShop = () => {
     resolver: zodResolver(addShopSchema),
   });
 
-  const onSubmit = (data: AddShopFormValues) => {
+  const onSubmit = async (data: AddShopFormValues) => {
     const logoFile = data.shopLogo[0];
-    console.log(data.shopName, data.shopDescription, logoFile);
-    // onCreate(data.shopName, data.shopDescription, logoFile);
+
+    const response = await createShop({
+      name: data.shopName,
+      description: data.shopDescription,
+      file: logoFile,
+    }).unwrap();
+
+    if (response.success) {
+      toast({
+        description: `${response.message}`,
+      });
+      onClose(); 
+      
+    } else {
+      toast({
+        description: `An Error Occurred`,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -79,7 +100,11 @@ const AddShop = () => {
 
         {/* Submit Button */}
         <div className="mt-4">
-          <CustomButton type="submit" className="bg-primary text-black">
+          <CustomButton
+            type="submit"
+            className="bg-primary text-black"
+            loading={isLoading}
+          >
             Create Shop
           </CustomButton>
         </div>

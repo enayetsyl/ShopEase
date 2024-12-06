@@ -7,7 +7,6 @@ import ApiError from "../../errors/ApiError";
 const createShop = async (user: any, req: Request) => {
   //  upload file to cloudinary
   // save data into db
-
   const file = req.file as TFile;
 
   if (file) {
@@ -16,7 +15,6 @@ const createShop = async (user: any, req: Request) => {
   }
 
   req.body.vendorId = user.vendor.id;
-
 
   const shop = await prisma.shop.create({ data: req.body });
 
