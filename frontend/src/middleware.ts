@@ -56,7 +56,7 @@ export function middleware(req: NextRequest) {
       protectedRoutes[pathname as keyof typeof protectedRoutes];
 
     if (user.role !== requiredRole) {
-      return NextResponse.redirect(new URL("/unauthorized", req.url)); // Redirect unauthorized users
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
   }
 

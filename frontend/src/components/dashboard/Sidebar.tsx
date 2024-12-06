@@ -27,10 +27,8 @@ const Sidebar = ({
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
   const role = user?.role as "ADMIN" | "VENDOR" | "CUSTOMER";
-  console.log(user);
 
   const navItems: NavItem[] = sidebarItems[role];
-  console.log("sidebarItems:", sidebarItems);
 
   return (
     <>
@@ -39,14 +37,13 @@ const Sidebar = ({
         <div className="p-4">
           <h2 className="text-xl font-bold pb-5">Welcome {user?.name}</h2>
           {navItems.map((navItem: NavItem, index: number) => {
-            console.log("navItem.component:", navItem.component);
             return (
               <CustomButton
                 key={index}
                 className={`w-full text-left py-3 px-4 mb-2 rounded-md ${
                   activeItem === navItem.label
-                    ? "bg-primary text-white"
-                    : "bg-muted text-muted-foreground hover:bg-primary-foreground hover:text-white"
+                    ? "bg-primary dark:bg-primary-foreground text-white dark:text-white dark:hover:text-black"
+                    : "bg-muted text-muted-foreground hover:bg-primary-foreground hover:text-white dark:hover:bg-primary dark:hover:text-black"
                 }`}
                 onClick={() => {
                   setActiveItem(navItem.label); // Set active item

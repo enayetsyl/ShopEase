@@ -5,6 +5,7 @@ import sendResponse from "../../../shared/sendResponse";
 
 const createShop = catchAsync(
   async (req: Request & { user?: any }, res: Response) => {
+    
     const result = await ShopServices.createShop(req.user, req);
 
     sendResponse(res, {
@@ -19,7 +20,6 @@ const createShop = catchAsync(
 const getAShop = catchAsync(
   async (req: Request & { user?: any }, res: Response) => {
     const result = await ShopServices.getAShop(req.user);
-
     sendResponse(res, {
       statusCode: 200,
       success: true,

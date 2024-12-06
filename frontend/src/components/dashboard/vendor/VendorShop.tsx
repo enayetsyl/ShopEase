@@ -1,7 +1,13 @@
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
-import React from "react";
-
+import CustomButton from "@/components/shared/CustomButton";
+import { H1, H2 } from "@/components/shared/CustomTypography";
+import { useGetShopQuery } from "@/redux/api/shopApi";
 const VendorShop = () => {
+  const { data, isLoading } = useGetShopQuery();
+  console.log("data", data);
+
+  if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error.message}</div>;
   return (
     <div className="">
       <CustomBreadcrumb
@@ -12,7 +18,25 @@ const VendorShop = () => {
         ]}
         title="Shop Page"
       />
-      <div></div>
+      <div>
+        <div>
+          {!data && (
+            <div>
+              <div className="flex justify-end items-center mr-10 mt-10">
+                <CustomButton className="bg-primary dark:bg-primary-foreground text-black dark:text-white dark:hover:text-black">
+                  Add Shop
+                </CustomButton>
+              </div>
+              <div className="flex flex-col justify-center items-center mt-32 mx-10">
+                <H2 className="text-center text-accent-foreground">
+                  You do not have any shop yet.
+                </H2>
+                <H2>Create your shop Now.</H2>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

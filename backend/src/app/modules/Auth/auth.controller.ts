@@ -19,15 +19,15 @@ const login = catchAsync(async (req: Request, res: Response) => {
   const { accessToken, refreshToken, userWithoutPassword } = result;
 
 
-  res.cookie("refreshToken", refreshToken, {
-    secure: false,
-    httpOnly: true,
-    sameSite: true,
-  });
   res.cookie("accessToken", accessToken, {
-    secure: false,
-    httpOnly: true,
-    sameSite: true,
+    secure: false, // Disable for local development
+    httpOnly: false, // Ensure it can be accessed via JavaScript
+    sameSite: "lax", // Use 'lax' for local development
+  });
+  res.cookie("refreshToken", refreshToken, {
+    secure: false, // Disable for local development
+    httpOnly: false,
+    sameSite: "lax",
   });
 
   sendResponse(res, {
