@@ -81,20 +81,20 @@ const SignInForm = () => {
           <Checkbox id="terms" />
           <label
             htmlFor="terms"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground dark:text-muted-foreground"
           >
             Remember Me
           </label>
         </div>
         <Link href="/sign-in">
-          <span className="underline font-normal leading-7 text-muted-foreground dark:text-accent-foreground hover:text-primary">
+          <span className="underline font-normal leading-7 text-foreground dark:text-muted-foreground">
             Forgot Password
           </span>
         </Link>
       </div>
 
       <CustomButton
-        className="bg-gradient-to-r from-primary to-secondary dark:from-secondary py-8 dark:to-primary w-full rounded-md shadow-md text-foreground hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black gap-2 text-lg"
+        className="bg-gradient-to-r from-primary to-accent dark:from-yellow-500 dark:to-yellow-600 py-8  w-full rounded-md shadow-md text-foreground hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black gap-2 text-lg"
         icon={<FaArrowRightLong />}
         iconPosition="right"
         type="submit"

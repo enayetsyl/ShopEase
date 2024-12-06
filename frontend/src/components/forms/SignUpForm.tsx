@@ -73,7 +73,7 @@ const SignUpForm = () => {
       />
 
       <div className="flex justify-start items-center gap-5">
-        <H6 className="font-semibold text-black">Account Type</H6>
+        <H6 className="font-semibold ">Account Type</H6>
         <RadioGroup className="flex justify-center items-center gap-5">
           <div className="flex items-center space-x-2">
             <RadioGroupItem
@@ -83,7 +83,7 @@ const SignUpForm = () => {
             />
             <label
               htmlFor="customer"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium  text-foreground dark:text-muted-foreground"
             >
               Customer
             </label>
@@ -92,7 +92,7 @@ const SignUpForm = () => {
             <RadioGroupItem value="VENDOR" id="vendor" {...register("role")} />
             <label
               htmlFor="vendor"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium  text-foreground dark:text-muted-foreground"
             >
               Vendor
             </label>
@@ -110,7 +110,7 @@ const SignUpForm = () => {
       </Link>
 
       <CustomButton
-        className="bg-gradient-to-r from-primary to-secondary dark:from-secondary py-8 dark:to-primary w-full rounded-md shadow-md text-foreground hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black gap-2 text-lg"
+        className="bg-gradient-to-r from-primary to-accent dark:from-yellow-500 dark:to-yellow-600 w-full py-8 rounded-md shadow-md text-foreground hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black gap-2 text-lg"
         icon={<FaArrowRightLong />}
         iconPosition="right"
         type="submit"

@@ -21,7 +21,7 @@ export const H1: React.FC<TypographyProps> = ({ children, className }) => (
 export const H2: React.FC<TypographyProps> = ({ children, className }) => (
   <h2
     className={clsx(
-      " scroll-m-20 text-3xl font-semibold tracking-tight transition-colors text-foreground dark:text-primary-foreground",
+      " scroll-m-20 text-3xl font-semibold tracking-tight transition-colors text-foreground ",
       className,
     )}
   >
