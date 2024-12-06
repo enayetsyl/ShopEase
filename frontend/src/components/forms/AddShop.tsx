@@ -4,71 +4,86 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import CustomButton from "@/components/shared/CustomButton";
-import { useState } from "react";
 import CustomInput from "../shared/CustomInput";
 import { CgRename } from "react-icons/cg";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const AddShop = ({
-  onCreate,
-}: {
-  onCreate: (name: string, description: string) => void;
-}) => {
-  const [shopName, setShopName] = useState("");
-  const [shopDescription, setShopDescription] = useState("");
+// Define Zod schema
+const addShopSchema = z.object({
+  shopName: z.string().min(3, "Shop name must be at least 3 characters long."),
+  shopDescription: z
+    .string()
+    .min(10, "Description must be at least 10 characters long."),
+  shopLogo: z
+    .instanceof(FileList)
+    .refine((files) => files.length === 1, "Please upload a logo."),
+});
 
-  const handleCreateShop = () => {
-    onCreate(shopName, shopDescription);
-    setShopName("");
-    setShopDescription("");
+type AddShopFormValues = z.infer<typeof addShopSchema>;
+const AddShop = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddShopFormValues>({
+    resolver: zodResolver(addShopSchema),
+  });
+
+  const onSubmit = (data: AddShopFormValues) => {
+    const logoFile = data.shopLogo[0];
+    console.log(data.shopName, data.shopDescription, logoFile);
+    // onCreate(data.shopName, data.shopDescription, logoFile);
   };
 
   return (
-    <DialogContent>
+    <DialogContent className="text-card-foreground">
       <DialogHeader>
         <DialogTitle className="">Create a New Shop</DialogTitle>
         <DialogDescription>
           Fill in the details below to create your shop.
         </DialogDescription>
       </DialogHeader>
-      <div className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Shop Name */}
         <CustomInput
           icon={<CgRename />}
           placeholder="Shop Name"
           label="Shop Name"
-          inputClassName="bg-white py-4 focus-visible:ring-0"
-          // {...register("name")}
-          // error={errors.name?.message as string | undefined}
+          inputClassName="bg-white py-4 focus-visible:ring-0 dark:text-black"
+          {...register("shopName")}
+          error={errors.shopName?.message}
         />
+
+        {/* Shop Description */}
         <CustomInput
           icon={<CgRename />}
           placeholder="Description"
           label="Description"
-          inputClassName="bg-white py-4  focus-visible:ring-0"
-
-          // {...register("name")}
-          // error={errors.name?.message as string | undefined}
+          inputClassName="bg-white py-4 focus-visible:ring-0 dark:text-black"
+          {...register("shopDescription")}
+          error={errors.shopDescription?.message}
         />
+
+        {/* Shop Logo */}
         <CustomInput
-          // icon={<CgRename />}
           placeholder="Logo"
           label="Logo"
           inputClassName="bg-white pb-3 focus-visible:ring-0"
           type="file"
-          // {...register("name")}
-          // error={errors.name?.message as string | undefined}
+          {...register("shopLogo")}
+          error={errors.shopLogo?.message}
         />
-      </div>
-      <div className="mt-4">
-        <CustomButton
-          className="bg-primary text-black"
-          onClick={handleCreateShop}
-        >
-          Create Shop
-        </CustomButton>
-      </div>
+
+        {/* Submit Button */}
+        <div className="mt-4">
+          <CustomButton type="submit" className="bg-primary text-black">
+            Create Shop
+          </CustomButton>
+        </div>
+      </form>
     </DialogContent>
   );
 };

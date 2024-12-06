@@ -9,7 +9,7 @@ type InputProps = {
   isRequired?: boolean;
   icon?: ReactNode;
   type?: string;
-  error?: string | undefined; // Error message from React Hook Form
+  error?: string | undefined;
   inputClassName?: string;
   labelClassName?: string;
   iconClassName?: string;

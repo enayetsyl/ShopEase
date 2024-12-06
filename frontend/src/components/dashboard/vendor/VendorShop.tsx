@@ -32,11 +32,11 @@ const VendorShop = () => {
               <div className="flex justify-end items-center mr-10 mt-10">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <CustomButton className="bg-primary dark:bg-primary-foreground text-black dark:text-white dark:hover:text-black">
+                    <CustomButton className="bg-primary dark:bg-primary-foreground text-black dark:text-white dark:hover:text-black ">
                       Add Shop
                     </CustomButton>
                   </DialogTrigger>
-                  <AddShop onCreate={handleCreateShop} />
+                  <AddShop />
                 </Dialog>
               </div>
               <div className="flex flex-col justify-center items-center mt-32 mx-10">
