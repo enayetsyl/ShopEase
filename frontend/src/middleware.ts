@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import jwt, { Secret } from "jsonwebtoken";
 
-// Define the structure of your JWT payload
 interface DecodedToken {
   id: string;
   email: string;
@@ -12,61 +11,58 @@ interface DecodedToken {
   customer?: object | null;
 }
 
-// Secret key for JWT validation
+const publicRoutes = ["/sign-in", "/sign-up", "/"];
 const secretKey = process.env.NEXT_JWT_SECRET as Secret;
+
+if (!secretKey) {
+  throw new Error(
+    "NEXT_JWT_SECRET is not defined in the environment variables",
+  );
+}
+
+function decodeToken(token: string) {
+  try {
+    return jwt.verify(token, secretKey) as DecodedToken;
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    return null;
+  }
+}
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Public routes that don't require authentication
-  const publicRoutes = ["/login", "/signup", "/api/public"];
-
-  // Skip middleware for public routes
+  // Allow public routes to bypass the middleware
   if (publicRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.next();
   }
 
-  // Get token from cookies
-  const token = req.cookies.get("token")?.value;
+  const token = req.cookies.get("accessToken")?.value;
+  const user = token ? decodeToken(token) : null;
 
-  if (!token) {
-    // Redirect to login if no token is found
-    return NextResponse.redirect(new URL("/login", req.url));
+  if (!user || !user.role) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
-  try {
-    // Verify token
-    const decoded = jwt.verify(token, secretKey) as DecodedToken;
+  const protectedRoutes = {
+    "/dashboard/admin": "ADMIN",
+    "/dashboard/vendor": "VENDOR",
+    "/dashboard/customer": "CUSTOMER",
+  };
 
-    // Role-based access control
-    if (pathname.startsWith("/admin") && decoded.role !== "ADMIN") {
-      return NextResponse.redirect(new URL("/unauthorized", req.url));
-    }
-    if (pathname.startsWith("/vendor") && decoded.role !== "VENDOR") {
-      return NextResponse.redirect(new URL("/unauthorized", req.url));
-    }
-    if (pathname.startsWith("/customer") && decoded.role !== "CUSTOMER") {
-      return NextResponse.redirect(new URL("/unauthorized", req.url));
-    }
+  // Check if the requested route is a protected route
+  if (pathname in protectedRoutes) {
+    const requiredRole =
+      protectedRoutes[pathname as keyof typeof protectedRoutes];
 
-    // Add decoded user data to headers if needed
-    const response = NextResponse.next();
-    response.cookies.set("x-user", JSON.stringify(decoded), { httpOnly: true });
-    return response;
-  } catch (err) {
-    console.error("JWT verification failed:", err);
-
-    // Redirect to login for invalid token
-    return NextResponse.redirect(new URL("/login", req.url));
+    if (user.role !== requiredRole) {
+      return NextResponse.redirect(new URL("/unauthorized", req.url)); // Redirect unauthorized users
+    }
   }
+
+  return NextResponse.next();
 }
 
-// Matcher configuration for protected routes
 export const config = {
-  matcher: [
-    "/admin/:path*",
-    "/vendor/:path*",
-    "/customer/:path*",
-    "/api/protected/:path*",
-  ],
+  matcher: ["/dashboard/:path*"],
 };

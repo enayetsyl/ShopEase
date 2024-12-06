@@ -1,4 +1,4 @@
-import SignUpForm from "@/components/forms/signUpForm";
+import SignUpForm from "@/components/forms/SignUpForm";
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
 import { H2, Paragraph } from "@/components/shared/CustomTypography";
 import Image from "next/image";

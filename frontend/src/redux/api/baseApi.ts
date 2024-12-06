@@ -4,6 +4,7 @@ export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5002/api/v1",
+    credentials: "include",
   }),
   tagTypes: ["Auth", "Users", "Categories"],
   endpoints: () => ({}),
