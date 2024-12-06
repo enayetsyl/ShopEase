@@ -1,7 +1,7 @@
 import React from "react";
 
 const VendorShop = () => {
-  return <div>VendorShop</div>;
+  return <div className="text-black">VendorShop</div>;
 };
 
 export default VendorShop;

@@ -1,28 +1,34 @@
 "use client";
 import Sidebar from "@/components/dashboard/Sidebar";
-import { allowedRoles } from "@/constants";
+import { allowedRoles, sidebarItems } from "@/constants";
 import ProtectedRoute from "@/protectedRoute/ProtectedRoute";
 import { RootState } from "@/redux/store";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const user = useSelector((state: RootState) => state.auth.user);
-  const [activeComponent, setActiveComponent] =
-    useState<React.ComponentType | null>(null);
+  useState<React.ComponentType | null>(null);
   const { slug } = useParams();
+  const [activeComponent, setActiveComponent] = useState<React.ReactNode>(null);
 
-  const ActiveComponent = activeComponent;
-
+  useEffect(() => {
+    if (!activeComponent && user?.role) {
+      const DefaultComponent = sidebarItems[user.role]?.[0]?.component; // Get the first component
+      if (DefaultComponent) {
+        setActiveComponent(<DefaultComponent />); // Instantiate it as a JSX element
+      }
+    }
+  }, [user, activeComponent]);
   return (
     <ProtectedRoute allowedRoles={allowedRoles}>
       <div className="flex justify-start items-center min-h-screen">
-        <Sidebar setActiveComponent={setActiveComponent} />
+        <div className="flex-1">
+          <Sidebar setActiveComponent={setActiveComponent} />
+        </div>
         <div className="flex-1 p-4">
-          {ActiveComponent ? (
-            <ActiveComponent />
-          ) : (
+          {activeComponent || (
             <h1 className="text-center text-gray-500">
               Select an option from the menu
             </h1>
