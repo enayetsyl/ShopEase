@@ -23,11 +23,11 @@ const Dashboard = () => {
   }, [user, activeComponent]);
   return (
     <ProtectedRoute allowedRoles={allowedRoles}>
-      <div className="flex justify-start items-center min-h-screen">
-        <div className="flex-1">
+      <div className="flex  min-h-screen">
+        <div className="flex-0">
           <Sidebar setActiveComponent={setActiveComponent} />
         </div>
-        <div className="flex-1 p-4">
+        <div className="flex-1 w-full">
           {activeComponent || (
             <h1 className="text-center text-gray-500">
               Select an option from the menu

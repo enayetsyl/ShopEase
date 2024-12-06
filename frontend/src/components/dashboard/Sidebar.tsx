@@ -35,7 +35,7 @@ const Sidebar = ({
   return (
     <>
       {/* Sidebar for Large Screens */}
-      <div className="hidden lg:block fixed top-0 left-0 h-full w-[300px] shadow-lg bg-gradient-to-t from-primary to-accent dark:from-yellow-500 dark:to-yellow-600">
+      <div className="hidden lg:block  h-full w-[300px] shadow-lg bg-gradient-to-t from-primary to-accent dark:from-yellow-500 dark:to-yellow-600">
         <div className="p-4">
           <h2 className="text-xl font-bold pb-5">Welcome {user?.name}</h2>
           {navItems.map((navItem: NavItem, index: number) => {
@@ -66,7 +66,7 @@ const Sidebar = ({
         size="icon"
         onClick={() => setIsSheetOpen(true)}
         aria-label="Toggle sidebar"
-        className="lg:hidden fixed top-4 left-4 z-50 bg-accent  "
+        className="lg:hidden fixed top-4 right-14 z-50 bg-accent  "
       >
         {" "}
         <Menu className="text-primary font-bold text-2xl" />
