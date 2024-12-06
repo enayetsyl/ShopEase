@@ -1,10 +1,13 @@
 "use client";
 import Sidebar from "@/components/dashboard/Sidebar";
 import ProtectedRoute from "@/protectedRoute/ProtectedRoute";
-import { useParams, useRouter } from "next/navigation";
+import { RootState } from "@/redux/store";
+import { useParams } from "next/navigation";
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
+  const user = useSelector((state: RootState) => state.auth.user);
   const allowedRoles = {
     admin: ["ADMIN"], // Only ADMIN can access `/dashboard/admin`
     vendor: ["VENDOR"], // Only VENDOR can access `/dashboard/vendor`
@@ -17,7 +20,7 @@ const Dashboard = () => {
   return (
     <ProtectedRoute allowedRoles={allowedRoles}>
       <div className="flex justify-start items-center min-h-screen">
-        <Sidebar />
+        <Sidebar userName={user?.name} />
         <h1 className="flex-1">Welcome to the {slug} dashboard!</h1>
       </div>
     </ProtectedRoute>

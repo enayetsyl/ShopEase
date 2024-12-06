@@ -40,7 +40,6 @@ const SignInForm = () => {
       });
       const user = response.data;
       dispatch(setAuth(user));
-      console.log(response);
       if (response.data.role === "VENDOR") {
         router.push("/dashboard/vendor");
       } else if (response.data.role === "CUSTOMER") {
@@ -48,7 +47,6 @@ const SignInForm = () => {
       } else if (response.data.role === "ADMIN") {
         router.push("/dashboard/admin");
       }
-      // router.push("/dashboard/admin");
     } catch (err: any) {
       console.error("Error from Backend:", err);
       toast({
