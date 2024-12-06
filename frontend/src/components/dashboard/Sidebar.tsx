@@ -15,6 +15,7 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { sidebarItems } from "@/constants";
 import { NavItem } from "@/types";
+import { Menu } from "lucide-react";
 
 const Sidebar = ({
   setActiveComponent,
@@ -48,13 +49,17 @@ const Sidebar = ({
 
       {/* Trigger for Mobile Screens */}
       <Button
+        variant="outline"
+        size="icon"
         onClick={() => setIsSheetOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 bg-blue-500 text-white"
+        aria-label="Toggle sidebar"
+        className="lg:hidden fixed top-4 left-4 z-50 bg-accent  "
       >
-        Open Menu
+        {" "}
+        <Menu className="text-primary font-bold text-2xl" />
       </Button>
 
-      {/* Sheet for Mobile Screens */}
+        {/* Sheet for Mobile Screens */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
           <Button className="hidden">Open Menu</Button>
