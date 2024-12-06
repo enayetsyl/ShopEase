@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import StoreProvider from "@/provider/StoreProvider";
+import { DarkModeButton } from "@/components/shared/DarkModeButton";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,6 +31,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <StoreProvider>
+          <div className="fixed top-4 right-4 z-50">
+            <DarkModeButton />
+          </div>
+
+          {/* Main Content */}
           <div className="max-w-7xl mx-auto">{children}</div>
         </StoreProvider>
       </body>
