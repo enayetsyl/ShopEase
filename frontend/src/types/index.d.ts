@@ -95,8 +95,40 @@ export interface ProductApiResponse {
   message: string;
   success: boolean;
 }
+export interface VendorProductApiResponse {
+  data: {
+    categoryName: string;
+    categoryId: string;
+    discount: number;
+    image: string[];
+    inventory: number;
+    price: number;
+    shopId: string;
+    id: string;
+    name: string;
+    description: string;
+    createdAt: string;
+    deletedAt: null | boolean;
+    updatedAt: string;
+    vendorId: string;
+  }[];
+  message: string;
+  success: boolean;
+}
 
 export interface ProductData {
+  categoryId: string;
+  discount: number;
+  image: string[];
+  inventory: number;
+  price: number;
+  shopId: string;
+  productId: string;
+  name: string;
+  description: string;
+}
+export interface VendorProductData {
+  categoryName: string;
   categoryId: string;
   discount: number;
   image: string[];

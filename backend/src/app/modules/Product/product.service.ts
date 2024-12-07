@@ -108,7 +108,6 @@ const getAllVendorProducts = async (options: TPaginationOptions, user: any) => {
   // get product data based on vendor id
   // get meta data
   const { page, limit, skip } = paginationHelper.calculatePagination(options);
-  const andConditions: Prisma.ProductWhereInput[] = [];
 
   const result = await prisma.product.findMany({
     where: {
@@ -120,6 +119,13 @@ const getAllVendorProducts = async (options: TPaginationOptions, user: any) => {
       options.sortBy && options.sortOrder
         ? { [options.sortBy]: options.sortOrder }
         : { createdAt: "desc" },
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 
   const total = await prisma.product.count({
@@ -129,7 +135,10 @@ const getAllVendorProducts = async (options: TPaginationOptions, user: any) => {
   });
 
   return {
-    data: result,
+    data: result.map((product) => ({
+      ...product,
+      categoryName: product.category.name,
+    })),
     meta: { page, limit, total },
   };
 };

@@ -1,4 +1,9 @@
-import { ProductApiResponse, ProductData } from "@/types";
+import {
+  ProductApiResponse,
+  ProductData,
+  VendorProductApiResponse,
+  VendorProductData,
+} from "@/types";
 import { baseApi } from "./baseApi";
 
 export const productApi = baseApi.injectEndpoints({
@@ -34,12 +39,12 @@ export const productApi = baseApi.injectEndpoints({
       },
     }),
     getVendorProducts: builder.query<
-      ProductData[],
+      VendorProductData[],
       { page: number; limit: number }
     >({
       query: ({ page, limit }) =>
         `/products/vendor-product?page=${page}&limit=${limit}`,
-      transformResponse: (response: ProductApiResponse) => {
+      transformResponse: (response: VendorProductApiResponse) => {
         return response.data.map((data) => {
           const {
             id: productId,
@@ -51,6 +56,7 @@ export const productApi = baseApi.injectEndpoints({
             inventory,
             price,
             shopId,
+            categoryName,
           } = data;
           const productData = {
             productId,
@@ -62,6 +68,7 @@ export const productApi = baseApi.injectEndpoints({
             inventory,
             price,
             shopId,
+            categoryName,
           };
           return productData;
         });
