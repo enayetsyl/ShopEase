@@ -1,4 +1,14 @@
 "use client";
+import {
+  House,
+  Store,
+  Zap,
+  ShoppingCart,
+  CircleUserRound,
+  LogIn,
+  LogOut,
+  LayoutDashboard,
+} from "lucide-react";
 
 import {
   Menubar,
@@ -34,13 +44,13 @@ const NavigationMenu = () => {
   return (
     <nav className="max-w-7xl fixed shadow-lg mx-auto w-full pt-1">
       <Menubar>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center w-full">
           {/* Fixed Menu Items */}
-          <div className="flex items-center gap-4 flex-grow">
+          <div className="flex items-center flex-grow">
             <MenubarMenu>
               <MenubarTrigger>
-                <Link href="/" className="flex items-center gap-2">
-                  <FaHome />
+                <Link href="/" className="flex items-center gap-1">
+                  <House />
                   Home
                 </Link>
               </MenubarTrigger>
@@ -48,8 +58,8 @@ const NavigationMenu = () => {
 
             <MenubarMenu>
               <MenubarTrigger>
-                <Link href="/shop" className="flex items-center gap-2">
-                  <FaShopify />
+                <Link href="/shop" className="flex items-center gap-1">
+                  <Store />
                   Shop
                 </Link>
               </MenubarTrigger>
@@ -57,8 +67,8 @@ const NavigationMenu = () => {
 
             <MenubarMenu>
               <MenubarTrigger>
-                <Link href="/flash-sale" className="flex items-center gap-2">
-                  <FaBolt />
+                <Link href="/flash-sale" className="flex items-center gap-1">
+                  <Zap />
                   Flash Sale
                 </Link>
               </MenubarTrigger>
@@ -66,42 +76,35 @@ const NavigationMenu = () => {
 
             <MenubarMenu>
               <MenubarTrigger>
-                <Link href="/cart" className="flex items-center gap-2">
-                  <FaShoppingCart size={20} />
+                <Link href="/cart" className="flex items-center ">
+                  <ShoppingCart size={20} />
                 </Link>
               </MenubarTrigger>
             </MenubarMenu>
           </div>
 
           {/* Conditional Menu: Login or Avatar */}
-          <div className="flex items-center">
+          <div className="flex items-center justify-end mr-12">
             <MenubarMenu>
               {!user ? (
                 <MenubarTrigger>
-                  <Link
-                    href="/login"
-                    className="flex items-center gap-2 text-gray-700 hover:text-black"
-                  >
-                    <FaSignInAlt />
-                    Login
+                  <Link href="/sign-in" className="flex items-center gap-1 ">
+                    <LogIn />
                   </Link>
                 </MenubarTrigger>
               ) : (
                 <MenubarTrigger>
-                  <FaUserCircle
-                    size={24}
-                    className="text-gray-700 hover:text-black"
-                  />
+                  <CircleUserRound size={24} className=" hover:text-black" />
                 </MenubarTrigger>
               )}
               {user && (
-                <MenubarContent className="bg-white shadow-md">
+                <MenubarContent className="">
                   <MenubarItem>
                     <Link
                       href="/dashboard"
-                      className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                      className="flex items-center gap-2 px-2 py-2 hover:bg-gray-100 cursor-pointer"
                     >
-                      <FaTachometerAlt />
+                      <LayoutDashboard />
                       Dashboard
                     </Link>
                   </MenubarItem>
@@ -110,7 +113,7 @@ const NavigationMenu = () => {
                     onClick={handleLogout}
                     className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   >
-                    <FaSignOutAlt />
+                    <LogOut />
                     Logout
                   </MenubarItem>
                 </MenubarContent>

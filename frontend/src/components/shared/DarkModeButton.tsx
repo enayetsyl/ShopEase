@@ -24,7 +24,7 @@ export function DarkModeButton() {
       {theme === "light" ? (
         <Moon className="h-[1.2rem] w-[1.2rem] text-primary" />
       ) : (
-        <Sun className="h-[1.2rem] w-[1.2rem]  text-primary" />
+        <Sun className="h-[1.2rem] w-[1.2rem]  text-black" />
       )}
     </Button>
   );
