@@ -5,7 +5,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import CustomButton from "../CustomButton";
 import { Pencil, Copy } from "lucide-react";
 
-
 export const vendorProductTableColumns: ColumnDef<VendorProductActions>[] = [
   { accessorKey: "categoryName", header: "Category Name" },
   { accessorKey: "name", header: "Name" },
