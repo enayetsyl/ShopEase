@@ -126,5 +126,5 @@ export const {
   useGetProductsQuery,
   useGetVendorProductsQuery,
   useEditProductMutation,
-  useDuplicateProductMutation
+  useDuplicateProductMutation,
 } = productApi;
