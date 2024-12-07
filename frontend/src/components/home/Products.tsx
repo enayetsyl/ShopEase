@@ -12,13 +12,7 @@ const Products = () => {
   return (
     <div className="flex flex-wrap justify-center gap-6 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
       {data?.map((product) => (
-        <ProductCard
-          key={product.productId}
-          id={product.productId}
-          name={product.name}
-          price={product.price}
-          images={product.image}
-        />
+        <ProductCard key={product.productId} product={product} />
       ))}
     </div>
   );

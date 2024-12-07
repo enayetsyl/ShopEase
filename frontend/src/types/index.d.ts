@@ -95,6 +95,54 @@ export interface ProductApiResponse {
   message: string;
   success: boolean;
 }
+export interface SingleProductApiResponse {
+  data: {
+    id: string;
+    name: string;
+    description: string;
+    categoryId: string;
+    discount: number;
+    image: string[];
+    inventory: number;
+    price: number;
+    shopId: string;
+    vendorId: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: null | string;
+
+    // Category data
+    category: {
+      id: string;
+      name: string;
+      description?: string;
+    };
+
+    // Shop data
+    shop: {
+      id: string;
+      name: string;
+      description?: string;
+      logo?: string;
+    };
+
+    // Reviews data
+    reviews: Array<{
+      id: string;
+      rating: number;
+      comment?: string;
+      createdAt: string;
+      customer: {
+        id: string;
+        name: string;
+        profilePhoto?: string;
+      };
+    }>;
+  };
+  message: string;
+  success: boolean;
+}
+
 export interface VendorProductApiResponse {
   data: {
     categoryName: string;
@@ -127,6 +175,7 @@ export interface ProductData {
   name: string;
   description: string;
 }
+
 export interface VendorProductData {
   categoryId: string;
   shopId: string;
@@ -138,6 +187,44 @@ export interface VendorProductData {
   inventory: number;
   price: number;
   image: string[];
+}
+
+export interface SingleProductData {
+  productId: string;
+  name: string;
+  description: string;
+  categoryId: string;
+  discount: number;
+  image: string[];
+  inventory: number;
+  price: number;
+  shopId: string;
+
+  // Category information
+  category?: {
+    name: string;
+    description?: string;
+  };
+
+  // Shop information
+  shop?: {
+    name: string;
+    description?: string;
+    logo?: string;
+  };
+
+  // Reviews information
+  reviews?: Array<{
+    id: string;
+    rating: number;
+    comment?: string;
+    createdAt: string;
+    customer: {
+      id: string;
+      name: string;
+      profilePhoto?: string;
+    };
+  }>;
 }
 
 export interface EditProductRequest {

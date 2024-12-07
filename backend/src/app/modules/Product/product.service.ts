@@ -144,9 +144,29 @@ const getAllVendorProducts = async (options: TPaginationOptions, user: any) => {
 };
 
 const getAProduct = async (id: string) => {
-  const result = await findProductById(id);
+  const product = await prisma.product.findUnique({
+    where: { id },
+    include: {
+      reviews: {
+        include: {
+          customer: {
+            select: {
+              id: true,
+              name: true,
+              profilePhoto: true,
+            },
+          },
+        },
+      },
+      shop: true,
+      category: true,
+    },
+  });
 
-  return result;
+  if (!product || product.deletedAt !== null)
+    throw new ApiError(404, "product Not Found");
+
+  return product;
 };
 
 const duplicateAProduct = async (id: string) => {

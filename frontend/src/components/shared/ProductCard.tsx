@@ -2,15 +2,14 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Eye, ShoppingCart, Star } from "lucide-react";
+import { ProductData } from "@/types";
 
 interface ProductCardProps {
-  id: string;
-  name: string;
-  price: number;
-  images: string[];
+  product: ProductData;
 }
 
-const ProductCard = ({ id, name, price, images }: ProductCardProps) => {
+const ProductCard = ({ product }: ProductCardProps) => {
+  const { productId: id, name, price, image } = product;
   const [isHovered, setIsHovered] = useState(false);
   // Generate random colors
   const getRandomColors = () => {
@@ -25,8 +24,8 @@ const ProductCard = ({ id, name, price, images }: ProductCardProps) => {
   const getRandomRating = () => Math.floor(Math.random() * 5) + 1;
 
   // Get main and hover images from the `images` array
-  const mainImage = images[0] || "/default-main-image.jpg";
-  const hoverImage = images[1] || "/default-hover-image.jpg";
+  const mainImage = image[0] || "/default-main-image.jpg";
+  const hoverImage = image[1] || "/default-hover-image.jpg";
 
   const randomColors = getRandomColors();
   const randomRating = getRandomRating();

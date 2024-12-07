@@ -2,6 +2,8 @@ import {
   EditProductRequest,
   ProductApiResponse,
   ProductData,
+  SingleProductApiResponse,
+  SingleProductData,
   VendorProductApiResponse,
   VendorProductData,
 } from "@/types";
@@ -37,6 +39,59 @@ export const productApi = baseApi.injectEndpoints({
           };
           return productData;
         });
+      },
+    }),
+    getSingleProduct: builder.query<SingleProductData, { id: string }>({
+      query: ({ id }) => `/products/${id}`,
+      transformResponse: (response: SingleProductApiResponse) => {
+        const {
+          id: productId,
+          name,
+          description,
+          categoryId,
+          discount,
+          image,
+          inventory,
+          price,
+          shopId,
+          reviews, // Assuming reviews data is present in the API response
+          category, // Assuming category data is present in the API response
+          shop, // Assuming shop data is present in the API response
+        } = response.data;
+
+        const productData: SingleProductData = {
+          productId,
+          name,
+          description,
+          categoryId,
+          discount,
+          image,
+          inventory,
+          price,
+          shopId,
+          reviews: reviews?.map((review) => ({
+            id: review.id,
+            rating: review.rating,
+            comment: review.comment,
+            createdAt: review.createdAt,
+            customer: {
+              id: review.customer.id,
+              name: review.customer.name,
+              profilePhoto: review.customer.profilePhoto,
+            },
+          })),
+          category: {
+            name: category.name,
+            description: category.description,
+          },
+          shop: {
+            name: shop.name,
+            description: shop.description,
+            logo: shop.logo,
+          },
+        };
+
+        return productData;
       },
     }),
     getVendorProducts: builder.query<
@@ -127,4 +182,5 @@ export const {
   useGetVendorProductsQuery,
   useEditProductMutation,
   useDuplicateProductMutation,
+  useGetSingleProductQuery,
 } = productApi;
