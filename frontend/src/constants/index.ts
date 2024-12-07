@@ -38,3 +38,27 @@ export const sidebarItems: SidebarItems = {
     { label: "Transactions", component: Transactions },
   ],
 };
+
+export const carouselItems = [
+  {
+    bgClass: "bg-stone-600",
+    h3Text: "Stationary",
+    spanText: "30% off",
+    h2Text: "on All Pen",
+    imageSrc: "/images/pen.jpg",
+  },
+  {
+    bgClass: "bg-blue-600",
+    h3Text: "Notebooks",
+    spanText: "20% off",
+    h2Text: "on Premium Notebooks",
+    imageSrc: "/images/sleeper.jpg",
+  },
+  {
+    bgClass: "bg-green-600",
+    h3Text: "Art Supplies",
+    spanText: "40% off",
+    h2Text: "on All Sketchbooks",
+    imageSrc: "/images/shoe.jpg",
+  },
+];
