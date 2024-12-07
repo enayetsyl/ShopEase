@@ -140,6 +140,16 @@ export interface VendorProductData {
   image: string[];
 }
 
+export interface EditProductRequest {
+  productId: string;
+  name: string;
+  description: string;
+  discount: number;
+  inventory: number;
+  price: number;
+  additionalImages: File[];
+}
+
 export interface VendorProductActions extends VendorProductData {
   handleEdit: (product: VendorProductData) => void;
   handleDuplicate: (product: VendorProductData) => void;

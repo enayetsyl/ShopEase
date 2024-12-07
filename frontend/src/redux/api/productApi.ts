@@ -1,4 +1,5 @@
 import {
+  EditProductRequest,
   ProductApiResponse,
   ProductData,
   VendorProductApiResponse,
@@ -75,7 +76,42 @@ export const productApi = baseApi.injectEndpoints({
       },
       providesTags: ["Product"],
     }),
+    editProduct: builder.mutation<ProductApiResponse, EditProductRequest>({
+      query: ({
+        productId,
+        name,
+        description,
+        discount,
+        inventory,
+        price,
+        additionalImages,
+      }) => {
+        const dataObject = JSON.stringify({
+          name,
+          description,
+          discount,
+          inventory,
+          price,
+        });
+        const formData = new FormData();
+        formData.append("data", dataObject);
+        additionalImages.forEach((file) => {
+          formData.append("images", file);
+        });
+
+        return {
+          url: `/products/${productId}`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useGetVendorProductsQuery } = productApi;
+export const {
+  useGetProductsQuery,
+  useGetVendorProductsQuery,
+  useEditProductMutation,
+} = productApi;

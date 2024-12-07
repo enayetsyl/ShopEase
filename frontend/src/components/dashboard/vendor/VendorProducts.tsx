@@ -4,7 +4,6 @@ import { useGetVendorProductsQuery } from "@/redux/api/productApi";
 import React, { useState } from "react";
 import { vendorProductTableColumns } from "@/components/shared/tableColumnDef/VendorProductTableColumns";
 import { VendorProductActions, VendorProductData } from "@/types";
-import AddShop from "@/components/forms/AddShop";
 import { Dialog } from "@/components/ui/dialog";
 import EditProduct from "./Product/EditProduct";
 
@@ -59,9 +58,12 @@ const VendorProducts = () => {
           <DataTable data={tableData} columns={vendorProductTableColumns} />
         )}
       </div>
-      {isEditOpen && (
+      {isEditOpen && selectedProduct && (
         <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-          <EditProduct product={selectedProduct} onClose={() => setIsEditOpen(false)} />
+          <EditProduct
+            product={selectedProduct}
+            onClose={() => setIsEditOpen(false)}
+          />
         </Dialog>
       )}
       {/* {isDuplicateOpen && (
