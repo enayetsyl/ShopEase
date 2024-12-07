@@ -107,6 +107,18 @@ export const productApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Product"],
     }),
+    duplicateProduct: builder.mutation<
+      ProductApiResponse,
+      { productId: string }
+    >({
+      query: ({ productId }) => {
+        return {
+          url: `/products/duplicate/${productId}`,
+          method: "POST",
+        };
+      },
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -114,4 +126,5 @@ export const {
   useGetProductsQuery,
   useGetVendorProductsQuery,
   useEditProductMutation,
+  useDuplicateProductMutation
 } = productApi;

@@ -1,37 +1,69 @@
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
 import { DataTable } from "@/components/shared/DataTable";
-import { useGetVendorProductsQuery } from "@/redux/api/productApi";
+import {
+  useDuplicateProductMutation,
+  useGetVendorProductsQuery,
+} from "@/redux/api/productApi";
 import React, { useState } from "react";
 import { vendorProductTableColumns } from "@/components/shared/tableColumnDef/VendorProductTableColumns";
 import { VendorProductActions, VendorProductData } from "@/types";
 import { Dialog } from "@/components/ui/dialog";
 import EditProduct from "./Product/EditProduct";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 
 const VendorProducts = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isDuplicateOpen, setIsDuplicateOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<VendorProductActions | null>(null);
   const { data } = useGetVendorProductsQuery({ page: 1, limit: 10 });
+  const [duplicateProduct, { isLoading }] = useDuplicateProductMutation();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const { toast } = useToast();
 
   const handleEdit = (product: VendorProductData) => {
     const productWithActions: VendorProductActions = {
       ...product,
       handleEdit: () => handleEdit(product),
-      handleDuplicate: () => handleDuplicate(product),
+      handleDuplicate: () => handleDuplicate(),
     };
     setSelectedProduct(productWithActions);
     setIsEditOpen(true);
     // console.log("edit product", product);
   };
 
-  const handleDuplicate = (product: VendorProductData) => {
-    const duplicatedProduct = {
-      ...product,
-      productId: `dup-${product.productId}`, // Use the correct key
-    };
-    console.log("Duplicated Product:", duplicatedProduct);
-    alert(`Product "${product.name}" duplicated!`);
+  const handleDuplicate = async () => {
+    // console.log("Duplicated Product:", selectedProduct.productId);
+    if (selectedProduct) {
+      try {
+        const response = await duplicateProduct({
+          productId: selectedProduct.productId,
+        });
+
+        if (response && response.data && response.data.success) {
+          toast({
+            description: `${response.data.message}`,
+          });
+        } else {
+          toast({
+            description: `An Error Occurred`,
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error("Error duplicating product:", error);
+      }
+    }
+    setIsAlertOpen(false);
   };
 
   // Ensure tableData is always an array
@@ -39,7 +71,15 @@ const VendorProducts = () => {
     data?.map((product) => ({
       ...product,
       handleEdit: () => handleEdit(product),
-      handleDuplicate: () => handleDuplicate(product),
+      handleDuplicate: () => {
+        const productWithActions: VendorProductActions = {
+          ...product,
+          handleEdit: () => handleEdit(product),
+          handleDuplicate: () => handleDuplicate(),
+        };
+        setSelectedProduct(productWithActions); // Pass a valid VendorProductActions object
+        setIsAlertOpen(true); // Open the confirmation dialog
+      },
     })) || [];
 
   console.log("data", tableData);
@@ -66,11 +106,27 @@ const VendorProducts = () => {
           />
         </Dialog>
       )}
-      {/* {isDuplicateOpen && (
-        <Dialog open={isDuplicateOpen} onOpenChange={setIsDuplicateOpen}>
-          <AddShop onClose={() => setIsDuplicateOpen(false)} />
-        </Dialog>
-      )} */}
+      {isAlertOpen && (
+        <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Duplication</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to duplicate this product? This action
+                cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setIsAlertOpen(false)}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={handleDuplicate} disabled={isLoading}>
+                {isLoading ? "Duplicating..." : "Yes, Duplicate"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 };
