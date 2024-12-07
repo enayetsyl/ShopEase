@@ -15,7 +15,6 @@ export function DarkModeButton() {
 
   return (
     <Button
-      variant="outline"
       size="icon"
       onClick={toggleTheme}
       aria-label="Toggle theme"

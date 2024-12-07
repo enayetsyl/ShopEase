@@ -1,4 +1,5 @@
 "use client";
+import HomeCarousel from "@/components/home/Carousel";
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
 import CustomButton from "@/components/shared/CustomButton";
 import CustomInput from "@/components/shared/CustomInput";
@@ -22,13 +23,8 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <CustomBreadcrumb
-        items={[{ label: "Home", path: "/" }, { label: "Sign In" }]}
-        title="Sign In"
-      />
-
-      {data && <p>Welcome, {data.name}!</p>}
+    <div className="px-5">
+      <HomeCarousel />
     </div>
   );
 }
