@@ -11,6 +11,7 @@ import Cart from "@/components/dashboard/customer/Cart";
 import CustomerOrders from "@/components/dashboard/customer/CustomerOrders";
 import RecentProducts from "@/components/dashboard/customer/RecentProducts";
 import { SidebarItems } from "@/types";
+import { Star, Truck, Package, Shield, Heart } from "lucide-react";
 
 export const allowedRoles = {
   admin: ["ADMIN"],
@@ -61,4 +62,28 @@ export const carouselItems = [
     h2Text: "on All Sketchbooks",
     imageSrc: "/images/shoe.jpg",
   },
+];
+
+export const features = [
+  {
+    Icon: Truck,
+    text: "Free Shipping on orders over $100",
+  },
+  {
+    Icon: Package,
+    text: "1 Day Returns if you change your mind",
+  },
+  {
+    Icon: Shield,
+    text: "Guaranteed 100% Organic from natural farms",
+  },
+];
+
+export const randomColors = ["blue", "pink", "red", "purple", "green"];
+export const randomTags = [
+  "fashion",
+  "sale",
+  "new arrival",
+  "limited edition",
+  "exclusive",
 ];

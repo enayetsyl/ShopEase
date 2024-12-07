@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 export interface Vendor {
   id: string;
   name: string;
@@ -259,4 +261,9 @@ export interface DuplicationAlertProps {
   setIsAlertOpen: (open: boolean) => void;
   handleDuplicate: () => void;
   isLoading: boolean;
+}
+
+export interface FeatureCardProps {
+  Icon: LucideIcon;
+  text: string;
 }
