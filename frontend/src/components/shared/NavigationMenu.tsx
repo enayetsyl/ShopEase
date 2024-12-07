@@ -21,16 +21,7 @@ import {
 import { logout } from "@/redux/slices/authSlice";
 import { RootState } from "@/redux/store";
 import Link from "next/link";
-import {
-  FaHome,
-  FaShopify,
-  FaBolt,
-  FaShoppingCart,
-  FaSignInAlt,
-  FaUserCircle,
-  FaSignOutAlt,
-  FaTachometerAlt,
-} from "react-icons/fa";
+
 import { useDispatch, useSelector } from "react-redux";
 
 const NavigationMenu = () => {
@@ -42,7 +33,7 @@ const NavigationMenu = () => {
   };
 
   return (
-    <nav className="max-w-7xl fixed shadow-lg mx-auto w-full pt-1">
+    <nav className="max-w-7xl fixed shadow-lg mx-auto w-full pt-1 z-40">
       <Menubar>
         <div className="flex justify-between items-center w-full">
           {/* Fixed Menu Items */}
