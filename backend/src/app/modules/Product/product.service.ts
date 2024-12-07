@@ -10,36 +10,37 @@ import { TProductFilterRequest } from "./product.type";
 import { productSearchableFields } from "./product.constant";
 import { findProductById } from "../../../helpers/productHelpers";
 
-
-
 const createAProduct = async (user: any, req: Request) => {
   // upload files to cloudinary
   // add cloudinary link to data
   // add it into db
   const files = req.files as TFile[];
-  if(files?.length === 0) throw new ApiError(400, "At least one image is required")
+  if (files?.length === 0)
+    throw new ApiError(400, "At least one image is required");
 
-  const vendorId = user.vendor.id
+  const vendorId = user.vendor.id;
 
   const shop = await prisma.shop.findFirst({
     where: { vendorId },
     select: {
-      id: true
+      id: true,
     },
   });
 
-  if(!shop) throw new ApiError(404, "Shop not found")
+  if (!shop) throw new ApiError(404, "Shop not found");
 
-  const shopId = shop.id
+  const shopId = shop.id;
 
-  const uploadedFiles = await fileUploader.uploadMultipleToCloudinary(files)
+  const uploadedFiles = await fileUploader.uploadMultipleToCloudinary(files);
 
-  const imageUrls = uploadedFiles.map(file=> file.secure_url)
+  const imageUrls = uploadedFiles.map((file) => file.secure_url);
 
   const productData = {
-    ...req.body, image: imageUrls,
-    vendorId, shopId
-  }
+    ...req.body,
+    image: imageUrls,
+    vendorId,
+    shopId,
+  };
 
   const product = await prisma.product.create({
     data: productData,
@@ -48,7 +49,10 @@ const createAProduct = async (user: any, req: Request) => {
   return product;
 };
 
-const getAllProducts = async (params: TProductFilterRequest,options: TPaginationOptions) => {
+const getAllProducts = async (
+  params: TProductFilterRequest,
+  options: TPaginationOptions
+) => {
   // create filter condition
   // get product data
   // get meta data
@@ -94,6 +98,35 @@ const getAllProducts = async (params: TProductFilterRequest,options: TPagination
     where: whereConditions,
   });
 
+  return {
+    data: result,
+    meta: { page, limit, total },
+  };
+};
+
+const getAllVendorProducts = async (options: TPaginationOptions, user: any) => {
+  // get product data based on vendor id
+  // get meta data
+  const { page, limit, skip } = paginationHelper.calculatePagination(options);
+  const andConditions: Prisma.ProductWhereInput[] = [];
+
+  const result = await prisma.product.findMany({
+    where: {
+      vendorId: user.vendor.id,
+    },
+    skip,
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : { createdAt: "desc" },
+  });
+
+  const total = await prisma.product.count({
+    where: {
+      vendorId: user.vendor.id,
+    },
+  });
 
   return {
     data: result,
@@ -113,52 +146,54 @@ const duplicateAProduct = async (id: string) => {
   // add the data to db
   const result = await findProductById(id);
 
-  const {id: _, updatedAt: __, createdAt: ___, deletedAt: ____, ...duplicateData} = result
+  const {
+    id: _,
+    updatedAt: __,
+    createdAt: ___,
+    deletedAt: ____,
+    ...duplicateData
+  } = result;
 
   return await prisma.product.create({
     data: duplicateData,
   });
-  
-
 };
 
-const updateAProduct = async ( id: string, user: any, req: Request) => {
+const updateAProduct = async (id: string, user: any, req: Request) => {
   // get product
   // update data
 
   const result = await findProductById(id);
-  
+
   const files = req.files as TFile[];
   let imageUrls: string[] = [];
 
-  if(files?.length > 0){
-    const uploadedFiles = await fileUploader.uploadMultipleToCloudinary(files)
+  if (files?.length > 0) {
+    const uploadedFiles = await fileUploader.uploadMultipleToCloudinary(files);
 
-  imageUrls = uploadedFiles.map(file=> file.secure_url)
+    imageUrls = uploadedFiles.map((file) => file.secure_url);
   }
 
   const updatedImages = [...result.image, ...imageUrls];
 
   const productData = {
-    ...req.body, image: updatedImages
-  }
-
+    ...req.body,
+    image: updatedImages,
+  };
 
   const updatedProduct = await prisma.product.update({
     where: { id },
     data: productData,
   });
 
-  return updatedProduct
-
+  return updatedProduct;
 };
-
-
 
 export const ProductServices = {
   createAProduct,
   duplicateAProduct,
   getAllProducts,
+  getAllVendorProducts,
   getAProduct,
-  updateAProduct
+  updateAProduct,
 };

@@ -61,7 +61,6 @@ export type SidebarItems = {
   [role: string]: NavItem[];
 };
 
-
 export interface ShopApiResponse {
   data: {
     id: string;

@@ -19,6 +19,7 @@ fileUploader.upload.array("images", 10),
 router.post("/duplicate/:productId", auth(UserRole.VENDOR), ProductController.duplicateAProduct)
 
 router.get("/",   ProductController.getAllProducts)
+router.get("/vendor-product", auth(UserRole.VENDOR),  ProductController.getAllVendorProducts)
 
 router.get("/:productId",   ProductController.getAProduct)
 

@@ -31,6 +31,20 @@ const getAllProducts = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllVendorProducts = catchAsync(async (req: Request &{user?: any}, res: Response) => {
+   const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+
+  const result = await ProductServices.getAllVendorProducts(options, req.user);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Products fetched successfully for vendor",
+    data: result.data,
+    meta: result.meta,
+  });
+});
+
 const getAProduct = catchAsync(async (req: Request, res: Response) => {
   const { productId } = req.params;
 
@@ -76,6 +90,7 @@ export const ProductController = {
   createAProduct,
   duplicateAProduct,
   getAllProducts,
+  getAllVendorProducts,
   getAProduct,
   updateAProduct
 };

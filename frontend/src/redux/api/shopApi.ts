@@ -1,7 +1,6 @@
 import { CreateShopRequest, ShopApiResponse, ShopData } from "@/types";
 import { baseApi } from "./baseApi";
 
-
 export const shopApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getShop: builder.query<ShopData, void>({
