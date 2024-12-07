@@ -23,16 +23,6 @@ export default function Home() {
 
   return (
     <div>
-      <button onClick={handleLogin} disabled={isLoading}>
-        {isLoading ? "Logging in..." : "Login"}
-      </button>
-      <CustomButton
-        loading={false}
-        variant="outline"
-        className=" text-primary-foreground hover:bg-primary/60 dark:bg-secondary dark:text-secondary-foreground"
-      >
-        Hello
-      </CustomButton>
       <CustomBreadcrumb
         items={[{ label: "Home", path: "/" }, { label: "Sign In" }]}
         title="Sign In"

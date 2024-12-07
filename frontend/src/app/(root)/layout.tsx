@@ -1,3 +1,4 @@
+import NavigationMenu from "@/components/shared/NavigationMenu";
 
 export default function Layout({
   children,
@@ -6,7 +7,10 @@ export default function Layout({
 }>) {
   return (
     <main>
-      <div className="max-w-7xl mx-auto">{children}</div>
+      <div className="max-w-7xl mx-auto">
+        <NavigationMenu />
+        <div className="pt-20">{children}</div>
+      </div>
     </main>
   );
 }
