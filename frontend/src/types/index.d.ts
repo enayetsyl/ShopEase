@@ -139,6 +139,11 @@ export interface VendorProductData {
   price: number;
   image: string[];
 }
+
+export interface VendorProductActions extends VendorProductData {
+  handleEdit: (product: VendorProductData) => void;
+  handleDuplicate: (product: VendorProductData) => void;
+}
 export interface ShopData {
   shopId: string;
   name: string;

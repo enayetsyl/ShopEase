@@ -49,8 +49,7 @@ const AddShop = ({ onClose }: { onClose: () => void }) => {
       toast({
         description: `${response.message}`,
       });
-      onClose(); 
-      
+      onClose();
     } else {
       toast({
         description: `An Error Occurred`,
