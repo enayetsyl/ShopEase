@@ -32,7 +32,7 @@ const NavigationMenu = () => {
   };
 
   return (
-    <nav className="max-w-7xl fixed shadow-lg mx-auto w-full pt-1 bg-white">
+    <nav className="max-w-7xl fixed shadow-lg mx-auto w-full pt-1">
       <Menubar>
         <div className="flex justify-between items-center">
           {/* Fixed Menu Items */}

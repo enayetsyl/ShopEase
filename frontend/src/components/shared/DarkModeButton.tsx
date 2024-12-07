@@ -19,7 +19,7 @@ export function DarkModeButton() {
       size="icon"
       onClick={toggleTheme}
       aria-label="Toggle theme"
-      className="bg-accent"
+      className="bg-black dark:bg-white"
     >
       {theme === "light" ? (
         <Moon className="h-[1.2rem] w-[1.2rem] text-primary" />
