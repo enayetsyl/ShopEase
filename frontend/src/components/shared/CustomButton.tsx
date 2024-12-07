@@ -31,7 +31,7 @@ const CustomButton: React.FC<ReusableButtonProps> = ({
     >
       {loading ? (
         <span className="animate-spin">
-          <AiOutlineLoading3Quarters />
+          <AiOutlineLoading3Quarters className="text-primary" />
         </span>
       ) : iconPosition === "left" && icon ? (
         <span>{icon}</span>

@@ -2,6 +2,8 @@
 
 import { VendorProductData } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import CustomButton from "../CustomButton";
+import { Pencil, Copy } from "lucide-react";
 
 export const vendorProductTableColumns: ColumnDef<VendorProductData>[] = [
   { accessorKey: "categoryName", header: "Category Name" },
@@ -32,13 +34,12 @@ export const vendorProductTableColumns: ColumnDef<VendorProductData>[] = [
 
       return (
         <div className="flex space-x-2">
-          <button className="text-blue-500 hover:underline">Edit</button>
-          <button
-            className="text-green-500 hover:underline"
+          <CustomButton className="" icon={<Pencil />}></CustomButton>
+          <CustomButton
+            className=""
+            icon={<Copy />}
             onClick={handleDuplicate}
-          >
-            Duplicate
-          </button>
+          ></CustomButton>
         </div>
       );
     },
