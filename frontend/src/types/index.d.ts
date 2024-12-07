@@ -128,16 +128,16 @@ export interface ProductData {
   description: string;
 }
 export interface VendorProductData {
-  categoryName: string;
   categoryId: string;
-  discount: number;
-  image: string[];
-  inventory: number;
-  price: number;
   shopId: string;
   productId: string;
+  categoryName: string;
   name: string;
   description: string;
+  discount: number;
+  inventory: number;
+  price: number;
+  image: string[];
 }
 export interface ShopData {
   shopId: string;

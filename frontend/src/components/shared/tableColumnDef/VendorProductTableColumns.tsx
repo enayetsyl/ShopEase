@@ -1,19 +1,22 @@
 "use client";
 
-import { ProductData } from "@/types";
+import { VendorProductData } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const vendorProductTableColumns: ColumnDef<ProductData>[] = [
+export const vendorProductTableColumns: ColumnDef<VendorProductData>[] = [
+  { accessorKey: "categoryName", header: "Category Name" },
   { accessorKey: "name", header: "Name" },
+  { accessorKey: "description", header: "Description" },
   { accessorKey: "price", header: "Price" },
   { accessorKey: "inventory", header: "Inventory" },
   { accessorKey: "discount", header: "Discount" },
+  // { accessorKey: "image", header: "Image" },
   {
     accessorKey: "actions",
     header: "Actions",
     cell: ({ row }) => {
       // Retrieve the product data from the row
-      const product: ProductData = row.original;
+      const product: VendorProductData = row.original;
 
       // Handle duplication logic
       const handleDuplicate = () => {
