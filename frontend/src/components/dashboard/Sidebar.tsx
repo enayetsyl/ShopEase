@@ -17,6 +17,7 @@ import { sidebarItems } from "@/constants";
 import { NavItem } from "@/types";
 import { Menu } from "lucide-react";
 import CustomButton from "../shared/CustomButton";
+import Image from "next/image";
 
 const Sidebar = ({
   setActiveComponent,
@@ -34,7 +35,16 @@ const Sidebar = ({
     <>
       {/* Sidebar for Large Screens */}
       <div className="hidden lg:block  h-full w-[300px] shadow-lg bg-gradient-to-t from-primary to-accent dark:from-yellow-500 dark:to-yellow-600">
-        <div className="p-4 lg:pt-52">
+        <div className="flex justify-start items-center rounded-lg">
+          <Image
+            src="/images/logo.jpg"
+            height={100}
+            width={100}
+            alt="logo"
+            className="object-cover p-4 w-60 h-52 rounded-2xl"
+          />
+        </div>
+        <div className="p-4 ">
           <h2 className="text-xl font-bold pb-5">Welcome {user?.name}</h2>
           {navItems.map((navItem: NavItem, index: number) => {
             return (
@@ -79,6 +89,15 @@ const Sidebar = ({
           className="w-[80%] max-w-[300px] bg-gradient-to-r from-primary to-accent dark:from-yellow-500 dark:to-yellow-600"
         >
           <SheetHeader>
+            <div className="flex justify-start items-center rounded-lg">
+              <Image
+                src="/images/logo.jpg"
+                height={100}
+                width={100}
+                alt="logo"
+                className="object-cover w-32 h-32 rounded-lg"
+              />
+            </div>
             <SheetTitle>Welcome {user?.name}</SheetTitle>
             <SheetDescription>
               {navItems.map((navItem: NavItem, index: number) => (

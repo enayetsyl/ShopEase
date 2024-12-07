@@ -167,7 +167,6 @@ export interface CreateShopRequest {
   file: File;
 }
 
-
 export interface DuplicationAlertProps {
   isAlertOpen: boolean;
   setIsAlertOpen: (open: boolean) => void;

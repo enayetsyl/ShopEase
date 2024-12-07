@@ -11,6 +11,7 @@ import { Dialog } from "@/components/ui/dialog";
 import EditProduct from "./Product/EditProduct";
 import { useToast } from "@/hooks/use-toast";
 import DuplicationAlert from "./Product/DuplicationAlert";
+import Heading from "@/components/shared/CustomHeading";
 
 const VendorProducts = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -80,7 +81,10 @@ const VendorProducts = () => {
         ]}
         title="Product Page"
       />
-      <div>
+      <div className="px-5 pb-10">
+        <div className="flex justify-center items-center py-10">
+          <Heading text="Your Products" className="text-4xl lg:text-6xl" />
+        </div>
         {data && (
           <DataTable data={tableData} columns={vendorProductTableColumns} />
         )}

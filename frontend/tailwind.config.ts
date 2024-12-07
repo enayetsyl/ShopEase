@@ -39,6 +39,12 @@ export default {
       borderRadius: {
         DEFAULT: "var(--radius)",
       },
+      backgroundImage: {
+        "gradient-primary":
+          "linear-gradient(to right, hsl(var(--chart-1)), hsl(var(--chart-2)))",
+        "gradient-secondary":
+          "linear-gradient(to right, hsl(var(--chart-3)), hsl(var(--chart-4)))",
+      },
     },
   },
   plugins: [tailwindcssAnimate],
