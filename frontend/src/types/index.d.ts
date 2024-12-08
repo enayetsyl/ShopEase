@@ -164,6 +164,11 @@ export interface VendorProductApiResponse {
   }[];
   message: string;
   success: boolean;
+  meta: {
+    page: number;
+    total: number;
+    limit: number;
+  };
 }
 
 export interface ProductData {

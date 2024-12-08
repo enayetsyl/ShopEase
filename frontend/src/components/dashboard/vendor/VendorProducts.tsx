@@ -60,7 +60,7 @@ const VendorProducts = () => {
   };
 
   const tableData: VendorProductActions[] =
-    data?.map((product) => ({
+    data?.data.map((product) => ({
       ...product,
       handleEdit: () => handleEdit(product),
       handleDuplicate: () => {

@@ -28,7 +28,7 @@ export default function CheckoutCard() {
   const [clientSecret, setClientSecret] = useState<string>("");
   const [transactionId, setTransactionId] = useState<string>("");
   const [metaData, setMetaData] = useState({});
-
+  const [createOrder] = useCreateOrderMutation();
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -65,8 +65,6 @@ export default function CheckoutCard() {
 
     fetchClientSecret();
   }, [createPaymentIntent, total]);
-
-  const [createOrder] = useCreateOrderMutation();
 
   const handleOrderSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

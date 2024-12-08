@@ -165,13 +165,17 @@ export const productApi = baseApi.injectEndpoints({
       },
     }),
     getVendorProducts: builder.query<
-      VendorProductData[],
+      {
+        data: VendorProductData[];
+        meta: { page: number; limit: number; total: number };
+      },
       { page: number; limit: number }
     >({
       query: ({ page, limit }) =>
         `/products/vendor-product?page=${page}&limit=${limit}`,
       transformResponse: (response: VendorProductApiResponse) => {
-        return response.data.map((data) => {
+        const { data, meta } = response;
+        const transformedData = data.map((product) => {
           const {
             id: productId,
             name,
@@ -183,8 +187,9 @@ export const productApi = baseApi.injectEndpoints({
             price,
             shopId,
             categoryName,
-          } = data;
-          const productData = {
+          } = product;
+
+          return {
             productId,
             name,
             description,
@@ -196,8 +201,9 @@ export const productApi = baseApi.injectEndpoints({
             shopId,
             categoryName,
           };
-          return productData;
         });
+
+        return { data: transformedData, meta };
       },
       providesTags: ["Product"],
     }),
