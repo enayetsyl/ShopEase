@@ -10,11 +10,19 @@ import CustomButton from "../shared/CustomButton";
 import { MoveRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { carouselItems } from "@/constants";
+import { cn } from "@/lib/utils";
 
 const HomeCarousel = () => {
   const router = useRouter();
   const goToShop = () => {
     router.push("/shop");
+  };
+
+  const bgColors = ["#3B3B3B", "#007BFF", "#28A745", "#FF5733", "#6C757D"];
+
+  const getRandomHexColor = () => {
+    const randomIndex = Math.floor(Math.random() * bgColors.length); // Random index
+    return bgColors[randomIndex]; // Return the hex color
   };
 
   return (
@@ -29,7 +37,10 @@ const HomeCarousel = () => {
         {carouselItems.map((item, index) => (
           <CarouselItem key={index}>
             <div
-              className={`${item.bgClass} rounded-lg flex p-4 justify-between items-center min-h-[40vh] lg:min-h-[60vh]`}
+              style={{ backgroundColor: getRandomHexColor() }}
+              className={cn(
+                "rounded-lg flex p-4 justify-between items-center min-h-[40vh] lg:min-h-[60vh]",
+              )}
             >
               <div className="lg:pl-8 lg:space-y-5">
                 <H3 className="text-primary dark:text-primary lg:text-3xl">
