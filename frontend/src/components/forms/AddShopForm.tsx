@@ -25,8 +25,8 @@ const addShopSchema = z.object({
 });
 
 type AddShopFormValues = z.infer<typeof addShopSchema>;
-const AddShop = ({ onClose }: { onClose: () => void }) => {
-  const [createShop, { isLoading, isSuccess }] = useCreateShopMutation();
+const AddShopForm = ({ onClose }: { onClose: () => void }) => {
+  const [createShop, { isLoading }] = useCreateShopMutation();
   const { toast } = useToast();
   const {
     register,
@@ -112,4 +112,4 @@ const AddShop = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-export default AddShop;
+export default AddShopForm;

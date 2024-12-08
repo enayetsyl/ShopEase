@@ -1,8 +1,8 @@
 import { useState } from "react";
 import CustomButton from "@/components/shared/CustomButton";
-import { H1, H2 } from "@/components/shared/CustomTypography";
+import { H2 } from "@/components/shared/CustomTypography";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import AddShop from "@/components/forms/AddShop";
+import AddShopForm from "@/components/forms/AddShopForm";
 
 const AddShopSection = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -18,7 +18,7 @@ const AddShopSection = () => {
               Add Shop
             </CustomButton>
           </DialogTrigger>
-          <AddShop onClose={() => setIsDialogOpen(false)} />
+          <AddShopForm onClose={() => setIsDialogOpen(false)} />
         </Dialog>
       </div>
       <div className="flex flex-col justify-center items-center mt-32 mx-10">

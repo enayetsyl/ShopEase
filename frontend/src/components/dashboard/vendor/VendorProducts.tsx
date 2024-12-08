@@ -7,14 +7,17 @@ import {
 import React, { useState } from "react";
 import { vendorProductTableColumns } from "@/components/shared/tableColumnDef/VendorProductTableColumns";
 import { VendorProductActions, VendorProductData } from "@/types";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import EditProduct from "./Product/EditProduct";
 import { useToast } from "@/hooks/use-toast";
 import DuplicationAlert from "./Product/DuplicationAlert";
 import Heading from "@/components/shared/CustomHeading";
+import CustomButton from "@/components/shared/CustomButton";
+import AddProductForm from "@/components/forms/AddProductForm";
 
 const VendorProducts = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isAddProductDialogOpen, setIsAddProductDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<VendorProductActions | null>(null);
   const { data } = useGetVendorProductsQuery({ page: 1, limit: 10 });
@@ -82,8 +85,24 @@ const VendorProducts = () => {
         title="Product Page"
       />
       <div className="px-5 pb-10">
-        <div className="flex justify-center items-center py-10">
+        <div className="flex justify-center items-center pt-10 pb-5">
           <Heading text="Your Products" className="text-4xl lg:text-6xl" />
+        </div>
+        <div className="flex justify-end items-center mr-10 my-5">
+          <Dialog
+            open={isAddProductDialogOpen}
+            onOpenChange={setIsAddProductDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <CustomButton
+                className="bg-primary dark:bg-primary-foreground text-black dark:text-white dark:hover:text-black "
+                onClick={() => setIsAddProductDialogOpen(true)}
+              >
+                Add Product
+              </CustomButton>
+            </DialogTrigger>
+            <AddProductForm onClose={() => setIsAddProductDialogOpen(false)} />
+          </Dialog>
         </div>
         {data && (
           <DataTable data={tableData} columns={vendorProductTableColumns} />
