@@ -14,10 +14,15 @@ import {
 import { applyCoupon } from "@/redux/slices/cartSlice";
 import { DataTable } from "@/components/shared/DataTable";
 import { cartItemTableColumns } from "@/components/shared/tableColumnDef/CartItemTableColumn";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { toast } = useToast();
   const { items, couponDiscount } = useSelector((state: any) => state.cart);
+  const { user } = useSelector((state: any) => state.auth);
   const [couponCode, setCouponCode] = useState("");
 
   const subtotal = items.reduce(
@@ -32,6 +37,23 @@ const Cart = () => {
     if (couponCode === "DISCOUNT20") {
       dispatch(applyCoupon({ code: couponCode, discount: 20 }));
     }
+  };
+
+  const handleCheckout = () => {
+    if (!user) {
+      toast({
+        description: "You need to log in to proceed to checkout.",
+        variant: "destructive",
+      });
+      router.push("/sign-in");
+      return;
+    }
+    // Proceed to checkout logic here
+    toast({
+      description: "Proceeding to checkout...",
+    });
+    // For example, redirect to the checkout page
+    router.push("/checkout");
   };
 
   return (
@@ -72,7 +94,9 @@ const Cart = () => {
           </div>
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button size="lg">Proceed to Checkout</Button>
+          <Button size="lg" onClick={handleCheckout}>
+            Proceed to Checkout
+          </Button>
         </CardFooter>
       </Card>
     </div>
