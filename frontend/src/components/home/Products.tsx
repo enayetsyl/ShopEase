@@ -4,7 +4,7 @@ import { useGetProductsQuery } from "@/redux/api/productApi";
 import Heading from "../shared/CustomHeading";
 
 const Products = () => {
-  const { data, isLoading } = useGetProductsQuery();
+  const { data, isLoading } = useGetProductsQuery({});
 
   if (isLoading) {
     return <p>Loading...</p>;
