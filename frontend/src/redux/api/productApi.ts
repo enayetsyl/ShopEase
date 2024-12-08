@@ -11,8 +11,29 @@ import { baseApi } from "./baseApi";
 
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query<ProductData[], void>({
-      query: () => "/products",
+    getProducts: builder.query<
+      ProductData[],
+      Partial<{
+        categoryId?: string;
+        searchTerm?: string;
+        page?: number;
+        limit?: number;
+        name?: string;
+        price?: number;
+        discount?: number;
+      }>
+    >({
+      query: (params = {}) => {
+        // Construct the query string dynamically
+        const queryString = Object.entries(params)
+          .map(
+            ([key, value]) =>
+              `${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+          )
+          .join("&");
+
+        return `/products${queryString ? `?${queryString}` : ""}`;
+      },
       transformResponse: (response: ProductApiResponse) => {
         return response.data.map((data) => {
           const {
@@ -26,7 +47,7 @@ export const productApi = baseApi.injectEndpoints({
             price,
             shopId,
           } = data;
-          const productData = {
+          return {
             productId,
             name,
             description,
@@ -37,10 +58,10 @@ export const productApi = baseApi.injectEndpoints({
             price,
             shopId,
           };
-          return productData;
         });
       },
     }),
+
     getSingleProduct: builder.query<SingleProductData, { id: string }>({
       query: ({ id }) => `/products/${id}`,
       transformResponse: (response: SingleProductApiResponse) => {

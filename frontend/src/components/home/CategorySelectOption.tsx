@@ -15,7 +15,7 @@ const CategorySelectOption = () => {
   const router = useRouter();
 
   const handleCategorySelect = (value: string) => {
-    router.push(`/all-products?category=${value}`);
+    router.push(`/all-products?categoryId=${value}`);
   };
 
   return (
