@@ -112,7 +112,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 />
               ))}
             </div>
-            <div className="flex items-center gap-1">
+            <div
+              className="flex items-center gap-1"
+              aria-label={`Rating: ${randomRating} out of 5`}
+              aria-readonly="true"
+            >
               {Array.from({ length: 5 }).map((_, index) => (
                 <Star
                   key={index}
