@@ -27,6 +27,11 @@ import { useDispatch, useSelector } from "react-redux";
 const NavigationMenu = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const cartItemCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  );
 
   const handleLogout = () => {
     dispatch(logout());
@@ -67,8 +72,13 @@ const NavigationMenu = () => {
 
             <MenubarMenu>
               <MenubarTrigger>
-                <Link href="/cart" className="flex items-center ">
+                <Link href="/cart" className=" relative flex items-center ">
                   <ShoppingCart size={20} />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold">
+                      {cartItemCount}
+                    </span>
+                  )}
                 </Link>
               </MenubarTrigger>
             </MenubarMenu>
