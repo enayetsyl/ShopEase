@@ -19,7 +19,6 @@ const Cart = () => {
   const dispatch = useDispatch();
   const { items, couponDiscount } = useSelector((state: any) => state.cart);
   const [couponCode, setCouponCode] = useState("");
-  console.log("items", items);
 
   const subtotal = items.reduce(
     (sum: number, item: any) => sum + item.price * item.quantity,

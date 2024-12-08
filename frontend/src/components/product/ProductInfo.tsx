@@ -9,9 +9,10 @@ import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Badge } from "../ui/badge";
 import { SingleProductData } from "@/types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
 import { useToast } from "@/hooks/use-toast";
+import { RootState } from "@/redux/store";
 
 interface ProductInfoProps {
   product: SingleProductData;
@@ -37,7 +38,18 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   const dispatch = useDispatch();
   const { toast } = useToast();
 
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
   const handleAddToCart = () => {
+    if (cartItems.length > 0 && cartItems[0].shopId !== product.shopId) {
+      toast({
+        description:
+          "You can only add products from the same vendor. Replace the cart or cancel the addition.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     dispatch(addToCart({ product, quantity }));
     toast({
       description: `${product.name} successfully added to the cart!`,

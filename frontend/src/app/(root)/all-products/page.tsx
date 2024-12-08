@@ -30,7 +30,7 @@ const AllProduct = () => {
         className="text-4xl lg:text-6xl text-center pb-20"
       />
       <ProductFilters />
-      <div className="">
+      <div className="pt-20">
         <div className="flex flex-wrap justify-center gap-6 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
           {data?.map((product) => (
             <ProductCard key={product.productId} product={product} />

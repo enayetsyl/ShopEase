@@ -8,7 +8,7 @@ import Link from "next/link";
 import CustomButton from "@/components/shared/CustomButton";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Paragraph, H6 } from "@/components/shared/CustomTypography";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpData, signUpSchema } from "@/schemas/signUpSchema";
 import { useRegisterMutation } from "@/redux/api/authApi";
@@ -22,6 +22,7 @@ const SignUpForm = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
@@ -29,7 +30,7 @@ const SignUpForm = () => {
       name: "",
       email: "",
       password: "",
-      role: "CUSTOMER",
+      role: undefined,
     },
   });
 
@@ -74,30 +75,37 @@ const SignUpForm = () => {
 
       <div className="flex justify-start items-center gap-5">
         <H6 className="font-semibold ">Account Type</H6>
-        <RadioGroup className="flex justify-center items-center gap-5">
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="CUSTOMER"
-              id="customer"
-              {...register("role")}
-            />
-            <label
-              htmlFor="customer"
-              className="text-sm font-medium  text-foreground dark:text-muted-foreground"
+        <Controller
+          name="role"
+          control={control}
+          rules={{ required: "Role is required" }}
+          render={({ field }) => (
+            <RadioGroup
+              {...field}
+              onValueChange={(value) => field.onChange(value)}
+              className="flex justify-center items-center gap-5"
             >
-              Customer
-            </label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="VENDOR" id="vendor" {...register("role")} />
-            <label
-              htmlFor="vendor"
-              className="text-sm font-medium  text-foreground dark:text-muted-foreground"
-            >
-              Vendor
-            </label>
-          </div>
-        </RadioGroup>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="CUSTOMER" id="customer" />
+                <label
+                  htmlFor="customer"
+                  className="text-sm font-medium  text-foreground dark:text-muted-foreground"
+                >
+                  Customer
+                </label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="VENDOR" id="vendor" />
+                <label
+                  htmlFor="vendor"
+                  className="text-sm font-medium  text-foreground dark:text-muted-foreground"
+                >
+                  Vendor
+                </label>
+              </div>
+            </RadioGroup>
+          )}
+        />
       </div>
       {errors.role && (
         <p className="text-red-500 text-sm">{errors.role.message}</p>

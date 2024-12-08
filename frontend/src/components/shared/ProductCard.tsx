@@ -3,17 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, ShoppingCart, Star } from "lucide-react";
 import { ProductData } from "@/types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
+import { RootState } from "@/redux/store";
 
 interface ProductCardProps {
   product: ProductData;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const { productId: id, name, price, image } = product;
+  const { productId: id, name, price, image, shopId } = product;
   const [isHovered, setIsHovered] = useState(false);
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -37,8 +38,28 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const randomColors = getRandomColors();
   const randomRating = getRandomRating();
 
+  // Access cart items from the Redux store
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // Prevents navigating to the product page
+    console.log("clg", cartItems);
+    if (cartItems.length > 0 && cartItems[0].shopId !== shopId) {
+      // Log the error to verify the condition
+      console.error(
+        "Vendor mismatch: Cannot add products from different vendors.",
+      );
+
+      // Show an error toast
+      toast({
+        description:
+          "You can only add products from the same vendor. Replace the cart or cancel the addition.",
+        variant: "destructive", // Ensure this variant is supported by your toast implementation
+      });
+      return;
+    }
+
+    // If the vendor is the same or cart is empty, add the product
     dispatch(addToCart({ product, quantity: 1 }));
     toast({
       description: `${name} successfully added to the cart!`,
