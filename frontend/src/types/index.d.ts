@@ -78,6 +78,22 @@ export interface ShopApiResponse {
   message: string;
   success: boolean;
 }
+
+export interface AllShopsApiResponse {
+  data: {
+    id: string;
+    name: string;
+    logo: string;
+    description: string;
+    createdAt: string;
+    deletedAt: null | boolean;
+    isBlackListed: boolean;
+    updatedAt: string;
+    vendorId: string;
+  }[];
+  message: string;
+  success: boolean;
+}
 export interface ProductApiResponse {
   data: {
     categoryId: string;

@@ -1,4 +1,9 @@
-import { CreateShopRequest, ShopApiResponse, ShopData } from "@/types";
+import {
+  AllShopsApiResponse,
+  CreateShopRequest,
+  ShopApiResponse,
+  ShopData,
+} from "@/types";
 import { baseApi } from "./baseApi";
 
 export const shopApi = baseApi.injectEndpoints({
@@ -8,6 +13,17 @@ export const shopApi = baseApi.injectEndpoints({
       transformResponse: (response: ShopApiResponse) => {
         const { id: shopId, name, logo, description } = response.data;
         const shopData = { shopId, name, description, logo };
+        return shopData;
+      },
+      providesTags: ["Shop"],
+    }),
+    getAllShop: builder.query<ShopData[], void>({
+      query: () => "/shop/all",
+      transformResponse: (response: AllShopsApiResponse) => {
+        const shopData = response.data.map((shop) => {
+          const { id: shopId, name, logo, description } = shop;
+          return { shopId, name, description, logo };
+        });
         return shopData;
       },
       providesTags: ["Shop"],
@@ -29,4 +45,5 @@ export const shopApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetShopQuery, useCreateShopMutation } = shopApi;
+export const { useGetShopQuery, useCreateShopMutation, useGetAllShopQuery } =
+  shopApi;

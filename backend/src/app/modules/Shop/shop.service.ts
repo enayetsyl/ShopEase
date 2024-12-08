@@ -28,7 +28,19 @@ const getAShop = async (payload: any) => {
   const shop = await prisma.shop.findFirst({
     where: { vendorId: payload.vendor.id },
   });
-  
+
+  if (!shop) throw new ApiError(404, "Shop not found");
+  return shop;
+};
+
+const getAllShops = async () => {
+  // fetch shop data
+  // return that data
+
+  const shop = await prisma.shop.findMany({
+    where: { isBlackListed: false },
+  });
+
   if (!shop) throw new ApiError(404, "Shop not found");
   return shop;
 };
@@ -36,4 +48,5 @@ const getAShop = async (payload: any) => {
 export const ShopServices = {
   createShop,
   getAShop,
+  getAllShops,
 };

@@ -19,7 +19,6 @@ const VendorOrders = () => {
         ]}
         title="Order Page"
       />
-      
     </div>
   );
 };

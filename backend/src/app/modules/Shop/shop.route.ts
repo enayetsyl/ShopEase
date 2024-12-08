@@ -8,13 +8,16 @@ import { ShopController } from "./shop.controller";
 
 const router = express.Router();
 
-router.post("/",auth(UserRole.VENDOR), fileUploader.upload.single("file"), 
-(req: Request, res: Response, next: NextFunction) => {
-  req.body = shopValidation.createShop.parse(JSON.parse(req.body.data))
-  return ShopController.createShop(req, res, next)
-}
+router.post(
+  "/",
+  auth(UserRole.VENDOR),
+  fileUploader.upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = shopValidation.createShop.parse(JSON.parse(req.body.data));
+    return ShopController.createShop(req, res, next);
+  }
 );
 router.get("/", auth(UserRole.VENDOR), ShopController.getAShop);
-
+router.get("/all", ShopController.getAllShops);
 
 export const ShopRoutes = router;

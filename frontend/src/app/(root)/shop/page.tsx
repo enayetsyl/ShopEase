@@ -1,7 +1,12 @@
+"use client";
+import { useGetAllShopQuery } from "@/redux/api/shopApi";
 import React from "react";
 
-const page = () => {
-  return <div>page</div>;
+const Shop = () => {
+  const { data } = useGetAllShopQuery();
+
+  console.log("shop data", data);
+  return <div>Shop</div>;
 };
 
-export default page;
+export default Shop;
