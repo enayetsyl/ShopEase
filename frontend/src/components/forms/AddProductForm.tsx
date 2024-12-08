@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCreateShopMutation } from "@/redux/api/shopApi";
 import { useToast } from "@/hooks/use-toast";
 import CategorySelectOption from "../home/CategorySelectOption";
+import { useCreateProductMutation } from "@/redux/api/productApi";
 
 // Define Zod schema
 
@@ -37,7 +38,7 @@ type ProductFormValues = z.infer<typeof productSchema>;
 
 const AddProductForm = ({ onClose }: { onClose: () => void }) => {
   const { toast } = useToast();
-  // const [createProduct, { isLoading }] = useCreateProductMutation();
+  const [createProduct, { isLoading }] = useCreateProductMutation();
   const {
     register,
     handleSubmit,
@@ -53,18 +54,21 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
       ...data,
       images: uploadedImages,
     });
-    // try {
-    //   const response = await createProduct(data).unwrap();
-    //   toast({
-    //     description: `${response.message}`,
-    //   });
-    //   onClose();
-    // } catch (error) {
-    //   toast({
-    //     description: "An error occurred while creating the product",
-    //     variant: "destructive",
-    //   });
-    // }
+    try {
+      const response = await createProduct({
+        ...data,
+        images: uploadedImages,
+      }).unwrap();
+      toast({
+        description: `${response.message}`,
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        description: "An error occurred while creating the product",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -140,7 +144,7 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
           <CustomButton
             type="submit"
             className="bg-primary text-black"
-            // loading={isLoading}
+            loading={isLoading}
           >
             Add Product
           </CustomButton>

@@ -11,6 +11,51 @@ import { baseApi } from "./baseApi";
 
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    createProduct: builder.mutation<
+      ProductApiResponse,
+      {
+        name: string;
+        description: string;
+        price: number;
+        discount?: number;
+        categoryId: string;
+        inventory: number;
+        images: File[];
+      }
+    >({
+      query: ({
+        name,
+        description,
+        price,
+        discount,
+        categoryId,
+        inventory,
+        images,
+      }) => {
+        // Construct FormData for product creation
+        const dataObject = JSON.stringify({
+          name,
+          description,
+          price,
+          discount,
+          categoryId,
+          inventory,
+        });
+        const formData = new FormData();
+        formData.append("data", dataObject);
+        images.forEach((file) => {
+          formData.append("images", file);
+        });
+
+        return {
+          url: `/products`,
+          method: "POST",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Product"],
+    }),
+
     getProducts: builder.query<
       ProductData[],
       Partial<{
@@ -199,6 +244,7 @@ export const productApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useCreateProductMutation,
   useGetProductsQuery,
   useGetVendorProductsQuery,
   useEditProductMutation,
