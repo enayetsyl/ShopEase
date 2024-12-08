@@ -1,4 +1,5 @@
 "use client";
+import ProductFilters from "@/components/allProducts/ProductFilter";
 import Heading from "@/components/shared/CustomHeading";
 import ProductCard from "@/components/shared/ProductCard";
 import { useGetProductsQuery } from "@/redux/api/productApi";
@@ -7,23 +8,34 @@ import React from "react";
 
 const AllProduct = () => {
   const searchParams = useSearchParams();
-  const categoryId = searchParams.get("categoryId") || undefined;
-  const { data, isLoading } = useGetProductsQuery({ categoryId });
+  const queryParams: Record<string, any> = {};
+
+  // Collect all query params
+  searchParams.forEach((value, key) => {
+    queryParams[key] = isNaN(Number(value)) ? value : Number(value); // Convert numbers
+  });
+
+  const { data, isLoading } = useGetProductsQuery(queryParams);
+
+  console.log("data", data);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  console.log(categoryId);
+
   return (
     <div className="pb-20">
       <Heading
         text="Our Products"
         className="text-4xl lg:text-6xl text-center pb-20"
       />
-      <div className="flex flex-wrap justify-center gap-6 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
-        {data?.map((product) => (
-          <ProductCard key={product.productId} product={product} />
-        ))}
+      <ProductFilters />
+      <div className="">
+        <div className="flex flex-wrap justify-center gap-6 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
+          {data?.map((product) => (
+            <ProductCard key={product.productId} product={product} />
+          ))}
+        </div>
       </div>
     </div>
   );
