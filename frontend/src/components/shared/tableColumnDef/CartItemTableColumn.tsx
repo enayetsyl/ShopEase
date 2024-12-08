@@ -11,6 +11,7 @@ interface CartItem {
   price: number;
   quantity: number;
   image: string;
+  discount: number;
 }
 
 // Component for rendering Quantity Actions
@@ -101,7 +102,8 @@ export const cartItemTableColumns: ColumnDef<CartItem>[] = [
   {
     header: "Total",
     cell: ({ row }) => {
-      const total = row.original.price * row.original.quantity;
+      const total =
+        (row.original.price - row.original.discount) * row.original.quantity;
       return <span className="font-medium">${total.toFixed(2)}</span>;
     },
   },

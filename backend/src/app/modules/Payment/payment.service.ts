@@ -48,7 +48,7 @@ const savePaymentInfo = async(data: any) => {
           },
         },
         include: {
-          order_items: true, // Include order items to process them
+          order_items: true,
         },
       });
 
@@ -63,7 +63,7 @@ const savePaymentInfo = async(data: any) => {
           },
           data: {
             inventory: {
-              decrement: quantity, // Decrease inventory by the ordered quantity
+              decrement: quantity, 
             },
           },
         });

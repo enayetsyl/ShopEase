@@ -37,12 +37,12 @@ const paymentMetadataSchema = z.object({
   description: z.string().nullable(),
   invoice: z.string().nullable(),
   last_payment_error: z.any().nullable(),
-  latest_charge: z.string(),
+  latest_charge: z.string().nullable(),
   livemode: z.boolean(),
   metadata: z.record(z.any()).optional(),
   next_action: z.any().nullable(),
   on_behalf_of: z.string().nullable(),
-  payment_method: z.string(),
+  payment_method: z.string().nullable(),
   payment_method_configuration_details: z.any().nullable(),
   payment_method_options: z.object({
     card: z.object({

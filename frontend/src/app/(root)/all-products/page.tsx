@@ -17,8 +17,6 @@ const AllProduct = () => {
 
   const { data, isLoading } = useGetProductsQuery(queryParams);
 
-  console.log("data", data);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }

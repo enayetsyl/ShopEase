@@ -91,6 +91,7 @@ export const productApi = baseApi.injectEndpoints({
             inventory,
             price,
             shopId,
+            vendorId,
           } = data;
           return {
             productId,
@@ -102,6 +103,7 @@ export const productApi = baseApi.injectEndpoints({
             inventory,
             price,
             shopId,
+            vendorId,
           };
         });
       },
@@ -120,9 +122,10 @@ export const productApi = baseApi.injectEndpoints({
           inventory,
           price,
           shopId,
-          reviews, // Assuming reviews data is present in the API response
-          category, // Assuming category data is present in the API response
-          shop, // Assuming shop data is present in the API response
+          reviews,
+          category,
+          shop,
+          vendorId,
         } = response.data;
 
         const productData: SingleProductData = {
@@ -135,6 +138,7 @@ export const productApi = baseApi.injectEndpoints({
           inventory,
           price,
           shopId,
+          vendorId,
           reviews: reviews?.map((review) => ({
             id: review.id,
             rating: review.rating,

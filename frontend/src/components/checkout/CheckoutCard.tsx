@@ -1,41 +1,74 @@
 "use client";
 
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import {
+  useCreatePaymentIntentMutation,
+  useSavePaymentMutation,
+} from "@/redux/api/paymentApi";
+import { useCreateOrderMutation } from "@/redux/api/orderApi";
+import { useToast } from "@/hooks/use-toast";
+import PaymentForm from "../forms/PaymentForm";
+import { useRouter } from "next/navigation";
+import { clearCart } from "@/redux/slices/cartSlice";
 
-interface OrderItem {
-  name: string;
-  quantity: number;
-  price: number;
-}
-
-interface CheckoutCardProps {
-  userId: string;
-}
-
-export default function CheckoutCard({ userId }: CheckoutCardProps) {
+export default function CheckoutCard() {
   const stripe = useStripe();
   const elements = useElements();
-  const [isLoading, setIsLoading] = useState(false);
+  const [createPaymentIntent] = useCreatePaymentIntentMutation();
+  const [savePayment] = useSavePaymentMutation();
+  const { toast } = useToast();
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [clientSecret, setClientSecret] = useState<string>("");
+  const [transactionId, setTransactionId] = useState<string>("");
+  const [metaData, setMetaData] = useState({});
+
   const [error, setError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Mock order items - in real app, these would come from cart
-  const orderItems: OrderItem[] = [
-    { name: "Vestibulum suscipit", quantity: 1, price: 165.0 },
-    { name: "Vestibulum dictum magna", quantity: 1, price: 50.0 },
-  ];
+  // Access cart data from Redux store
+  const { items, couponDiscount, vendorId } = useSelector(
+    (state: RootState) => state.cart,
+  );
 
-  const subtotal = orderItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  // Calculate totals
+  const subtotal = items.reduce(
+    (sum, item) => sum + (item.price - item.discount) * item.quantity,
     0,
   );
+  const discountAmount = (subtotal * couponDiscount) / 100;
   const shippingCost = 10.0;
-  const total = subtotal + shippingCost;
+  const total = subtotal - discountAmount + shippingCost;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Prepare structured data
+
+  // Log structured cart data
+
+  useEffect(() => {
+    const fetchClientSecret = async () => {
+      try {
+        const response = await createPaymentIntent({ amount: total }).unwrap();
+        setClientSecret(response.data.client_secret);
+
+        setMetaData(response.data);
+      } catch (err) {
+        console.error("Error creating payment intent:", err);
+        setError("Failed to initialize payment. Please try again.");
+      }
+    };
+
+    fetchClientSecret();
+  }, [createPaymentIntent, total]);
+
+  const [createOrder] = useCreateOrderMutation();
+
+  const handleOrderSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!stripe || !elements) {
@@ -43,35 +76,95 @@ export default function CheckoutCard({ userId }: CheckoutCardProps) {
     }
 
     setIsLoading(true);
-    setError("");
+
+    const card = elements.getElement(CardElement);
+
+    if (card === null) {
+      return;
+    }
+
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card,
+    });
+
+    if (error) {
+      setError(error.message ?? "An error occurred");
+    } else {
+      setError("");
+    }
 
     try {
-      // Create payment intent
-      const response = await fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: total }),
-      });
-
-      const { clientSecret } = await response.json();
-
-      const { error: paymentError } = await stripe.confirmCardPayment(
-        clientSecret,
-        {
+      const { paymentIntent, error: confirmError } =
+        await stripe.confirmCardPayment(clientSecret, {
           payment_method: {
-            card: elements.getElement(CardElement)!,
+            card: card,
           },
-        },
-      );
-
-      if (paymentError) {
-        setError(paymentError.message ?? "An error occurred");
+        });
+      setMetaData(paymentIntent || {});
+      if (confirmError) {
+        toast({
+          description: confirmError?.message || "Payment failed",
+          variant: "destructive",
+        });
       } else {
-        // Handle successful payment
-        window.location.href = "/success";
+        if (paymentIntent.status === "succeeded") {
+          setTransactionId(paymentIntent.id);
+          toast({
+            description: "Payment successful!",
+          });
+
+          const structuredCartData = {
+            vendorId: items[0].vendorId,
+            totalAmount: Number(total.toFixed(2)),
+            products: items.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+              price: item.price,
+              discount: item.discount,
+            })),
+          };
+
+          try {
+            const createOrderResponse =
+              await createOrder(structuredCartData).unwrap();
+
+            if (createOrderResponse.success) {
+              const savePaymentData = {
+                orderId: createOrderResponse.data.id,
+                customerId: createOrderResponse.data.customerId,
+                amount: createOrderResponse.data.totalAmount,
+                transactionId: paymentIntent.id,
+                status: "SUCCESS",
+                metadata: metaData,
+              };
+
+              const savePaymentResponse =
+                await savePayment(savePaymentData).unwrap();
+
+              if (savePaymentResponse.success) {
+                toast({
+                  description: savePaymentResponse.message,
+                });
+
+                // Clear the cart
+                dispatch(clearCart());
+
+                // Redirect to home page
+                router.push("/");
+              }
+            }
+          } catch (err) {
+            console.error("Failed to create order:", err);
+          }
+        }
       }
-    } catch (err) {
-      setError("Payment failed. Please try again.");
+    } catch (error) {
+      toast({
+        description: "An error occurred during payment",
+        variant: "destructive",
+      });
+      // toast.error("An error occurred during payment");
     } finally {
       setIsLoading(false);
     }
@@ -90,12 +183,12 @@ export default function CheckoutCard({ userId }: CheckoutCardProps) {
               <span>Product</span>
               <span>Total</span>
             </div>
-            {orderItems.map((item, index) => (
+            {items.map((item, index) => (
               <div key={index} className="flex justify-between text-sm">
                 <span>
                   {item.name} × {item.quantity}
                 </span>
-                <span>${item.price.toFixed(2)}</span>
+                <span>${(item.price - item.discount).toFixed(2)}</span>
               </div>
             ))}
           </div>
@@ -122,37 +215,13 @@ export default function CheckoutCard({ userId }: CheckoutCardProps) {
 
           <Separator />
 
-          {/* Payment */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="rounded-md border p-4">
-              <CardElement
-                options={{
-                  style: {
-                    base: {
-                      fontSize: "16px",
-                      color: "#32325d",
-                      "::placeholder": {
-                        color: "#aab7c4",
-                      },
-                    },
-                    invalid: {
-                      color: "#dc2626",
-                    },
-                  },
-                }}
-              />
-            </div>
-
-            {error && <div className="text-sm text-red-500">{error}</div>}
-
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={!stripe || isLoading}
-            >
-              {isLoading ? "Processing..." : "Place order"}
-            </Button>
-          </form>
+          {/* Payment Form */}
+          <PaymentForm
+            handleOrderSubmit={handleOrderSubmit}
+            stripe={stripe}
+            isLoading={isLoading}
+            error={error}
+          />
         </div>
       </CardContent>
     </Card>

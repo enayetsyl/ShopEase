@@ -5,15 +5,11 @@ import ApiError from "../../errors/ApiError";
 import { TPaginationOptions } from "../../types/pagination";
 import { Request } from "express";
 import { TProductFilterRequest } from "./order.type";
-import { orderFilterableFields } from "./order.constant";
 
 const createOrder = async (user: any, req: Request) => {
   const { vendorId, totalAmount, products } = req.body;
 
   const customerId = user.customer.id
-
-  console.log('customer id', customerId)
-  console.log('req,body', req.body)
 
   if (!Array.isArray(products) || products.length === 0) throw new ApiError(400,"Products array must not be empty.");
   

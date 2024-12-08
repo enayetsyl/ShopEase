@@ -26,7 +26,8 @@ const Cart = () => {
   const [couponCode, setCouponCode] = useState("");
 
   const subtotal = items.reduce(
-    (sum: number, item: any) => sum + item.price * item.quantity,
+    (sum: number, item: any) =>
+      sum + (item.price - item.discount) * item.quantity,
     0,
   );
   const discountAmount = (subtotal * couponDiscount) / 100;

@@ -201,7 +201,7 @@ export interface SingleProductData {
   inventory: number;
   price: number;
   shopId: string;
-
+  vendorId: string;
   // Category information
   category?: {
     name: string;
@@ -266,4 +266,64 @@ export interface DuplicationAlertProps {
 export interface FeatureCardProps {
   Icon: LucideIcon;
   text: string;
+}
+
+interface PaymentMethodOptions {
+  card: {
+    installments: any | null;
+    mandate_options: any | null;
+    network: string | null;
+    request_three_d_secure: string;
+  };
+}
+
+interface PaymentMetadata {
+  id: string;
+  object: string;
+  amount: number;
+  amount_capturable: number;
+  amount_details: {
+    tip?: Record<string, any>;
+  };
+  amount_received: number;
+  application: string | null;
+  application_fee_amount: number | null;
+  automatic_payment_methods: any | null;
+  canceled_at: number | null;
+  cancellation_reason: string | null;
+  capture_method: string;
+  client_secret: string;
+  confirmation_method: string;
+  created: number;
+  currency: string;
+  customer: string | null;
+  description: string | null;
+  invoice: string | null;
+  last_payment_error: any | null;
+  latest_charge: string;
+  livemode: boolean;
+  metadata?: Record<string, any>;
+  next_action: any | null;
+  on_behalf_of: string | null;
+  payment_method: string;
+  payment_method_configuration_details: any | null;
+  payment_method_options: PaymentMethodOptions;
+  payment_method_types: string[];
+  processing: any | null;
+  receipt_email: string | null;
+  review: any | null;
+  setup_future_usage: any | null;
+  shipping: any | null;
+  source: any | null;
+  statement_descriptor: string | null;
+  statement_descriptor_suffix: string | null;
+  status: string;
+  transfer_data: any | null;
+  transfer_group: string | null;
+}
+
+export interface PaymentResponse {
+  data: PaymentMetadata;
+  message: string;
+  success: boolean;
 }

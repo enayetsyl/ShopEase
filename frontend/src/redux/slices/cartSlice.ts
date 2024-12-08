@@ -9,7 +9,7 @@ interface CartState {
   items: CartItem[];
   couponCode: string | null;
   couponDiscount: number;
-  vendorId: string | null; // Track the vendor ID of items in the cart
+  vendorId: string | null;
 }
 
 const initialState: CartState = {

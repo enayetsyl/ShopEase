@@ -5,6 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import CheckoutCard from "./CheckoutCard";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
@@ -21,10 +22,15 @@ export default function CheckoutContent() {
   }, [user, router]);
 
   if (!user) {
-    return null; // or a loading spinner
+    return null;
   }
 
-  return <div className="pt-32 mt-20">You are in the checkout page</div>;
+  return (
+    <Elements stripe={stripePromise}>
+      <CheckoutCard />
+    </Elements>
+    // <div className="pt-32 mt-20">You are in the checkout page</div>
+  );
 }
 
 {
