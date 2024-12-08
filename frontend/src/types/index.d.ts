@@ -332,3 +332,46 @@ export interface PaymentResponse {
   message: string;
   success: boolean;
 }
+
+export interface Product {
+  productId: string;
+  quantity: number;
+  price: number;
+  discount: number;
+}
+
+export interface StructuredCartData {
+  vendorId: string;
+  totalAmount: number;
+  products: Product[];
+}
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
+  productId: string;
+  quantity: number;
+  price: number;
+  discount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Order {
+  id: string;
+  customerId: string;
+  vendorId: string;
+  totalAmount: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  order_items?: OrderItem[];
+}
+
+export interface OrderApiResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: Order;
+}
