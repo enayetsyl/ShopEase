@@ -27,6 +27,10 @@ const productSchema = z.object({
     .optional(),
   categoryId: z.string().nonempty("Category is required"),
   inventory: z.number().min(0, "Inventory must be greater than or equal to 0"),
+  images: z
+    .instanceof(FileList)
+    .refine((files) => files.length >= 2, "You must upload at least 2 images.")
+    .refine((files) => files.length <= 5, "You can upload up to 5 images."),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -44,7 +48,11 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
   });
 
   const onSubmit = async (data: ProductFormValues) => {
-    console.log("data", data);
+    const uploadedImages = Array.from(data.images);
+    console.log("Product Data:", {
+      ...data,
+      images: uploadedImages,
+    });
     // try {
     //   const response = await createProduct(data).unwrap();
     //   toast({
@@ -115,6 +123,16 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
           isForm={true}
           control={control}
           error={errors.categoryId?.message}
+        />
+
+        {/* Product Images */}
+        <CustomInput
+          label="Upload Images (2-5)"
+          type="file"
+          inputClassName="bg-white py-2 focus-visible:ring-0"
+          multiple
+          {...register("images")}
+          error={errors.images?.message}
         />
 
         {/* Submit Button */}

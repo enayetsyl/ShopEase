@@ -62,8 +62,8 @@ const EditProductForm = ({
       name: data.productName,
       description: data.productDescription,
       discount: data.discount,
-      inventory:data.inventory,
-      price : data.price,
+      inventory: data.inventory,
+      price: data.price,
       additionalImages: uploadedImages,
     }).unwrap();
 
