@@ -11,6 +11,7 @@ import { Badge } from "../ui/badge";
 import { SingleProductData } from "@/types";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductInfoProps {
   product: SingleProductData;
@@ -34,6 +35,14 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
 
   const productTags = randomTags.slice(0, 3);
   const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({ product, quantity }));
+    toast({
+      description: `${product.name} successfully added to the cart!`,
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -97,11 +106,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         </div>
 
         <div className="flex gap-4">
-          <Button
-            size="lg"
-            className="flex-1"
-            onClick={() => dispatch(addToCart({ product, quantity: 1 }))}
-          >
+          <Button size="lg" className="flex-1" onClick={handleAddToCart}>
             Add to Cart
           </Button>
           <Button size="lg" variant="outline">

@@ -26,7 +26,6 @@ const cartSlice = createSlice({
       action: PayloadAction<{ product: SingleProductData; quantity: number }>,
     ) => {
       const { product, quantity } = action.payload;
-      console.log("action.payload", action.payload);
       const existingItem = state.items.find(
         (item) => item.productId === product.productId,
       );

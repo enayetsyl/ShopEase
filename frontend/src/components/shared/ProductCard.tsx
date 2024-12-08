@@ -3,6 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, ShoppingCart, Star } from "lucide-react";
 import { ProductData } from "@/types";
+import { useDispatch } from "react-redux";
+import { useToast } from "@/hooks/use-toast";
+import { addToCart } from "@/redux/slices/cartSlice";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   product: ProductData;
@@ -11,6 +15,9 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const { productId: id, name, price, image } = product;
   const [isHovered, setIsHovered] = useState(false);
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+  const router = useRouter();
   // Generate random colors
   const getRandomColors = () => {
     const colors = [];
@@ -29,6 +36,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const randomColors = getRandomColors();
   const randomRating = getRandomRating();
+
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // Prevents navigating to the product page
+    dispatch(addToCart({ product, quantity: 1 }));
+    toast({
+      description: `${name} successfully added to the cart!`,
+    });
+  };
+
+  const handleQuickView = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // Prevents navigating to the product page directly
+    router.push(`/products/${id}`); // Navigate to the product details page
+  };
 
   return (
     <Link href={`/products/${id}`}>
@@ -55,19 +75,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
           >
             <button
               className="rounded-full bg-white p-3 text-gray-800 transition-transform hover:scale-110"
-              onClick={(e) => {
-                e.preventDefault();
-                // Add to cart logic here
-              }}
+              onClick={handleAddToCart}
             >
               <ShoppingCart className="h-5 w-5" />
             </button>
             <button
               className="rounded-full bg-white p-3 text-gray-800 transition-transform hover:scale-110"
-              onClick={(e) => {
-                e.preventDefault();
-                // Quick view logic here
-              }}
+              onClick={handleQuickView}
             >
               <Eye className="h-5 w-5" />
             </button>
