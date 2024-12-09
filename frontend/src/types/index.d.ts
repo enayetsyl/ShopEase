@@ -85,17 +85,17 @@ export interface ReviewData {
   comment: string;
 }
 
-export interface ProductData {
-  productId: string;
-  productName: string;
-  productDescription: string;
-  productReviews?: ReviewData[];
-  categoryId: string; // Required
-  price: number; // Required
-  discount: number; // Required
-  image: string[]; // Required
-  inventory: number; // Required
-}
+// export interface ProductData {
+//   productId: string;
+//   productName: string;
+//   productDescription: string;
+//   productReviews?: ReviewData[];
+//   categoryId: string; // Required
+//   price: number; // Required
+//   discount: number; // Required
+//   image: string[]; // Required
+//   inventory: number; // Required
+// }
 
 export interface VendorData {
   vendorId: string;
@@ -254,6 +254,7 @@ export interface ProductData {
   productId: string;
   name: string;
   description: string;
+  vendorId: string;
 }
 
 export interface VendorProductData {
