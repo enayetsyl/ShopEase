@@ -3,7 +3,7 @@ import FeatureCard from "./FeatureCard";
 import { features, randomColors, randomTags } from "@/constants";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
-import { Heart, Star } from "lucide-react";
+import { Heart, ShoppingBag, Star } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
 import { useToast } from "@/hooks/use-toast";
 import { RootState } from "@/redux/store";
+import Link from "next/link";
 
 interface ProductInfoProps {
   product: SingleProductData;
@@ -122,7 +123,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
             Add to Cart
           </Button>
           <Button size="lg" variant="outline">
-            <Heart className="w-4 h-4" />
+            <Link href={`/shop-detail/${product.shopId}`}>
+              <ShoppingBag className="w-4 h-4" />
+            </Link>
           </Button>
         </div>
       </div>

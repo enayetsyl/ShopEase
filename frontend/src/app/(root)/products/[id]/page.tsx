@@ -14,6 +14,7 @@ export default function ProductDetails() {
     id: id as string,
   });
 
+
   const [quantity, setQuantity] = useState(1);
 
   if (isLoading) return <div>Loading...</div>;
