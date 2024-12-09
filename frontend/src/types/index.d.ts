@@ -117,6 +117,11 @@ export interface ShopData {
   vendor?: VendorData;
 }
 
+export interface ShopRouteShopData extends ShopData {
+  productsQuantity: number;
+  followers: number;
+}
+
 export interface AllShopsApiResponse {
   data: {
     id: string;

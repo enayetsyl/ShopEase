@@ -4,6 +4,7 @@ import {
   ProductData,
   ShopApiResponse,
   ShopData,
+  ShopRouteShopData,
   VendorData,
 } from "@/types";
 import { baseApi } from "./baseApi";
@@ -19,17 +20,33 @@ export const shopApi = baseApi.injectEndpoints({
       },
       providesTags: ["Shop"],
     }),
-    getAllShop: builder.query<ShopData[], void>({
+    getAllShop: builder.query<ShopRouteShopData[], void>({
       query: () => "/shop/all",
+      transformResponse: (response: AllShopsApiResponse) => {
+        console.log("transform res", response.data);
+        return response.data.map((shop) => {
+          const {
+            id: shopId,
+            name,
+            logo,
+            description,
+            products,
+            vendor,
+          } = shop;
+          const productsQuantity = products?.length ?? 0;
+          const followers = vendor?.follows?.length ?? 0;
+          const shopData = {
+            shopId,
+            name,
+            description,
+            logo,
+            productsQuantity,
+            followers,
+          };
+          return shopData;
+        });
+      },
       providesTags: ["Shop"],
-      // async onQueryStarted(arg, { queryFulfilled }) {
-      //   try {
-      //     const { data } = await queryFulfilled;
-      //     console.log("Fetched Data:", data);
-      //   } catch (error) {
-      //     console.error("Error fetching data:", error);
-      //   }
-      // },
     }),
 
     createShop: builder.mutation<ShopApiResponse, CreateShopRequest>({

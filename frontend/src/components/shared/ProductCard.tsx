@@ -54,7 +54,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       toast({
         description:
           "You can only add products from the same vendor. Replace the cart or cancel the addition.",
-        variant: "destructive", // Ensure this variant is supported by your toast implementation
+        variant: "destructive",
       });
       return;
     }
