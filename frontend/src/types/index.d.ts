@@ -79,6 +79,44 @@ export interface ShopApiResponse {
   success: boolean;
 }
 
+export interface ReviewData {
+  reviewId: string;
+  rating: number;
+  comment: string;
+}
+
+export interface ProductData {
+  productId: string;
+  productName: string;
+  productDescription: string;
+  productReviews?: ReviewData[];
+  categoryId: string; // Required
+  price: number; // Required
+  discount: number; // Required
+  image: string[]; // Required
+  inventory: number; // Required
+}
+
+export interface VendorData {
+  vendorId: string;
+  vendorName: string;
+  follows?: FollowData[];
+}
+
+export interface FollowData {
+  followId: string;
+  customerId: string;
+}
+
+export interface ShopData {
+  shopId: string;
+  name: string;
+  description: string;
+  logo: string;
+  products?: ProductData[];
+  vendor?: VendorData;
+}
+
 export interface AllShopsApiResponse {
   data: {
     id: string;
@@ -90,10 +128,29 @@ export interface AllShopsApiResponse {
     isBlackListed: boolean;
     updatedAt: string;
     vendorId: string;
+    products?: {
+      id: string;
+      name: string;
+      description: string;
+      reviews?: {
+        id: string;
+        rating: number;
+        comment: string;
+      }[];
+    }[];
+    vendor?: {
+      id: string;
+      name: string;
+      follows?: {
+        id: string;
+        customerId: string;
+      }[];
+    };
   }[];
   message: string;
   success: boolean;
 }
+
 export interface ProductApiResponse {
   data: {
     categoryId: string;
@@ -263,12 +320,6 @@ export interface EditProductRequest {
 export interface VendorProductActions extends VendorProductData {
   handleEdit: (product: VendorProductData) => void;
   handleDuplicate: (product: VendorProductData) => void;
-}
-export interface ShopData {
-  shopId: string;
-  name: string;
-  description: string;
-  logo: string;
 }
 
 export interface CreateShopRequest {

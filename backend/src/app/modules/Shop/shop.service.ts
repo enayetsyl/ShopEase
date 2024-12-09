@@ -34,15 +34,27 @@ const getAShop = async (payload: any) => {
 };
 
 const getAllShops = async () => {
-  // fetch shop data
-  // return that data
-
-  const shop = await prisma.shop.findMany({
+  const shops = await prisma.shop.findMany({
     where: { isBlackListed: false },
+    include: {
+      products: {
+        include: {
+          reviews: true,
+        },
+      },
+      vendor: {
+        include: {
+          follows: true,
+        },
+      },
+    },
   });
 
-  if (!shop) throw new ApiError(404, "Shop not found");
-  return shop;
+
+  console.log(shops)
+
+  if (!shops) throw new ApiError(404, "shops not found");
+  return shops;
 };
 
 export const ShopServices = {
