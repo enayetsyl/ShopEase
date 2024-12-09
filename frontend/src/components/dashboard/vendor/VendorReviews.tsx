@@ -1,44 +1,8 @@
 import React, { useState } from "react";
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
-import { useGetReviewsQuery } from "@/redux/api/reviewApi";
+import { Review, useGetReviewsQuery } from "@/redux/api/reviewApi";
 import { DataTable } from "@/components/shared/DataTable";
-import { ColumnDef } from "@tanstack/react-table";
-
-interface Review {
-  id: string;
-  comment: string;
-  rating: number;
-  customer: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  product: {
-    id: string;
-    name: string;
-  };
-  createdAt: string;
-}
-
-const reviewTableColumns: ColumnDef<Review>[] = [
-  {
-    accessorKey: "comment",
-    header: "Comment",
-  },
-  {
-    accessorKey: "rating",
-    header: "Rating",
-    cell: ({ getValue }) => `${getValue<number>()} ★`, // Add star symbol
-  },
-  {
-    accessorKey: "customer.name",
-    header: "Customer Name",
-  },
-  {
-    accessorKey: "product.name",
-    header: "Product Name",
-  },
-];
+import { reviewTableColumns } from "@/components/shared/tableColumnDef/VendorReviewTableColumn";
 
 const VendorReviews = () => {
   const [page, setPage] = useState(1);
@@ -65,21 +29,39 @@ const VendorReviews = () => {
 
   // Transform API data into a format compatible with the DataTable
   const tableData: Review[] =
-    data?.data.map((review) => ({
-      id: review.id,
-      comment: review.comment,
-      rating: review.rating,
-      customer: {
-        id: review.customer.id,
-        name: review.customer.name,
-        email: review.customer.email,
-      },
-      product: {
-        id: review.product.id,
-        name: review.product.name,
-      },
-      createdAt: review.createdAt,
-    })) || [];
+  data?.data.map((review: Review) => ({
+    id: review.id,
+    comment: review.comment,
+    rating: review.rating,
+    customer: {
+      id: review.customer.id,
+      name: review.customer.name,
+      email: review.customer.email,
+      createdAt: review.customer.createdAt,
+      updatedAt: review.customer.updatedAt,
+      isDeleted: review.customer.isDeleted,
+      isSuspended: review.customer.isSuspended,
+      profilePhoto: review.customer.profilePhoto,
+    },
+    product: {
+      id: review.product.id,
+      name: review.product.name,
+      description: review.product.description,
+      categoryId: review.product.categoryId,
+      price: review.product.price,
+      discount: review.product.discount,
+      inventory: review.product.inventory,
+      shopId: review.product.shopId,
+      vendorId: review.product.vendorId,
+      createdAt: review.product.createdAt,
+      updatedAt: review.product.updatedAt,
+      deletedAt: review.product.deletedAt,
+      image: review.product.image,
+    },
+    createdAt: review.createdAt,
+    updatedAt: review.updatedAt,
+  })) || [];
+
 
   return (
     <div>

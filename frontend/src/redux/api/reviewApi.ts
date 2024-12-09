@@ -9,7 +9,7 @@ interface GetReviewsResponse {
   data: Review[];
 }
 
-interface Review {
+export interface Review {
   id: string;
   comment: string;
   createdAt: string;
@@ -85,13 +85,8 @@ export const reviewApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       transformResponse: (response: GetReviewsResponse) => {
-        console.log("API Response:", response); // Log the raw API response
-        return {
-          success: response.success,
-          message: response.message,
-          data: response.data,
-          meta: response.meta,
-        };
+        
+        return response;
       },
     }),
   }),
