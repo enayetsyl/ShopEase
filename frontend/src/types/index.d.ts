@@ -250,16 +250,16 @@ export interface VendorProductApiResponse {
 }
 
 export interface ProductData {
+  shopId: string;
+  productId: string;
   categoryId: string;
+  vendorId: string;
+  name: string;
   discount: number;
+  description: string;
   image: string[];
   inventory: number;
   price: number;
-  shopId: string;
-  productId: string;
-  name: string;
-  description: string;
-  vendorId: string;
 }
 
 export interface VendorProductData {
@@ -447,4 +447,17 @@ export interface OrderApiResponse {
   success: boolean;
   message: string;
   data: Order;
+}
+
+export interface ProductInShopDetailPage {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  categoryId: string;
+  inventory: number;
+  image: string;
+  vendorId: string;
+  shopId: string;
+  discount: number;
 }

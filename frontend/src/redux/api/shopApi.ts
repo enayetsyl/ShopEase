@@ -23,7 +23,6 @@ export const shopApi = baseApi.injectEndpoints({
     getAllShop: builder.query<ShopRouteShopData[], void>({
       query: () => "/shop/all",
       transformResponse: (response: AllShopsApiResponse) => {
-        console.log("transform res", response.data);
         return response.data.map((shop) => {
           const {
             id: shopId,
@@ -63,8 +62,18 @@ export const shopApi = baseApi.injectEndpoints({
       },
       invalidatesTags: ["Shop"],
     }),
+    getShopDetails: builder.query<any, { id: string }>({
+      query: ({ id }) => ({
+        url: `/shop/single/${id}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useGetShopQuery, useCreateShopMutation, useGetAllShopQuery } =
-  shopApi;
+export const {
+  useGetShopQuery,
+  useCreateShopMutation,
+  useGetAllShopQuery,
+  useGetShopDetailsQuery,
+} = shopApi;
