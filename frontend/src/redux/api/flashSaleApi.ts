@@ -6,12 +6,16 @@ export interface CreateFlashSaleResponse {
   data: FlashSale;
 }
 
-export interface FlashSale {
-  id: string;
+export interface CreateFlashSale {
   productId: string;
   discount: number;
   startTime: string;
   endTime: string;
+}
+
+export interface FlashSale extends CreateFlashSale {
+  id: string;
+
   createdAt: string;
   updatedAt: string;
 }
@@ -64,16 +68,21 @@ export interface GetSingleFlashSaleResponse {
 export const flashSaleApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Create a Flash Sale
-    createFlashSale: builder.mutation<CreateFlashSaleResponse, FlashSale>({
-      query: (flashSale) => ({
-        url: "/flash-sale",
-        method: "POST",
-        body: flashSale,
-      }),
-    }),
+    createFlashSale: builder.mutation<CreateFlashSaleResponse, CreateFlashSale>(
+      {
+        query: (flashSale) => ({
+          url: "/flash-sale",
+          method: "POST",
+          body: flashSale,
+        }),
+      },
+    ),
 
     // Update a Flash Sale
-    updateFlashSale: builder.mutation<UpdateFlashSaleResponse, { id: string; updates: Partial<FlashSale> }>({
+    updateFlashSale: builder.mutation<
+      UpdateFlashSaleResponse,
+      { id: string; updates: Partial<FlashSale> }
+    >({
       query: ({ id, updates }) => ({
         url: `/flash-sale/${id}`,
         method: "PATCH",
@@ -82,7 +91,10 @@ export const flashSaleApi = baseApi.injectEndpoints({
     }),
 
     // Get all Flash Sales
-    getAllFlashSales: builder.query<GetAllFlashSalesResponse, { limit?: number; page?: number }>({
+    getAllFlashSales: builder.query<
+      GetAllFlashSalesResponse,
+      { limit?: number; page?: number }
+    >({
       query: ({ limit = 10, page = 1 }) => ({
         url: `/flash-sale`,
         method: "GET",

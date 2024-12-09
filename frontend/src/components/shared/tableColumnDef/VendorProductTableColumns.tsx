@@ -3,7 +3,7 @@
 import { VendorProductActions } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import CustomButton from "../CustomButton";
-import { Pencil, Copy } from "lucide-react";
+import { Pencil, Copy, Tag } from "lucide-react";
 
 export const vendorProductTableColumns: ColumnDef<VendorProductActions>[] = [
   { accessorKey: "categoryName", header: "Category Name" },
@@ -30,6 +30,10 @@ export const vendorProductTableColumns: ColumnDef<VendorProductActions>[] = [
             icon={<Copy />}
             onClick={() => product.handleDuplicate(product)}
           ></CustomButton>
+          <CustomButton
+            icon={<Tag />}
+            onClick={() => product.handleFlashSale(product)}
+          />
         </div>
       );
     },

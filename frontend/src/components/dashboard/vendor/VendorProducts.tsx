@@ -14,12 +14,14 @@ import DuplicationAlert from "./Product/DuplicationAlert";
 import Heading from "@/components/shared/CustomHeading";
 import CustomButton from "@/components/shared/CustomButton";
 import AddProductForm from "@/components/forms/AddProductForm";
+import FlashSaleModal from "./Product/FlashSaleModal";
 
 const VendorProducts = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddProductDialogOpen, setIsAddProductDialogOpen] = useState(false);
+  const [isFlashSaleOpen, setIsFlashSaleOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<VendorProductActions | null>(null);
   const { data } = useGetVendorProductsQuery({ page, limit });
@@ -27,11 +29,23 @@ const VendorProducts = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const { toast } = useToast();
 
+  const handleFlashSale = (product: VendorProductData) => {
+    const productWithActions: VendorProductActions = {
+      ...product,
+      handleEdit: () => handleEdit(product),
+      handleDuplicate: () => handleDuplicate(),
+      handleFlashSale: () => handleFlashSale(product),
+    };
+    setSelectedProduct(productWithActions);
+    setIsFlashSaleOpen(true);
+  };
+
   const handleEdit = (product: VendorProductData) => {
     const productWithActions: VendorProductActions = {
       ...product,
       handleEdit: () => handleEdit(product),
       handleDuplicate: () => handleDuplicate(),
+      handleFlashSale: () => handleFlashSale(product),
     };
     setSelectedProduct(productWithActions);
     setIsEditOpen(true);
@@ -62,18 +76,11 @@ const VendorProducts = () => {
   };
 
   const tableData: VendorProductActions[] =
-    data?.data.map((product) => ({
+    data?.data.map((product: VendorProductData) => ({
       ...product,
       handleEdit: () => handleEdit(product),
-      handleDuplicate: () => {
-        const productWithActions: VendorProductActions = {
-          ...product,
-          handleEdit: () => handleEdit(product),
-          handleDuplicate: () => handleDuplicate(),
-        };
-        setSelectedProduct(productWithActions);
-        setIsAlertOpen(true);
-      },
+      handleDuplicate: async () => handleDuplicate(),
+      handleFlashSale: () => handleFlashSale(product),
     })) || [];
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
@@ -142,6 +149,14 @@ const VendorProducts = () => {
           handleDuplicate={handleDuplicate}
           isLoading={isLoading}
         />
+      )}
+      {isFlashSaleOpen && (
+        <Dialog open={isFlashSaleOpen} onOpenChange={setIsFlashSaleOpen}>
+          <FlashSaleModal
+            productId={selectedProduct?.productId || ""}
+            onClose={() => setIsFlashSaleOpen(false)}
+          />
+        </Dialog>
       )}
     </div>
   );

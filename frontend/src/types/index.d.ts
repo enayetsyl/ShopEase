@@ -325,7 +325,8 @@ export interface EditProductRequest {
 
 export interface VendorProductActions extends VendorProductData {
   handleEdit: (product: VendorProductData) => void;
-  handleDuplicate: (product: VendorProductData) => void;
+  handleDuplicate: (product: VendorProductData) => Promise<void>;
+  handleFlashSale: (product: VendorProductData) => void;
 }
 
 export interface CreateShopRequest {
