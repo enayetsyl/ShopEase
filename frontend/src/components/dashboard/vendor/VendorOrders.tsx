@@ -1,57 +1,20 @@
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
 import Heading from "@/components/shared/CustomHeading";
 import { DataTable } from "@/components/shared/DataTable";
+import { orderTableColumns } from "@/components/shared/tableColumnDef/VendorOrderTableColumns";
 import { useGetAllOrdersQuery } from "@/redux/api/orderApi";
 import { Order } from "@/types";
-import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
-
-// interface Order {
-//   id: string;
-//   createdAt: string;
-//   totalAmount: number;
-//   status: string;
-//   order_items: { id: string; quantity: number; price: number }[];
-//   itemsCount: number; // Derived property for number of items
-// }
-
-// Define the columns for the DataTable
-const orderTableColumns: ColumnDef<Order>[] = [
-  {
-    accessorKey: "createdAt",
-    header: "Order Date",
-    cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
-  },
-  {
-    accessorKey: "totalAmount",
-    header: "Amount",
-    cell: ({ getValue }) => `$${getValue<number>()}`,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "itemsCount",
-    header: "Number of Items",
-  },
-];
 
 const VendorOrders = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const { data, error, isLoading } = useGetAllOrdersQuery({
+  const { data } = useGetAllOrdersQuery({
     page: 1,
     limit: 10,
   });
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error loading orders!</p>;
-  }
+  
 
   // Transform the API response to match the table structure
   const tableData: Order[] =
@@ -70,7 +33,6 @@ const VendorOrders = () => {
     if (page < totalPages) setPage((prev) => prev + 1);
   };
 
-  console.log("data", data);
   return (
     <div>
       <CustomBreadcrumb
