@@ -2,19 +2,63 @@
 
 import Heading from "@/components/shared/CustomHeading";
 import ProductCard from "@/components/shared/ProductCard";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import {
+  useFollowShopMutation,
+  useUnfollowShopMutation,
+} from "@/redux/api/followApi";
 import { useGetShopDetailsQuery } from "@/redux/api/shopApi";
 import { ProductData, ProductInShopDetailPage } from "@/types";
-import { UserIcon } from "lucide-react";
+import { UserIcon, UserMinus, UserPlus } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 const ShopDetail: React.FC = () => {
   const params = useParams();
-  const id = params?.id as string | undefined; // Ensure id is either string or undefined
+  const id = params?.id as string | undefined;
+  const { toast } = useToast();
+  const { data } = useGetShopDetailsQuery({ id: id || "" });
+  const [followShop] = useFollowShopMutation();
+  const [unfollowShop] = useUnfollowShopMutation();
 
-  // Use the query hook only if `id` is defined
-  const { data, error, isLoading } = useGetShopDetailsQuery({ id: id || "" });
+  console.log("data", data);
+
+  const handleFollow = async () => {
+    try {
+      await followShop({ vendorId: data?.data?.vendorId || "" }).unwrap();
+
+      toast({
+        title: "Success",
+        description: `You are now following ${data?.data?.name}`,
+      });
+    } catch (error) {
+      console.log("error in following", error);
+      toast({
+        title: "Error",
+        description: "Failed to follow the shop. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      await unfollowShop({ id: data?.data?.vendorId || "" }).unwrap();
+
+      toast({
+        title: "Success",
+        description: `You have unfollowed ${data?.data?.name}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to unfollow the shop. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const productsData: ProductData[] =
     data?.data?.products?.map((product: ProductInShopDetailPage) => ({
@@ -29,16 +73,6 @@ const ShopDetail: React.FC = () => {
       inventory: product.inventory,
       price: product.price,
     })) || [];
-
-  const productsQuantity = productsData?.length;
-  const followers = data?.vendor?.follows?.length || 0;
-
-  // const { id: shopId, logo, name, description, products, vendor } = data || {};
-
-  console.log(data?.data?.name, data?.description, data?.logo);
-
-  console.log("data", data?.data);
-  console.log("products", productsData, productsQuantity, followers);
 
   return (
     <div className="mx-auto px-4 py-8">
@@ -64,7 +98,17 @@ const ShopDetail: React.FC = () => {
             <span>{data?.data?.vendor?.follows?.length || 0} followers</span>
           </div>
         </div>
+        <div className=" flex justify-center items-center gap-5 mb-10">
+          <Button variant="outline" className="mt-4" onClick={handleUnfollow}>
+            <UserMinus className="w-4 h-4 mr-2" />
+            Unfollow
+          </Button>
 
+          <Button variant="outline" className="mt-4" onClick={handleFollow}>
+            <UserPlus className="w-4 h-4 mr-2" />
+            Follow
+          </Button>
+        </div>
         <Heading
           text="Vendor Products"
           className="text-4xl lg:text-6xl text-center lg:text-left pb-20"

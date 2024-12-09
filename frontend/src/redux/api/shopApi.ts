@@ -1,11 +1,9 @@
 import {
   AllShopsApiResponse,
   CreateShopRequest,
-  ProductData,
   ShopApiResponse,
   ShopData,
   ShopRouteShopData,
-  VendorData,
 } from "@/types";
 import { baseApi } from "./baseApi";
 
@@ -67,6 +65,7 @@ export const shopApi = baseApi.injectEndpoints({
         url: `/shop/single/${id}`,
         method: "GET",
       }),
+      providesTags: ["Shop"],
     }),
   }),
 });

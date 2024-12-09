@@ -38,6 +38,7 @@ const SignInForm = () => {
       toast({
         description: `${response.message}`,
       });
+
       const user = response.data;
       dispatch(setAuth(user));
       if (response.data.role === "VENDOR") {
