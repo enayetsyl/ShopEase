@@ -91,6 +91,11 @@ const SignInForm = () => {
           </span>
         </Link>
       </div>
+      <Link href="/sign-up">
+        <span className="underline font-normal leading-7 text-foreground dark:text-muted-foreground">
+          Don't Have an account!
+        </span>
+      </Link>
 
       <CustomButton
         className="bg-gradient-to-r from-primary to-accent dark:from-yellow-500 dark:to-yellow-600 py-8  w-full rounded-md shadow-md text-foreground hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black gap-2 text-lg"
