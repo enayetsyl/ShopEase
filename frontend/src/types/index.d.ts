@@ -483,3 +483,11 @@ export interface FollowError {
     statusCode: number;
   };
 }
+
+export interface FollowerCountResponse {
+  success: boolean;
+  message: string;
+  data: {
+    data: number; // Represents the actual follower count
+  };
+}

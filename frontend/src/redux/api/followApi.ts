@@ -1,4 +1,4 @@
-import { FollowResponse } from "@/types";
+import { FollowerCountResponse, FollowResponse } from "@/types";
 import { baseApi } from "./baseApi";
 
 export const followApi = baseApi.injectEndpoints({
@@ -23,6 +23,9 @@ export const followApi = baseApi.injectEndpoints({
         url: `/follows/${vendorId}`,
         method: "GET",
       }),
+      transformResponse: (response: FollowerCountResponse) => {
+        return response.data.data;
+      },
       providesTags: ["Shop"],
     }),
   }),

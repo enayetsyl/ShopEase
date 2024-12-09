@@ -110,12 +110,7 @@ const ShopDetail: React.FC = () => {
           </p>
           <div className="flex items-center justify-center">
             <UserIcon className="w-5 h-5 mr-2" />
-            <span>
-              {Array.isArray(data?.data?.vendor?.follows)
-                ? data?.data?.vendor?.follows.length
-                : 0}{" "}
-              followers
-            </span>
+            <span>{followerCount || 0} followers</span>
           </div>
         </div>
         <div className=" flex justify-center items-center gap-5 mb-10">

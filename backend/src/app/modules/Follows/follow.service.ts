@@ -39,10 +39,12 @@ const getFollowers = async (vendorId: string) => {
   };
 };
 const getFollowersOfAShop = async (vendorId: string) => {
+  console.log("vendor id", vendorId);
   const total = await prisma.follow.count({
-    where: { vendorId },
+    where: { vendorId, isDeleted: false },
   });
 
+  console.log("toatl", total);
   return {
     data: total,
   };
