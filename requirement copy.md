@@ -15,8 +15,7 @@
    - Monitor transactions and review activities across the platform.
 2. **Vendor**
    - Create and manage their shop (name, logo, description, etc.).
-   - View customer reviews and ratings.
-   - View order history specific to their shop.
+  
 3. **User (Customer)**
    - Compare up to three products at a time based on their attributes.
    - Access order history to view past purchases.
@@ -51,7 +50,6 @@
      - Reset password functionality via email.
 8. **Vendor Dashboard**
    - delete products.
-   - View and respond to customer reviews.
 9. **Recent Products Page**
    - Display the last 10 products viewed by the user.
    - Include product details, prices, and direct links to the product page.
