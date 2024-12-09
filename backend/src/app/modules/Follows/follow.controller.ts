@@ -28,6 +28,18 @@ const getFollowers = catchAsync(async (req: Request &{user?: any}, res: Response
 
   });
 });
+const getFollowersOfAShop = catchAsync(async (req: Request, res: Response) => {
+
+  const result = await FollowServices.getFollowersOfAShop(req.params.vendorId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Follower count fetched successfully",
+    data: result,
+
+  });
+});
 
 const unfollow = catchAsync(async (req: Request & { user?: any }, res: Response) => {
   const { vendorId } = req.params;
@@ -44,5 +56,5 @@ const unfollow = catchAsync(async (req: Request & { user?: any }, res: Response)
 
 
 export const FollowController = {
-  follow, unfollow, getFollowers
+  follow, unfollow, getFollowers,getFollowersOfAShop
 };

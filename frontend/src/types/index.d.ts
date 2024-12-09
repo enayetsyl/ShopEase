@@ -461,3 +461,25 @@ export interface ProductInShopDetailPage {
   shopId: string;
   discount: number;
 }
+
+// Response type for the follow/unfollow actions
+export interface FollowResponse {
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    vendorId: string;
+    customerId: string;
+    isDeleted: boolean;
+    createdAt: string;
+  };
+}
+
+// Error type
+export interface FollowError {
+  success: boolean;
+  message: string;
+  error?: {
+    statusCode: number;
+  };
+}

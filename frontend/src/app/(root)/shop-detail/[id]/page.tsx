@@ -6,14 +6,20 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
   useFollowShopMutation,
+  useGetShopFollowerCountQuery,
   useUnfollowShopMutation,
 } from "@/redux/api/followApi";
 import { useGetShopDetailsQuery } from "@/redux/api/shopApi";
-import { ProductData, ProductInShopDetailPage } from "@/types";
+import {
+  FollowError,
+  FollowResponse,
+  ProductData,
+  ProductInShopDetailPage,
+} from "@/types";
 import { UserIcon, UserMinus, UserPlus } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 
 const ShopDetail: React.FC = () => {
   const params = useParams();
@@ -22,22 +28,27 @@ const ShopDetail: React.FC = () => {
   const { data } = useGetShopDetailsQuery({ id: id || "" });
   const [followShop] = useFollowShopMutation();
   const [unfollowShop] = useUnfollowShopMutation();
-
-  console.log("data", data);
+  const { data: followerCount, refetch } = useGetShopFollowerCountQuery({
+    vendorId: data?.data?.vendorId,
+  });
 
   const handleFollow = async () => {
     try {
-      await followShop({ vendorId: data?.data?.vendorId || "" }).unwrap();
+      const response: FollowResponse = await followShop({
+        vendorId: data?.data?.vendorId || "",
+      }).unwrap();
 
       toast({
         title: "Success",
-        description: `You are now following ${data?.data?.name}`,
+        description: response?.message,
       });
+      refetch();
     } catch (error) {
-      console.log("error in following", error);
+      console.error("error in following", error);
+      const followError = error as FollowError;
       toast({
         title: "Error",
-        description: "Failed to follow the shop. Please try again.",
+        description: followError.message,
         variant: "destructive",
       });
     }
@@ -45,16 +56,20 @@ const ShopDetail: React.FC = () => {
 
   const handleUnfollow = async () => {
     try {
-      await unfollowShop({ id: data?.data?.vendorId || "" }).unwrap();
-
+      const response: FollowResponse = await unfollowShop({
+        id: data?.data?.vendorId || "",
+      }).unwrap();
       toast({
         title: "Success",
-        description: `You have unfollowed ${data?.data?.name}`,
+        description: response?.message,
       });
+      refetch();
     } catch (error) {
+      console.error("Error in unfollowing shop", error);
+      const unfollowError = error as FollowError;
       toast({
         title: "Error",
-        description: "Failed to unfollow the shop. Please try again.",
+        description: unfollowError.message,
         variant: "destructive",
       });
     }
@@ -95,7 +110,12 @@ const ShopDetail: React.FC = () => {
           </p>
           <div className="flex items-center justify-center">
             <UserIcon className="w-5 h-5 mr-2" />
-            <span>{data?.data?.vendor?.follows?.length || 0} followers</span>
+            <span>
+              {Array.isArray(data?.data?.vendor?.follows)
+                ? data?.data?.vendor?.follows.length
+                : 0}{" "}
+              followers
+            </span>
           </div>
         </div>
         <div className=" flex justify-center items-center gap-5 mb-10">
