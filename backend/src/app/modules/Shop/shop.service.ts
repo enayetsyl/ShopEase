@@ -50,15 +50,35 @@ const getAllShops = async () => {
     },
   });
 
-
-  console.log(shops)
-
   if (!shops) throw new ApiError(404, "shops not found");
   return shops;
+};
+
+const getAShopForShopDetailPage = async (payload: string) => {
+  console.log("payload", payload);
+  const shop = await prisma.shop.findUnique({
+    where: { id: payload },
+    include: {
+      products: {
+        include: {
+          reviews: true,
+        },
+      },
+      vendor: {
+        include: {
+          follows: true,
+        },
+      },
+    },
+  });
+
+  if (!shop) throw new ApiError(404, "shop not found");
+  return shop;
 };
 
 export const ShopServices = {
   createShop,
   getAShop,
   getAllShops,
+  getAShopForShopDetailPage,
 };

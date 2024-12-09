@@ -17,6 +17,7 @@ router.post(
     return ShopController.createShop(req, res, next);
   }
 );
+router.get("/single/:shopId", ShopController.getAShopForShopDetailPage);
 router.get("/", auth(UserRole.VENDOR), ShopController.getAShop);
 router.get("/all", ShopController.getAllShops);
 

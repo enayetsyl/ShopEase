@@ -27,6 +27,19 @@ const getAShop = catchAsync(
     });
   }
 );
+const getAShopForShopDetailPage = catchAsync(
+  async (req: Request, res: Response) => {
+    const { shopId } = req.params;
+    console.log('shop id in controller', shopId)
+    const result = await ShopServices.getAShopForShopDetailPage(shopId);
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Shop detail fetched successfully",
+      data: result,
+    });
+  }
+);
 
 const getAllShops = catchAsync(async (req: Request, res: Response) => {
   const result = await ShopServices.getAllShops();
@@ -42,4 +55,5 @@ export const ShopController = {
   createShop,
   getAShop,
   getAllShops,
+  getAShopForShopDetailPage,
 };
