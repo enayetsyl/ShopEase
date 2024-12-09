@@ -1,12 +1,74 @@
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
+import Heading from "@/components/shared/CustomHeading";
+import { DataTable } from "@/components/shared/DataTable";
 import { useGetAllOrdersQuery } from "@/redux/api/orderApi";
-import React from "react";
+import { Order } from "@/types";
+import { ColumnDef } from "@tanstack/react-table";
+import React, { useState } from "react";
+
+// interface Order {
+//   id: string;
+//   createdAt: string;
+//   totalAmount: number;
+//   status: string;
+//   order_items: { id: string; quantity: number; price: number }[];
+//   itemsCount: number; // Derived property for number of items
+// }
+
+// Define the columns for the DataTable
+const orderTableColumns: ColumnDef<Order>[] = [
+  {
+    accessorKey: "createdAt",
+    header: "Order Date",
+    cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
+  },
+  {
+    accessorKey: "totalAmount",
+    header: "Amount",
+    cell: ({ getValue }) => `$${getValue<number>()}`,
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+  },
+  {
+    accessorKey: "itemsCount",
+    header: "Number of Items",
+  },
+];
 
 const VendorOrders = () => {
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
   const { data, error, isLoading } = useGetAllOrdersQuery({
     page: 1,
     limit: 10,
   });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error loading orders!</p>;
+  }
+
+  // Transform the API response to match the table structure
+  const tableData: Order[] =
+    data?.data.map((order: Order) => ({
+      ...order,
+      itemsCount: order?.order_items?.length as number,
+    })) || [];
+
+  const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
+
+  const handlePreviousPage = () => {
+    if (page > 1) setPage((prev) => prev - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage((prev) => prev + 1);
+  };
 
   console.log("data", data);
   return (
@@ -19,6 +81,22 @@ const VendorOrders = () => {
         ]}
         title="Order Page"
       />
+      <div className="p-5">
+        <div className="flex justify-center items-center pt-10 pb-10">
+          <Heading
+            text="Your Customer Orders"
+            className="text-4xl lg:text-6xl"
+          />
+        </div>
+        <DataTable
+          data={tableData}
+          columns={orderTableColumns}
+          pageIndex={page}
+          totalPages={totalPages}
+          onPreviousPage={handlePreviousPage}
+          onNextPage={handleNextPage}
+        />
+      </div>
     </div>
   );
 };

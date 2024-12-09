@@ -14,10 +14,7 @@
     - Monitor transactions and review activities across the platform.
 2. **Vendor**
     - Create and manage their shop (name, logo, description, etc.).
-    - Add products with attributes such as name, price, category, inventory count, images, and discounts.
-    - Duplicate existing products and edit their details for quicker additions.
     - View customer reviews and ratings.
-    - Manage product inventory (update quantity, edit details, or delete products).
     - View order history specific to their shop.
 3. **User (Customer)**
     - Browse products across all vendor shops from the home page.

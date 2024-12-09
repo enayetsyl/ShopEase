@@ -446,7 +446,12 @@ export interface OrderApiResponse {
   statusCode: number;
   success: boolean;
   message: string;
-  data: Order;
+  data: Order[];
+  meta: {
+    page: number;
+    total: number;
+    limit: number;
+  };
 }
 
 export interface ProductInShopDetailPage {
