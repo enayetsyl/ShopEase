@@ -1,9 +1,6 @@
 import { SingleProductData } from "@/types";
-import React, { useState } from "react";
-import { Label } from "../ui/label";
-import { Star } from "lucide-react";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import React from "react";
+
 import ReviewSubmitForm from "../forms/ReviewSubmitForm";
 
 interface ReviewInfoProps {
@@ -31,7 +28,7 @@ const ReviewSection: React.FC<ReviewInfoProps> = ({ product, renderStars }) => {
       </div>
 
       {/* Add Review Form */}
-      <ReviewSubmitForm />
+      <ReviewSubmitForm productId={product.productId} />
     </div>
   );
 };

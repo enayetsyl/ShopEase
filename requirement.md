@@ -15,7 +15,6 @@
 2. **Vendor**
     - Create and manage their shop (name, logo, description, etc.).
     - View customer reviews and ratings.
-    - View order history specific to their shop.
 3. **User (Customer)**
     - Browse products across all vendor shops from the home page.
     - Use advanced filtering and searching (price range, category, etc.) for convenience.

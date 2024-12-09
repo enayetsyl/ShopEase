@@ -64,7 +64,14 @@ const Cart = () => {
           <CardTitle>Shopping Cart</CardTitle>
         </CardHeader>
         <CardContent>
-          <DataTable columns={cartItemTableColumns} data={items} />
+          <DataTable
+            columns={cartItemTableColumns}
+            data={items}
+            pageIndex={0}
+            totalPages={0}
+            onPreviousPage={() => {}}
+            onNextPage={() => {}}
+          />
 
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <div className="flex gap-2">

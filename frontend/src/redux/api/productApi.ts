@@ -163,6 +163,7 @@ export const productApi = baseApi.injectEndpoints({
 
         return productData;
       },
+      providesTags:["Product"]
     }),
     getVendorProducts: builder.query<
       {
@@ -248,6 +249,7 @@ export const productApi = baseApi.injectEndpoints({
           method: "POST",
         };
       },
+
       invalidatesTags: ["Product"],
     }),
   }),

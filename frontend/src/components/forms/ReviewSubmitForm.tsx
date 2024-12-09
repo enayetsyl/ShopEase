@@ -3,15 +3,51 @@ import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { Star } from "lucide-react";
+import { useGiveReviewMutation } from "@/redux/api/reviewApi";
+import { useToast } from "@/hooks/use-toast";
 
-const ReviewSubmitForm = () => {
+const ReviewSubmitForm = ({ productId }: { productId: string }) => {
   const [newReviewRating, setNewReviewRating] = useState(5);
   const [newReviewText, setNewReviewText] = useState("");
-  const handleSubmitReview = (e: React.FormEvent) => {
+  const [giveReview, { isLoading, isError, isSuccess, error }] =
+    useGiveReviewMutation();
+    const {toast} = useToast()
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle review submission here
-    setNewReviewText("");
-    setNewReviewRating(5);
+
+    try {
+      const response = await giveReview({
+        productId,
+        rating: newReviewRating,
+        comment: newReviewText,
+      }).unwrap();
+
+
+      if (response.success) {
+        toast({
+          description: response.message,
+        });
+        setNewReviewText("");
+        setNewReviewRating(5);
+      }
+    } catch (err) {
+      console.error("Error submitting review:", err);
+      // Narrowing down the type of `err`
+      if (err && typeof err === "object" && "data" in err) {
+        const errorData = err as { data: { message: string } };
+        toast({
+          description: errorData.data.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          description: "An unexpected error occurred.",
+          variant: "destructive",
+        });
+      }
+
+    }
   };
   return (
     <form onSubmit={handleSubmitReview} className="mt-8 space-y-4">
