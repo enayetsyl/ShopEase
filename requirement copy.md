@@ -18,14 +18,8 @@
    - View customer reviews and ratings.
    - View order history specific to their shop.
 3. **User (Customer)**
-   - Browse products across all vendor shops from the home page.
-   - Use advanced filtering and searching (price range, category, etc.) for convenience.
-   - Add products to the cart from either the homepage or individual shop pages.
-   - Purchase products and apply coupon codes during checkout for discounts.
    - Compare up to three products at a time based on their attributes.
-   - Leave reviews and ratings for purchased products. _(Only after purchase)._
    - Access order history to view past purchases.
-   - Follow specific vendor shops to prioritize their products in the listing.
    - View a "Recent Products" page showing the last 10 products they viewed.
    - **Receive a warning if attempting to add products from multiple vendors in the cart, with options:**
      - Replace the cart with the new product(s).
@@ -49,7 +43,6 @@
      - Retain the current cart and cancel the addition.
 5. **Checkout**
 6. **Order History**
-   - **For Vendors:** View a detailed list of all orders placed for their shop.
    - **For Customers:** View their purchase history with product and order details.
 7. **Authentication**
    
@@ -59,7 +52,6 @@
 8. **Vendor Dashboard**
    - delete products.
    - View and respond to customer reviews.
-   - Paginated lists for added products and order history.
 9. **Recent Products Page**
    - Display the last 10 products viewed by the user.
    - Include product details, prices, and direct links to the product page.

@@ -10,8 +10,8 @@ const VendorOrders = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const { data } = useGetAllOrdersQuery({
-    page: 1,
-    limit: 10,
+    page,
+    limit
   });
 
   
