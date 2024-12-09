@@ -20,14 +20,24 @@ import { Button } from "@/components/ui/button";
 interface DataTableProps<TData> {
   data: TData[];
   columns: ColumnDef<TData, any>[];
+  pageIndex: number;
+  totalPages: number;
+  onPreviousPage: () => void;
+  onNextPage: () => void;
 }
 
-export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
+export function DataTable<TData>({
+  data,
+  columns,
+  pageIndex,
+  totalPages,
+  onPreviousPage,
+  onNextPage,
+}: DataTableProps<TData>) {
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getCoreRowModel: getCoreRowModel(), // Only core row model is needed for server-side pagination
   });
 
   return (
@@ -63,20 +73,13 @@ export function DataTable<TData>({ data, columns }: DataTableProps<TData>) {
         </TableBody>
       </Table>
       <div className="flex justify-between items-center mt-4">
-        <Button
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
+        <Button onClick={onPreviousPage} disabled={pageIndex === 1}>
           Previous
         </Button>
         <span>
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
+          Page {pageIndex} of {totalPages}
         </span>
-        <Button
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
+        <Button onClick={onNextPage} disabled={pageIndex === totalPages}>
           Next
         </Button>
       </div>

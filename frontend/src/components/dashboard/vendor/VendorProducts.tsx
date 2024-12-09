@@ -16,11 +16,13 @@ import CustomButton from "@/components/shared/CustomButton";
 import AddProductForm from "@/components/forms/AddProductForm";
 
 const VendorProducts = () => {
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isAddProductDialogOpen, setIsAddProductDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<VendorProductActions | null>(null);
-  const { data } = useGetVendorProductsQuery({ page: 1, limit: 10 });
+  const { data } = useGetVendorProductsQuery({ page, limit });
   const [duplicateProduct, { isLoading }] = useDuplicateProductMutation();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const { toast } = useToast();
@@ -74,6 +76,16 @@ const VendorProducts = () => {
       },
     })) || [];
 
+  const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
+
+  const handlePreviousPage = () => {
+    if (page > 1) setPage((prev) => prev - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage((prev) => prev + 1);
+  };
+
   return (
     <div>
       <CustomBreadcrumb
@@ -105,7 +117,14 @@ const VendorProducts = () => {
           </Dialog>
         </div>
         {data && (
-          <DataTable data={tableData} columns={vendorProductTableColumns} />
+          <DataTable
+            data={tableData}
+            columns={vendorProductTableColumns}
+            pageIndex={page}
+            totalPages={totalPages}
+            onPreviousPage={handlePreviousPage}
+            onNextPage={handleNextPage}
+          />
         )}
       </div>
       {isEditOpen && selectedProduct && (

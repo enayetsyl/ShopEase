@@ -15,10 +15,7 @@
    - Monitor transactions and review activities across the platform.
 2. **Vendor**
    - Create and manage their shop (name, logo, description, etc.).
-   - Add products with attributes such as name, price, category, inventory count, images, and discounts.
-   - Duplicate existing products and edit their details for quicker additions.
    - View customer reviews and ratings.
-   - Manage product inventory (update quantity, edit details, or delete products).
    - View order history specific to their shop.
 3. **User (Customer)**
    - Browse products across all vendor shops from the home page.
@@ -55,14 +52,12 @@
    - **For Vendors:** View a detailed list of all orders placed for their shop.
    - **For Customers:** View their purchase history with product and order details.
 7. **Authentication**
-   - **Signup Page:** Option to register as a user or vendor.
-   - If a vendor is selected, redirect them to the dashboard to add their shop name and some initial products.
-   - **Login Page:** Secure login using JWT.
+   
+   
      - **Password Management:** Change password after logging in.
      - Reset password functionality via email.
 8. **Vendor Dashboard**
-   - Manage shop information (name, logo, etc.).
-   - Add, edit, duplicate, or delete products.
+   - delete products.
    - View and respond to customer reviews.
    - Paginated lists for added products and order history.
 9. **Recent Products Page**
