@@ -12,12 +12,30 @@ interface CartState {
   vendorId: string | null;
 }
 
-const initialState: CartState = {
-  items: [],
-  couponCode: null,
-  couponDiscount: 0,
-  vendorId: null,
+// Utility to load cart from local storage
+const loadCartFromLocalStorage = (): CartState => {
+  if (typeof window !== "undefined") {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      return JSON.parse(storedCart);
+    }
+  }
+  return {
+    items: [],
+    couponCode: null,
+    couponDiscount: 0,
+    vendorId: null,
+  };
 };
+
+// Utility to save cart to local storage
+const saveCartToLocalStorage = (cart: CartState) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
+};
+
+const initialState: CartState = loadCartFromLocalStorage();
 
 const cartSlice = createSlice({
   name: "cart",
@@ -47,6 +65,9 @@ const cartSlice = createSlice({
       if (!state.vendorId) {
         state.vendorId = product.shopId;
       }
+
+      // Save to local storage
+      saveCartToLocalStorage(state);
     },
     replaceCart: (
       state,
@@ -57,12 +78,18 @@ const cartSlice = createSlice({
       // Clear the cart and set the new product and vendor
       state.items = [{ ...product, quantity }];
       state.vendorId = product.shopId;
+
+      // Save to local storage
+      saveCartToLocalStorage(state);
     },
     clearCart: (state) => {
       state.items = [];
       state.vendorId = null;
       state.couponCode = null;
       state.couponDiscount = 0;
+
+      // Save to local storage
+      saveCartToLocalStorage(state);
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(
@@ -71,6 +98,9 @@ const cartSlice = createSlice({
       if (state.items.length === 0) {
         state.vendorId = null;
       }
+
+      // Save to local storage
+      saveCartToLocalStorage(state);
     },
     updateQuantity: (
       state,
@@ -82,6 +112,9 @@ const cartSlice = createSlice({
       if (item) {
         item.quantity = Math.max(1, action.payload.quantity);
       }
+
+      // Save to local storage
+      saveCartToLocalStorage(state);
     },
     applyCoupon: (
       state,
@@ -89,10 +122,16 @@ const cartSlice = createSlice({
     ) => {
       state.couponCode = action.payload.code;
       state.couponDiscount = action.payload.discount;
+
+      // Save to local storage
+      saveCartToLocalStorage(state);
     },
     clearCoupon: (state) => {
       state.couponCode = null;
       state.couponDiscount = 0;
+
+      // Save to local storage
+      saveCartToLocalStorage(state);
     },
   },
 });
@@ -106,4 +145,5 @@ export const {
   applyCoupon,
   clearCoupon,
 } = cartSlice.actions;
+
 export default cartSlice.reducer;

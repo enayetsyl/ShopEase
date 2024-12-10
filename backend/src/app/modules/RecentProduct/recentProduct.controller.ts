@@ -20,13 +20,13 @@ const saveRecentProduct = catchAsync(
 
 const getRecentProduct = catchAsync(
   async (req: Request & { user?: any }, res: Response) => {
-    await RecentProductServices.getRecentProduct(req.user);
+    const result = await RecentProductServices.getRecentProduct(req.user);
 
     sendResponse(res, {
       statusCode: 201,
       success: true,
       message: "Recent products saved successfully.",
-      data: "",
+      data: result,
     });
   }
 );

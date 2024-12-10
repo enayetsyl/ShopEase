@@ -3,7 +3,7 @@ import prisma from "../../../shared/prisma";
 const saveRecentProduct = async (user: any, payload: string[]) => {
   const { id, email } = user;
 
-  console.log('payload', payload)
+  console.log("payload", payload);
 
   const recentProductsData = payload.map((productId) => ({
     userId: id,
@@ -32,6 +32,7 @@ const getRecentProduct = async (user: any) => {
     orderBy: {
       visitedAt: "desc",
     },
+    include: { product: true },
     take: 10,
   });
 
