@@ -31,7 +31,6 @@
    - Infinite scrolling for product listing.
    - Filtering and searching functionalities (price range, category, keyword, etc.).
    - Scroll-to-top button for better navigation.
-   - Show flash sale products and add a button at the bottom. After clicking the button, redirect to the flash sale page and display all flash sale products.
 2. **Product Details Page**
 
    - Related products section showing products in the same category.

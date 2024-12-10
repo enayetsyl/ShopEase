@@ -30,8 +30,6 @@ const FlashSale = () => {
       };
     }) || [];
 
-  console.log("Transformed flash sale data", transformedData);
-
   return (
     <div>
       <Heading
