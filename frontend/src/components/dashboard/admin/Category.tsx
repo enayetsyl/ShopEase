@@ -1,15 +1,27 @@
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
+import CustomButton from "@/components/shared/CustomButton";
 import Heading from "@/components/shared/CustomHeading";
 import { DataTable } from "@/components/shared/DataTable";
-import { useGetAdminUsersQuery } from "@/redux/api/adminApi";
+import { AdminCategoryTableColumns } from "@/components/shared/tableColumnDef/AdminCategoryTableColumns";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Category as ICategory,
+  useDeleteCategoryMutation,
+  useGetCategoriesQuery,
+  useUpdateCategoryMutation,
+} from "@/redux/api/categoryApi";
+import { Pencil, Trash } from "lucide-react";
 import React, { useState } from "react";
 
 const Category = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
-  const { data } = useGetAdminUsersQuery({ page, limit });
+  const { data } = useGetCategoriesQuery({ page, limit });
+  const [updateCategory] = useUpdateCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
+  const { toast } = useToast();
 
-  console.log("User", data);
+  console.log("Category", data);
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
 
@@ -20,6 +32,66 @@ const Category = () => {
   const handleNextPage = () => {
     if (page < totalPages) setPage((prev) => prev + 1);
   };
+
+  const handleEditCategory = async (
+    id: string,
+    updatedData: Partial<ICategory>,
+  ) => {
+    try {
+      const updatedCategory = await updateCategory({
+        id,
+        data: updatedData,
+      }).unwrap();
+      toast({
+        description: `Category "${updatedCategory.name}" updated successfully!`,
+      });
+    } catch (error) {
+      console.error("Error updating category:", error);
+      toast({
+        description: "Failed to update category. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    try {
+      await deleteCategory(id).unwrap();
+      toast({
+        description: "Category deleted successfully!",
+      });
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      toast({
+        description: "Failed to delete category. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const columns = AdminCategoryTableColumns.map((col) =>
+    col.id === "actions"
+      ? {
+          ...col,
+          cell: ({ row }: any) => (
+            <div className="flex space-x-2">
+              <CustomButton
+                className=""
+                icon={<Pencil />}
+                onClick={() =>
+                  handleEditCategory(row.original.id, { name: "Updated Name" })
+                }
+              />
+              <CustomButton
+                className=""
+                icon={<Trash />}
+                onClick={() => handleDeleteCategory(row.original.id)}
+              />
+            </div>
+          ),
+        }
+      : col,
+  );
 
   return (
     <div>
@@ -32,17 +104,17 @@ const Category = () => {
         title="Category Page"
       />
       <div className="p-5">
-        <div className="flex justify-center items-center pt-10 pb-10">
+        <div className="flex justify-center items-center pt-10 pb-20">
           <Heading text="Categories" className="text-4xl lg:text-6xl" />
         </div>
-        {/* <DataTable
-          data={}
-          columns={}
+        <DataTable
+          data={data?.data || []}
+          columns={columns}
           pageIndex={page}
           totalPages={totalPages}
           onPreviousPage={handlePreviousPage}
           onNextPage={handleNextPage}
-        /> */}
+        />
       </div>
     </div>
   );

@@ -9,7 +9,6 @@
 
 1. **Admin**
    - Full control over the platform, including monitoring and moderation.
-   - Manage users (vendors and customers) with the ability to suspend or delete accounts.
    - Blacklist vendor shops to restrict their operations.
    - Dynamically manage product categories (add, edit, delete categories).
    - Monitor transactions and review activities across the platform.

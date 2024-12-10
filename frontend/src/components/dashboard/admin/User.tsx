@@ -21,7 +21,6 @@ const User = () => {
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
   const { toast } = useToast();
-  console.log("User", data);
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
 
