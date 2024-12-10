@@ -3,6 +3,8 @@ import prisma from "../../../shared/prisma";
 const saveRecentProduct = async (user: any, payload: string[]) => {
   const { id, email } = user;
 
+  console.log('payload', payload)
+
   const recentProductsData = payload.map((productId) => ({
     userId: id,
     productId,

@@ -6,7 +6,8 @@ import { RecentProductServices } from "./recentProduct.service";
 
 const saveRecentProduct = catchAsync(
   async (req: Request & { user?: any }, res: Response) => {
-    await RecentProductServices.saveRecentProduct(req.user, req.body);
+    const { products } = req.body;
+    await RecentProductServices.saveRecentProduct(req.user, products);
 
     sendResponse(res, {
       statusCode: 201,

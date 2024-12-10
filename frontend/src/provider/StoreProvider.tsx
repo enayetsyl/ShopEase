@@ -1,4 +1,5 @@
 "use client";
+import SyncRecentProducts from "@/components/SyncRecentProducts ";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { AppStore, makeStore } from "@/redux/store";
@@ -19,6 +20,7 @@ const StoreProvider = ({ children }: { children: React.ReactNode }) => {
       >
         {children}
         <Toaster />
+        <SyncRecentProducts />
       </ThemeProvider>
     </Provider>
   );
