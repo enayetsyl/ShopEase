@@ -8,7 +8,6 @@ import { checkAccountStatus, findUserById } from "../../../helpers/userHelpers";
 import { TAdminFilterRequest, TCategory } from "./admin.type";
 import { findCategoryById } from "../../../helpers/adminHelpers";
 
-
 // ! User related service function
 const getAllUser = async (
   params: TAdminFilterRequest,
@@ -42,7 +41,9 @@ const getAllUser = async (
       })),
     });
   }
-
+  andConditions.push({
+    deletedAt: null,
+  });
   const whereConditions: Prisma.UserWhereInput = { AND: andConditions };
 
   const result = await prisma.user.findMany({
@@ -69,30 +70,9 @@ const getUserById = async (id: string) => {
   // get user
   // send result
 
-  const user = await findUserById(id)
+  const user = await findUserById(id);
 
-  checkAccountStatus(user)
-  // const user = await prisma.user.findUnique({
-  //   where: { id },
-  //   include: {
-  //     vendor: true,
-  //     customer: true,
-  //   },
-  // });
-
-  // if (!user) throw new ApiError(404, "User Not Found");
-
-  // if (
-  //   user.role === "VENDOR" &&
-  //   (user.vendor?.isDeleted || user.vendor?.isSuspended)
-  // )
-  //   throw new ApiError(403, "Vendor account is suspended or deleted. ");
-
-  // if (
-  //   user.role === "CUSTOMER" &&
-  //   (user.customer?.isDeleted || user.customer?.isSuspended)
-  // )
-  //   throw new ApiError(403, "Customer account is suspended or deleted. ");
+  checkAccountStatus(user);
 
   return user;
 };
@@ -107,33 +87,11 @@ const updateUserIntoDB = async (
   // response
 
   const { isSuspended } = payload;
-  const user = await findUserById(id)
+  const user = await findUserById(id);
 
-  checkAccountStatus(user)
-  // const user = await prisma.user.findUnique({
-  //   where: { id },
-  //   include: {
-  //     vendor: true,
-  //     customer: true,
-  //   },
-  // });
-
-  // if (!user) throw new ApiError(404, "User Not Found");
+  checkAccountStatus(user);
 
   const { role, vendor, customer } = user;
-
-
-  // if (
-  //   user.role === "VENDOR" &&
-  //   (user.vendor?.isDeleted || user.vendor?.isSuspended)
-  // )
-  //   throw new ApiError(403, "Vendor account is suspended or deleted. ");
-
-  // if (
-  //   user.role === "CUSTOMER" &&
-  //   (user.customer?.isDeleted || user.customer?.isSuspended)
-  // )
-  //   throw new ApiError(403, "Customer account is suspended or deleted. ");
 
   if (role === "VENDOR") {
     await prisma.vendor.update({
@@ -147,35 +105,14 @@ const updateUserIntoDB = async (
     });
   }
 
-  return 
+  return;
 };
 
 const deleteUserFromDB = async (id: string) => {
-  const user = await findUserById(id)
-  checkAccountStatus(user)
-  // const user = await prisma.user.findUnique({
-  //   where: { id },
-  //   include: {
-  //     vendor: true,
-  //     customer: true,
-  //   },
-  // });
-
-  // if (!user) throw new ApiError(404, "User Not Found");
+  const user = await findUserById(id);
+  checkAccountStatus(user);
 
   const { role, vendor, customer } = user;
-
-  // if (
-  //   user.role === "VENDOR" &&
-  //   (user.vendor?.isDeleted || user.vendor?.isSuspended)
-  // )
-  //   throw new ApiError(403, "Vendor account is suspended or deleted. ");
-
-  // if (
-  //   user.role === "CUSTOMER" &&
-  //   (user.customer?.isDeleted || user.customer?.isSuspended)
-  // )
-  //   throw new ApiError(403, "Customer account is suspended or deleted. ");
 
   // Perform the updates in a transaction
   await prisma.$transaction(async (tx) => {
@@ -204,7 +141,7 @@ const deleteUserFromDB = async (id: string) => {
     }
   });
 
-  return
+  return;
 };
 
 // ! Vendor related service function
@@ -213,11 +150,11 @@ const blacklistVendorShop = async (
   payload: { isBlackListed: boolean }
 ) => {
   return await prisma.shop.update({
-    where:{id},
-    data:{
-      isBlackListed: payload.isBlackListed
-    }
-  })
+    where: { id },
+    data: {
+      isBlackListed: payload.isBlackListed,
+    },
+  });
 };
 
 // ! Category related service function
@@ -225,93 +162,96 @@ const blacklistVendorShop = async (
 const createACategory = async (payload: TCategory) => {
   // check whether category exist
   // add it into db
-  const {name, description} = payload
-
+  const { name, description } = payload;
 
   const existingCategory = await prisma.category.findUnique({
-      where: { name },
-    });
-  
-    if (existingCategory) {
-      throw new ApiError(400, "Category with this name already exists.");
-    }
-  
-    // Create a new category
-    const newCategory = await prisma.category.create({
-      data: {
-        name,
-        description: description || null,
-      },
-    });
-  
-    return newCategory;
+    where: { name },
+  });
 
+  if (existingCategory) {
+    throw new ApiError(400, "Category with this name already exists.");
+  }
+
+  // Create a new category
+  const newCategory = await prisma.category.create({
+    data: {
+      name,
+      description: description || null,
+    },
+  });
+
+  return newCategory;
 };
 
 const getAllCategories = async (options: TPaginationOptions) => {
   // create filter condition
   // get category data
   // get meta data
-  const { page, limit, skip } = paginationHelper.calculatePagination(options)
+  const { page, limit, skip } = paginationHelper.calculatePagination(options);
 
-
-   const result =  await prisma.category.findMany({
+  const result = await prisma.category.findMany({
     where: {
-      deletedAt: null, 
+      deletedAt: null,
     },
     skip,
     take: limit,
-    orderBy: options.sortBy && options.sortOrder ? {[options.sortBy] : options.sortOrder} : {createdAt: "desc"}
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : { createdAt: "desc" },
   });
 
   const total = await prisma.category.count({
-    where: {deletedAt: null}
-  })
+    where: { deletedAt: null },
+  });
 
-  return { 
+  return {
     data: result,
-    meta: {page, limit, total}
-  }
-
+    meta: { page, limit, total },
+  };
 };
 
 const getACategory = async (id: string) => {
-  const result = await findCategoryById(id)
+  const result = await findCategoryById(id);
 
-  return result
+  return result;
 };
 
-const updateACategory = async (id: string, payload: {name?: string, description?:string}) => {
+const updateACategory = async (
+  id: string,
+  payload: { name?: string; description?: string }
+) => {
   // get category
   // update data
-  const { name, description }= payload
+  const { name, description } = payload;
 
-  const category = await findCategoryById(id)
+  const category = await findCategoryById(id);
 
-  if(name) {
+  if (name) {
     const existingCategory = await prisma.category.findFirst({
-      where:{name, NOT: {id}}
-    })
-    if(existingCategory) throw new ApiError(400, "Category name already exists.")
+      where: { name, NOT: { id } },
+    });
+    if (existingCategory)
+      throw new ApiError(400, "Category name already exists.");
   }
 
   const result = await prisma.category.update({
-    where:{id},
-    data: {name: name || category.name, 
-      description: description || category.description}
-  })
+    where: { id },
+    data: {
+      name: name || category.name,
+      description: description || category.description,
+    },
+  });
 
-  return result
-
+  return result;
 };
 
 const deleteACategory = async (id: string) => {
- await findCategoryById(id)
-  return  await prisma.category.update({
-    where:{id},
-    data: {deletedAt: new Date()}
-  })
-
+  await findCategoryById(id);
+  return await prisma.category.update({
+    where: { id },
+    data: { deletedAt: new Date() },
+  });
 };
 
 export const AdminServices = {
@@ -324,5 +264,5 @@ export const AdminServices = {
   getAllCategories,
   getACategory,
   updateACategory,
-  deleteACategory
+  deleteACategory,
 };

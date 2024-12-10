@@ -1,14 +1,17 @@
 "use client";
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
+import CustomButton from "@/components/shared/CustomButton";
 import Heading from "@/components/shared/CustomHeading";
 import { DataTable } from "@/components/shared/DataTable";
 import { AdminUserTableColumns } from "@/components/shared/tableColumnDef/AdminUserTableColumns";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
+  useDeleteUserMutation,
   useGetAdminUsersQuery,
   useUpdateUserMutation,
 } from "@/redux/api/adminApi";
+import { MonitorPause, Trash } from "lucide-react";
 import React, { useState } from "react";
 
 const User = () => {
@@ -16,6 +19,7 @@ const User = () => {
   const [limit] = useState(10);
   const { data } = useGetAdminUsersQuery({ page, limit });
   const [updateUser] = useUpdateUserMutation();
+  const [deleteUser] = useDeleteUserMutation();
   const { toast } = useToast();
   console.log("User", data);
 
@@ -46,17 +50,35 @@ const User = () => {
     }
   };
 
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      await deleteUser(userId).unwrap();
+      toast({
+        description: "User deleted successfully:",
+      });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
   const columns = AdminUserTableColumns.map((col) =>
     col.id === "actions"
       ? {
           ...col,
           cell: ({ row }: any) => (
-            <Button
-              onClick={() => handleSuspendUser(row.original.id)}
-              variant="outline"
-            >
-              Suspend
-            </Button>
+            <div className="flex justify-center items-center gap-2">
+              <CustomButton
+                icon={<MonitorPause />}
+                onClick={() => handleSuspendUser(row.original.id)}
+                variant="outline"
+              ></CustomButton>
+              <CustomButton
+                icon={<Trash />}
+                onClick={() => handleDeleteUser(row.original.id)}
+                variant="destructive"
+                className="ml-2"
+              />
+            </div>
           ),
         }
       : col,

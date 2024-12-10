@@ -45,6 +45,7 @@ export const adminApi = baseApi.injectEndpoints({
         data: response.data,
         meta: response.meta,
       }),
+      providesTags: ["Admin"],
     }),
     getUserById: builder.query<AdminUser, string>({
       query: (id) => `/admin/users/${id}`,
@@ -60,12 +61,14 @@ export const adminApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
+      invalidatesTags: ["Admin"],
     }),
     deleteUser: builder.mutation<null, string>({
       query: (id) => ({
         url: `/admin/users/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Admin"],
       transformResponse: (response: AdminApiResponse<null>) => response.data,
     }),
     blacklistVendor: builder.mutation<
