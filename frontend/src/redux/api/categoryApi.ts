@@ -39,6 +39,7 @@ export const categoryApi = baseApi.injectEndpoints({
         const { data, meta } = response;
         return { data, meta };
       },
+      providesTags: ["Categories"],
     }),
     getCategoryById: builder.query<Category, string>({
       query: (id) => `/admin/categories/${id}`,
@@ -63,6 +64,7 @@ export const categoryApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
+      invalidatesTags: ["Categories"],
       transformResponse: (response: CategoryApiResponse<Category>) =>
         response.data,
     }),
@@ -71,6 +73,7 @@ export const categoryApi = baseApi.injectEndpoints({
         url: `/admin/categories/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Categories"],
       transformResponse: (response: CategoryApiResponse<null>) => response.data,
     }),
   }),

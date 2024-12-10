@@ -3,6 +3,7 @@ import CustomButton from "@/components/shared/CustomButton";
 import Heading from "@/components/shared/CustomHeading";
 import { DataTable } from "@/components/shared/DataTable";
 import { AdminCategoryTableColumns } from "@/components/shared/tableColumnDef/AdminCategoryTableColumns";
+import { Dialog } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import {
   Category as ICategory,
@@ -12,16 +13,24 @@ import {
 } from "@/redux/api/categoryApi";
 import { Pencil, Trash } from "lucide-react";
 import React, { useState } from "react";
+import EditCategoryInfoModal from "./category/EditCategoryInfoModal";
 
 const Category = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const { data } = useGetCategoriesQuery({ page, limit });
-  const [updateCategory] = useUpdateCategoryMutation();
+  const [updateCategory, { isLoading }] = useUpdateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null,
+  );
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
   const { toast } = useToast();
 
-  console.log("Category", data);
+  // console.log("Category", data);
+  // console.log("selectedCategory", selectedCategory);
+  // console.log("is edit open", isEditOpen);
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
 
@@ -45,6 +54,7 @@ const Category = () => {
       toast({
         description: `Category "${updatedCategory.name}" updated successfully!`,
       });
+      setIsEditOpen(false);
     } catch (error) {
       console.error("Error updating category:", error);
       toast({
@@ -78,9 +88,10 @@ const Category = () => {
               <CustomButton
                 className=""
                 icon={<Pencil />}
-                onClick={() =>
-                  handleEditCategory(row.original.id, { name: "Updated Name" })
-                }
+                onClick={() => {
+                  setIsEditOpen(true);
+                  setSelectedCategory(row.original);
+                }}
               />
               <CustomButton
                 className=""
@@ -116,6 +127,18 @@ const Category = () => {
           onNextPage={handleNextPage}
         />
       </div>
+      {isEditOpen && selectedCategory && (
+        <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+          <EditCategoryInfoModal
+            category={selectedCategory}
+            onClose={() => setSelectedCategory(null)}
+            onSubmit={(formData) =>
+              handleEditCategory(selectedCategory.id, formData)
+            }
+            isLoading={isLoading}
+          />
+        </Dialog>
+      )}
     </div>
   );
 };
