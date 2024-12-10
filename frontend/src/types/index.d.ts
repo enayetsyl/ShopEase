@@ -405,6 +405,11 @@ export interface PaymentResponse {
   data: PaymentMetadata;
   message: string;
   success: boolean;
+  meta?: {
+    total: number;
+    page: number;
+    limit: number;
+  };
 }
 
 export interface Product {

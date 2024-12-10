@@ -114,7 +114,7 @@ const Category = () => {
         ]}
         title="Category Page"
       />
-      <div className="p-5">
+      <div className="p-5 pb-20">
         <div className="flex justify-center items-center pt-10 pb-20">
           <Heading text="Categories" className="text-4xl lg:text-6xl" />
         </div>
