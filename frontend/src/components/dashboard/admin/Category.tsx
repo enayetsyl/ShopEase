@@ -127,7 +127,6 @@ const Category = () => {
         <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
           <EditCategoryInfoModal
             category={selectedCategory}
-            onClose={() => setSelectedCategory(null)}
             onSubmit={(formData) =>
               handleEditCategory(selectedCategory.id, formData)
             }
