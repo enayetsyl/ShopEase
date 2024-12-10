@@ -3,14 +3,20 @@ import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
 import Heading from "@/components/shared/CustomHeading";
 import { DataTable } from "@/components/shared/DataTable";
 import { AdminUserTableColumns } from "@/components/shared/tableColumnDef/AdminUserTableColumns";
-import { useGetAdminUsersQuery } from "@/redux/api/adminApi";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import {
+  useGetAdminUsersQuery,
+  useUpdateUserMutation,
+} from "@/redux/api/adminApi";
 import React, { useState } from "react";
 
 const User = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const { data } = useGetAdminUsersQuery({ page, limit });
-
+  const [updateUser] = useUpdateUserMutation();
+  const { toast } = useToast();
   console.log("User", data);
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
@@ -22,6 +28,39 @@ const User = () => {
   const handleNextPage = () => {
     if (page < totalPages) setPage((prev) => prev + 1);
   };
+
+  const handleSuspendUser = async (userId: string) => {
+    try {
+      await updateUser({
+        id: userId,
+        data: { isSuspended: true },
+      }).unwrap();
+
+      toast({
+        description: "User suspended successfully:",
+      });
+
+      // console.log("User suspended successfully:", updatedUser);
+    } catch (error) {
+      console.error("Error suspending user:", error);
+    }
+  };
+
+  const columns = AdminUserTableColumns.map((col) =>
+    col.id === "actions"
+      ? {
+          ...col,
+          cell: ({ row }: any) => (
+            <Button
+              onClick={() => handleSuspendUser(row.original.id)}
+              variant="outline"
+            >
+              Suspend
+            </Button>
+          ),
+        }
+      : col,
+  );
 
   return (
     <div>
@@ -39,7 +78,7 @@ const User = () => {
         </div>
         <DataTable
           data={data?.data || []}
-          columns={AdminUserTableColumns}
+          columns={columns}
           pageIndex={page}
           totalPages={totalPages}
           onPreviousPage={handlePreviousPage}

@@ -27,6 +27,10 @@ interface GetAdminUsersParams {
   limit?: number;
 }
 
+interface UpdateUserData {
+  isSuspended?: boolean;
+}
+
 export const adminApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAdminUsers: builder.query<
@@ -49,15 +53,13 @@ export const adminApi = baseApi.injectEndpoints({
     }),
     updateUser: builder.mutation<
       AdminUser,
-      { id: string; data: Partial<AdminUser> }
+      { id: string; data: UpdateUserData }
     >({
       query: ({ id, data }) => ({
         url: `/admin/users/${id}`,
         method: "PATCH",
         body: data,
       }),
-      transformResponse: (response: AdminApiResponse<AdminUser>) =>
-        response.data,
     }),
     deleteUser: builder.mutation<null, string>({
       query: (id) => ({
