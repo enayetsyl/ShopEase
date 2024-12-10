@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useGetSingleProductQuery } from "@/redux/api/productApi";
 import ProductImages from "@/components/product/ProductImages";
 import ProductInfo from "@/components/product/ProductInfo";
 import ReviewSection from "@/components/product/ReviewSection";
+import { useDispatch } from "react-redux";
+import { addProductId } from "@/redux/slices/recentProductsSlice";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -14,8 +16,17 @@ export default function ProductDetails() {
     id: id as string,
   });
 
+  console.log("data in the products route", product);
 
+  const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    if (product?.productId) {
+      console.log("inside if condition");
+      dispatch(addProductId(product.productId));
+    }
+  }, [product, dispatch]);
 
   if (isLoading) return <div>Loading...</div>;
   if (!product) return <div>Product not found</div>;
