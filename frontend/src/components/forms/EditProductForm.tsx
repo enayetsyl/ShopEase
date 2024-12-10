@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import CustomButton from "@/components/shared/CustomButton";
 import { useForm } from "react-hook-form";
@@ -20,12 +20,17 @@ const editProductSchema = z.object({
   price: z.number().min(0, "Price must be a positive number."),
   discount: z.number().min(0).max(100, "Discount must be between 0 and 100."),
   inventory: z.number().min(0, "Inventory must be a positive number."),
-  additionalImages: z
-    .instanceof(FileList)
-    .refine((files) => files.length >= 2, "You must upload at least 2 images.")
-    .refine((files) => files.length <= 5, "You can upload up to 5 images."),
+  additionalImages: z.custom<FileList>(
+    (value) =>
+      typeof window !== "undefined" &&
+      value instanceof FileList &&
+      value.length >= 2 &&
+      value.length <= 5,
+    {
+      message: "You must upload between 2 and 5 images.",
+    },
+  ),
 });
-
 type EditProductFormValues = z.infer<typeof editProductSchema>;
 
 const EditProductForm = ({

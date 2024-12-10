@@ -28,12 +28,14 @@ const productSchema = z.object({
   categoryId: z.string().nonempty("Category is required"),
   inventory: z.number().min(0, "Inventory must be greater than or equal to 0"),
   images: z
-    .any()
-    .refine((value) => value instanceof FileList, {
-      message: "Invalid file format",
-    })
-    .refine((value) => value.length >= 2, "You must upload at least 2 images.")
-    .refine((value) => value.length <= 5, "You can upload up to 5 images."),
+  .custom<FileList>(
+    (value) =>
+      typeof window !== "undefined" &&
+      value instanceof FileList &&
+      value.length >= 2 &&
+      value.length <= 5,
+    { message: "You must upload between 2 and 5 images." }
+  ),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
