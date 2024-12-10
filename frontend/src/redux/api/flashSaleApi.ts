@@ -13,9 +13,12 @@ export interface CreateFlashSale {
   endTime: string;
 }
 
-export interface FlashSale extends CreateFlashSale {
+export interface FlashSale {
   id: string;
-
+  productId: string;
+  discount: number;
+  startTime: string;
+  endTime: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -88,6 +91,7 @@ export const flashSaleApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: updates,
       }),
+      invalidatesTags: ["Flash Sale"],
     }),
 
     // Get all Flash Sales
@@ -100,6 +104,7 @@ export const flashSaleApi = baseApi.injectEndpoints({
         method: "GET",
         params: { limit, page },
       }),
+      providesTags: ["Flash Sale"],
     }),
 
     // Get a specific Flash Sale

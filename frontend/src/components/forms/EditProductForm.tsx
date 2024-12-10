@@ -67,9 +67,6 @@ const EditProductForm = ({
       additionalImages: uploadedImages,
     }).unwrap();
 
-    // Simulate backend call
-    console.log("Updated product data:", response);
-
     if (response.success) {
       toast({
         description: `${response.message}`,

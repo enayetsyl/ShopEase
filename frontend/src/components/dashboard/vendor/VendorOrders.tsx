@@ -11,10 +11,8 @@ const VendorOrders = () => {
   const [limit] = useState(10);
   const { data } = useGetAllOrdersQuery({
     page,
-    limit
+    limit,
   });
-
-  
 
   // Transform the API response to match the table structure
   const tableData: Order[] =

@@ -7,6 +7,7 @@ import VendorOrders from "@/components/dashboard/vendor/VendorOrders";
 import VendorProducts from "@/components/dashboard/vendor/VendorProducts";
 import VendorReviews from "@/components/dashboard/vendor/VendorReviews";
 import VendorShop from "@/components/dashboard/vendor/VendorShop";
+import VendorFlashSale from "@/components/dashboard/vendor/VendorFlashSale";
 import Cart from "@/components/dashboard/customer/Cart";
 import CustomerOrders from "@/components/dashboard/customer/CustomerOrders";
 import RecentProducts from "@/components/dashboard/customer/RecentProducts";
@@ -25,6 +26,7 @@ export const sidebarItems: SidebarItems = {
     { label: "Products", component: VendorProducts },
     { label: "Orders", component: VendorOrders },
     { label: "Review", component: VendorReviews },
+    { label: "Flash Sale", component: VendorFlashSale },
   ],
   CUSTOMER: [
     { label: "Orders", component: CustomerOrders },

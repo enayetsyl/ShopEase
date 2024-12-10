@@ -163,7 +163,7 @@ export const productApi = baseApi.injectEndpoints({
 
         return productData;
       },
-      providesTags:["Product"]
+      providesTags: ["Product"],
     }),
     getVendorProducts: builder.query<
       {
