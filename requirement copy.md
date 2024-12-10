@@ -10,8 +10,7 @@
 1. **Admin**
    - Full control over the platform, including monitoring and moderation.
    - Blacklist vendor shops to restrict their operations.
-   - Dynamically manage product categories (add, edit, delete categories).
-   - Monitor transactions and review activities across the platform.
+  
 2. **Vendor**
    - Create and manage their shop (name, logo, description, etc.).
   
@@ -53,12 +52,7 @@
 11. **Responsive Design**
     - Mobile and desktop-friendly interface for all users.
 12. **Scalability**
-    - Implement paginated APIs for any list-based data to ensure scalability and performance. This includes, but is not limited to:
-      - Order History
-        - For both vendors and customers, paginate the order history to display a limited number of orders per page. Include options to navigate between pages (e.g., next, previous, or specific page numbers).
-      - Product Listings
-        - On the homepage, shop page, and "All Products" page, paginate product listings to handle large datasets efficiently.
-        - Pagination should work seamlessly with filters and search functionality.
+    - Implement paginated APIs for any list-based data to ensure scalability and performance. 
 
 - **Technical Requirements**
 
@@ -66,9 +60,7 @@
    - **Authentication:** JWT-based authentication.
    - **Database:** Relational database PostgreSQL with Prisma or Mongodb with Mongoose.
    - **Server:** Node.js with Express for handling APIs. Typescript is optional but highly encouraged.
-   - **Image Uploads:** Cloud storage integration for product images (e.g., Cloudinary).
-2. **Frontend**
-   - **Framework:** React.js or NextJs with state management using Redux or Context API. Typescript is optional but highly encouraged.
+
 
 ---
 

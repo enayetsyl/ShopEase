@@ -36,8 +36,8 @@ export const sidebarItems: SidebarItems = {
   ADMIN: [
     { label: "Users", component: User },
     { label: "Category", component: Category },
-    { label: "Products", component: AdminProducts },
-    { label: "Orders", component: AdminOrders },
+    // { label: "Products", component: AdminProducts },
+    // { label: "Orders", component: AdminOrders },
     { label: "Transactions", component: Transactions },
   ],
 };

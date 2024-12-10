@@ -69,12 +69,10 @@ const User = () => {
               <CustomButton
                 icon={<MonitorPause />}
                 onClick={() => handleSuspendUser(row.original.id)}
-                variant="outline"
               ></CustomButton>
               <CustomButton
                 icon={<Trash />}
                 onClick={() => handleDeleteUser(row.original.id)}
-                variant="destructive"
                 className="ml-2"
               />
             </div>

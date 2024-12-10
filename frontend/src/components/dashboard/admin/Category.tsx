@@ -28,9 +28,7 @@ const Category = () => {
 
   const { toast } = useToast();
 
-  // console.log("Category", data);
-  // console.log("selectedCategory", selectedCategory);
-  // console.log("is edit open", isEditOpen);
+
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
 

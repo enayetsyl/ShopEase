@@ -10,7 +10,6 @@ const AdminProducts = () => {
   const [limit] = useState(10);
   const { data } = useGetAdminUsersQuery({ page, limit });
 
-  // console.log("User", data);
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
 
