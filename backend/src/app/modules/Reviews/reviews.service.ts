@@ -38,9 +38,6 @@ const createReview = async (customerId: string, data: TReview) => {
     throw new Error("You have already reviewed this product.");
   }
 
-  // console.log('existing review', existingReview)
-  
-  // console.log('has purchased', hasPurchased)
   const review = await prisma.review.create({
     data: {
       customerId,

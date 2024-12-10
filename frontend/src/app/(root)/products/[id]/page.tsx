@@ -16,14 +16,11 @@ export default function ProductDetails() {
     id: id as string,
   });
 
-  console.log("data in the products route", product);
-
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (product?.productId) {
-      console.log("inside if condition");
       dispatch(addProductId(product.productId));
     }
   }, [product, dispatch]);

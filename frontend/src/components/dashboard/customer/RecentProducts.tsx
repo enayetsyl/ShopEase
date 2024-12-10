@@ -8,8 +8,6 @@ import React from "react";
 const RecentProducts = () => {
   const { data: recentProducts } = useGetRecentProductsQuery();
 
-  console.log("recentProducts", recentProducts);
-
   // Organize data to match the ProductData interface
   const products: ProductData[] =
     recentProducts?.data.map((item: any) => ({
@@ -24,8 +22,6 @@ const RecentProducts = () => {
       inventory: item.product.inventory,
       price: item.product.price,
     })) || [];
-
-  console.log("Organized Products:", products);
 
   return (
     <div>

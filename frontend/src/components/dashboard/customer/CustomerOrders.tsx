@@ -56,8 +56,6 @@ const CustomerOrders = () => {
       status: order.status,
     })) || [];
 
-  console.log("Organized Orders", orders);
-
   return (
     <div>
       <CustomBreadcrumb

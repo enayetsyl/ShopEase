@@ -55,7 +55,7 @@ const getAllShops = async () => {
 };
 
 const getAShopForShopDetailPage = async (payload: string) => {
-  console.log("payload", payload);
+
   const shop = await prisma.shop.findUnique({
     where: { id: payload },
     include: {

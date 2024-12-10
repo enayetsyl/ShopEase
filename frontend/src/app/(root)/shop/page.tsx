@@ -7,7 +7,6 @@ import React from "react";
 const Shop = () => {
   const { data } = useGetAllShopQuery();
 
-  console.log("shop data", data);
   return (
     <>
       <div className="pt-20">

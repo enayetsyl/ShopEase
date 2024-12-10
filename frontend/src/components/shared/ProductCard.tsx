@@ -43,7 +43,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // Prevents navigating to the product page
-    console.log("clg", cartItems);
     if (cartItems.length > 0 && cartItems[0].shopId !== shopId) {
       // Log the error to verify the condition
       console.error(

@@ -30,7 +30,6 @@ const getAShop = catchAsync(
 const getAShopForShopDetailPage = catchAsync(
   async (req: Request, res: Response) => {
     const { shopId } = req.params;
-    console.log('shop id in controller', shopId)
     const result = await ShopServices.getAShopForShopDetailPage(shopId);
     sendResponse(res, {
       statusCode: 200,

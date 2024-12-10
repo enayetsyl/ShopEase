@@ -11,11 +11,8 @@ const SyncRecentProducts = () => {
 
   useEffect(() => {
     const auth = localStorage.getItem("auth");
-    console.log("auth in sync recent products", auth);
     if (auth) {
-      console.log("Auth found in localStorage:", auth);
       if (recentProducts.length > 0) {
-        console.log("Sending recent products to API:", recentProducts);
         sendRecentProducts([...recentProducts])
           .unwrap()
           .then(() => {

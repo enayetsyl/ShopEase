@@ -13,7 +13,7 @@ const stripe = new Stripe(config.STRIPE_SECRET_KEY as string)
 const createPaymentIntent = async (data: {amount: number}) => {
 //  upload file to cloudinary
 // save data into db
-// console.log('data', data)
+
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: data.amount *100,

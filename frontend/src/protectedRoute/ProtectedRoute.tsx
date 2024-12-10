@@ -14,7 +14,6 @@ const ProtectedRoute = ({ allowedRoles, children }: ProtectedRouteProps) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
   const pathname = usePathname();
-  // console.log(first)
 
   useEffect(() => {
     if (!user) {

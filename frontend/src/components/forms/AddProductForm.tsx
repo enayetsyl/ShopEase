@@ -50,10 +50,7 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
 
   const onSubmit = async (data: ProductFormValues) => {
     const uploadedImages = Array.from(data.images);
-    console.log("Product Data:", {
-      ...data,
-      images: uploadedImages,
-    });
+
     try {
       const response = await createProduct({
         ...data,

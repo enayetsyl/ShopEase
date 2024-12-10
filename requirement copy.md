@@ -18,8 +18,6 @@
   
 3. **User (Customer)**
    - Compare up to three products at a time based on their attributes.
-   - Access order history to view past purchases.
-   - View a "Recent Products" page showing the last 10 products they viewed.
    - **Receive a warning if attempting to add products from multiple vendors in the cart, with options:**
      - Replace the cart with the new product(s).
      - Retain the current cart and cancel the addition.
@@ -50,8 +48,7 @@
 8. **Vendor Dashboard**
    - delete products.
 9. **Recent Products Page**
-   - Display the last 10 products viewed by the user.
-   - Include product details, prices, and direct links to the product page.
+
 10. **Comparison Feature**
     - Allow users to compare up to three products, but only if the products are from the same category. Comparison will be based on attributes such as price, category, ratings, and other relevant details. If a user attempts to add a product from a different category for comparison, display a warning message indicating that only products from the same category can be compared.
 11. **Responsive Design**

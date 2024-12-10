@@ -1,9 +1,7 @@
 import prisma from "../../../shared/prisma";
 
 const saveRecentProduct = async (user: any, payload: string[]) => {
-  const { id, email } = user;
-
-  console.log("payload", payload);
+  const { id } = user;
 
   const recentProductsData = payload.map((productId) => ({
     userId: id,
@@ -11,14 +9,10 @@ const saveRecentProduct = async (user: any, payload: string[]) => {
     visitedAt: new Date(),
   }));
 
-  console.log("recentProductsData", recentProductsData);
-
   const savedData = await prisma.recentProduct.createMany({
     data: recentProductsData,
     skipDuplicates: true,
   });
-
-  console.log("saved data", savedData);
 
   return;
 };
@@ -36,7 +30,7 @@ const getRecentProduct = async (user: any) => {
     take: 10,
   });
 
-  console.log("recentProducts", recentProducts);
+  
 
   return recentProducts;
 };
