@@ -93,7 +93,7 @@ const SignInForm = () => {
       </div>
       <Link href="/sign-up">
         <span className="underline font-normal leading-7 text-foreground dark:text-muted-foreground">
-          Don't Have an account!
+          Don&#39;t Have an account!
         </span>
       </Link>
 

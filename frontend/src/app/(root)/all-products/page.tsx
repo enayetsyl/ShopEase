@@ -4,9 +4,9 @@ import Heading from "@/components/shared/CustomHeading";
 import ProductCard from "@/components/shared/ProductCard";
 import { useGetProductsQuery } from "@/redux/api/productApi";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 
-const AllProduct = () => {
+const AllProductContent = () => {
   const searchParams = useSearchParams();
   const queryParams: Record<string, any> = {};
 
@@ -38,5 +38,17 @@ const AllProduct = () => {
     </div>
   );
 };
+
+const AllProduct = () => (
+  <Suspense
+    fallback={
+      <div className="flex justify-center items-center min-h-screen text-primary text-5xl font-semibold">
+        Loading products...
+      </div>
+    }
+  >
+    <AllProductContent />
+  </Suspense>
+);
 
 export default AllProduct;

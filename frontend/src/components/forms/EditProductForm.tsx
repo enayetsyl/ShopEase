@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import CustomButton from "@/components/shared/CustomButton";
 import { useForm } from "react-hook-form";

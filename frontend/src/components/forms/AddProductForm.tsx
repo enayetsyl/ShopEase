@@ -1,3 +1,4 @@
+"use client";
 import {
   DialogContent,
   DialogDescription,
@@ -27,9 +28,12 @@ const productSchema = z.object({
   categoryId: z.string().nonempty("Category is required"),
   inventory: z.number().min(0, "Inventory must be greater than or equal to 0"),
   images: z
-    .instanceof(FileList)
-    .refine((files) => files.length >= 2, "You must upload at least 2 images.")
-    .refine((files) => files.length <= 5, "You can upload up to 5 images."),
+    .any()
+    .refine((value) => value instanceof FileList, {
+      message: "Invalid file format",
+    })
+    .refine((value) => value.length >= 2, "You must upload at least 2 images.")
+    .refine((value) => value.length <= 5, "You can upload up to 5 images."),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -47,7 +51,10 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
   });
 
   const onSubmit = async (data: ProductFormValues) => {
-    const uploadedImages = Array.from(data.images);
+    const uploadedImages =
+      typeof window !== "undefined" && data.images
+        ? Array.from(data.images)
+        : [];
 
     try {
       const response = await createProduct({
