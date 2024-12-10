@@ -42,15 +42,12 @@ export interface Review {
   };
 }
 
-
 // Interface for the giveReview API response
 export interface GiveReviewResponse {
   success: boolean;
   message: string;
   data: Review;
 }
-
-
 
 // Interface for the request body of giveReview
 export interface GiveReviewRequest {
@@ -85,7 +82,6 @@ export const reviewApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       transformResponse: (response: GetReviewsResponse) => {
-        
         return response;
       },
     }),

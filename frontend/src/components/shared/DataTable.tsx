@@ -5,13 +5,11 @@ import {
   ColumnDef,
   useReactTable,
   getCoreRowModel,
-  getPaginationRowModel,
 } from "@tanstack/react-table";
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";

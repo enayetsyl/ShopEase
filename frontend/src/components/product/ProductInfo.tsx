@@ -3,7 +3,7 @@ import FeatureCard from "./FeatureCard";
 import { features, randomColors, randomTags } from "@/constants";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
-import { Heart, ShoppingBag, Star } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";

@@ -4,7 +4,6 @@ import CustomButton from "@/components/shared/CustomButton";
 import Heading from "@/components/shared/CustomHeading";
 import { DataTable } from "@/components/shared/DataTable";
 import { AdminUserTableColumns } from "@/components/shared/tableColumnDef/AdminUserTableColumns";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
   useDeleteUserMutation,

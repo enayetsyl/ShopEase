@@ -1,5 +1,3 @@
-import AdminOrders from "@/components/dashboard/admin/AdminOrders";
-import AdminProducts from "@/components/dashboard/admin/AdminProducts";
 import Category from "@/components/dashboard/admin/Category";
 import Transactions from "@/components/dashboard/admin/Transactions";
 import User from "@/components/dashboard/admin/User";
@@ -12,7 +10,7 @@ import Cart from "@/components/dashboard/customer/Cart";
 import CustomerOrders from "@/components/dashboard/customer/CustomerOrders";
 import RecentProducts from "@/components/dashboard/customer/RecentProducts";
 import { SidebarItems } from "@/types";
-import { Star, Truck, Package, Shield, Heart } from "lucide-react";
+import { Truck, Package, Shield } from "lucide-react";
 
 export const allowedRoles = {
   admin: ["ADMIN"],

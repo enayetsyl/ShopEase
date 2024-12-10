@@ -2,12 +2,6 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Star, Truck, Package, Shield, Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 
 interface ProductData {
   id: string;
@@ -26,18 +20,6 @@ export default function ProductDetailsClient({
   product,
 }: ProductDetailsClientProps) {
   const [selectedImage, setSelectedImage] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [newReviewText, setNewReviewText] = useState("");
-
-  const renderStars = (rating: number) =>
-    Array(5)
-      .fill(0)
-      .map((_, i) => (
-        <Star
-          key={i}
-          className={`w-5 h-5 ${i < rating ? "fill-primary text-primary" : "fill-muted text-muted-foreground"}`}
-        />
-      ));
 
   return (
     <div className="container mx-auto px-4 py-8">

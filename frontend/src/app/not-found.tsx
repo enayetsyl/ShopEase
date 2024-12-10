@@ -1,4 +1,3 @@
-import { H1, Paragraph } from "@/components/shared/CustomTypography";
 import Image from "next/image";
 import Link from "next/link";
 

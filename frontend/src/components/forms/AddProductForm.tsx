@@ -6,11 +6,9 @@ import {
 } from "@/components/ui/dialog";
 import CustomButton from "@/components/shared/CustomButton";
 import CustomInput from "../shared/CustomInput";
-import { CgRename } from "react-icons/cg";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCreateShopMutation } from "@/redux/api/shopApi";
 import { useToast } from "@/hooks/use-toast";
 import CategorySelectOption from "../home/CategorySelectOption";
 import { useCreateProductMutation } from "@/redux/api/productApi";
@@ -61,6 +59,7 @@ const AddProductForm = ({ onClose }: { onClose: () => void }) => {
       });
       onClose();
     } catch (error) {
+      console.error(error);
       toast({
         description: "An error occurred while creating the product",
         variant: "destructive",

@@ -1,6 +1,5 @@
 import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
 import Heading from "@/components/shared/CustomHeading";
-import { DataTable } from "@/components/shared/DataTable";
 import { useGetAdminUsersQuery } from "@/redux/api/adminApi";
 import React, { useState } from "react";
 
@@ -8,7 +7,6 @@ const AdminOrders = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const { data } = useGetAdminUsersQuery({ page, limit });
-
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
 

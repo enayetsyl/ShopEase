@@ -28,8 +28,6 @@ const Category = () => {
 
   const { toast } = useToast();
 
-
-
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
 
   const handlePreviousPage = () => {

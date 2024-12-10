@@ -1,6 +1,5 @@
 import React from "react";
 import CustomButton from "@/components/shared/CustomButton";
-import { CgRename } from "react-icons/cg";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

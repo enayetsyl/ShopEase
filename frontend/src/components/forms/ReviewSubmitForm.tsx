@@ -9,9 +9,8 @@ import { useToast } from "@/hooks/use-toast";
 const ReviewSubmitForm = ({ productId }: { productId: string }) => {
   const [newReviewRating, setNewReviewRating] = useState(5);
   const [newReviewText, setNewReviewText] = useState("");
-  const [giveReview, { isLoading, isError, isSuccess, error }] =
-    useGiveReviewMutation();
-    const {toast} = useToast()
+  const [giveReview] = useGiveReviewMutation();
+  const { toast } = useToast();
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +21,6 @@ const ReviewSubmitForm = ({ productId }: { productId: string }) => {
         rating: newReviewRating,
         comment: newReviewText,
       }).unwrap();
-
 
       if (response.success) {
         toast({
@@ -46,7 +44,6 @@ const ReviewSubmitForm = ({ productId }: { productId: string }) => {
           variant: "destructive",
         });
       }
-
     }
   };
   return (

@@ -2,7 +2,6 @@ import CustomBreadcrumb from "@/components/shared/CustomBreadcrumb";
 import Heading from "@/components/shared/CustomHeading";
 import { DataTable } from "@/components/shared/DataTable";
 import { AdminTransactionTableColumns } from "@/components/shared/tableColumnDef/AdminTransactionTableColumns";
-import { useGetAdminUsersQuery } from "@/redux/api/adminApi";
 import { useGetPaymentsQuery } from "@/redux/api/paymentApi";
 import React, { useState } from "react";
 

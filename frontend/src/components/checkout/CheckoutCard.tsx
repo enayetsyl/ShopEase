@@ -2,7 +2,6 @@
 
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,7 +32,7 @@ export default function CheckoutCard() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Access cart data from Redux store
-  const { items, couponDiscount, vendorId } = useSelector(
+  const { items, couponDiscount } = useSelector(
     (state: RootState) => state.cart,
   );
 
@@ -81,7 +80,7 @@ export default function CheckoutCard() {
       return;
     }
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+    const { error } = await stripe.createPaymentMethod({
       type: "card",
       card,
     });
@@ -126,7 +125,6 @@ export default function CheckoutCard() {
           try {
             const createOrderResponse =
               await createOrder(structuredCartData).unwrap();
-
             if (createOrderResponse.success) {
               const savePaymentData = {
                 orderId: createOrderResponse.data.id,
@@ -162,7 +160,7 @@ export default function CheckoutCard() {
         description: "An error occurred during payment",
         variant: "destructive",
       });
-      // toast.error("An error occurred during payment");
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

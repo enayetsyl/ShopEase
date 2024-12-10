@@ -1,9 +1,13 @@
-import { OrderApiResponse, StructuredCartData } from "@/types";
+import {
+  CreateOrderApiResponse,
+  OrderApiResponse,
+  StructuredCartData,
+} from "@/types";
 import { baseApi } from "./baseApi";
 
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    createOrder: builder.mutation<OrderApiResponse, StructuredCartData>({
+    createOrder: builder.mutation<CreateOrderApiResponse, StructuredCartData>({
       query: (cartData) => {
         return {
           url: `orders`,

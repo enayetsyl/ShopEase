@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { H2 } from "../shared/CustomTypography";
 import { selectButtonCategories } from "@/constants";
 import { Control, Controller } from "react-hook-form";
 

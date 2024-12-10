@@ -459,6 +459,17 @@ export interface OrderApiResponse {
     limit: number;
   };
 }
+export interface CreateOrderApiResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: Order;
+  meta?: {
+    page: number;
+    total: number;
+    limit: number;
+  };
+}
 
 export interface ProductInShopDetailPage {
   id: string;

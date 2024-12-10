@@ -12,7 +12,7 @@ const Category = () => {
         <CategorySelectOption />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
-        {cardCategories.map((category, index) => (
+        {cardCategories.map((category) => (
           <React.Fragment key={category.id}>
             <div className="flex flex-col items-center p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer group dark:hover-shadow-[0_30px_75px_rgba(255,255,255,0.2)]">
               <div className="relative w-32 h-32 flex items-center justify-center bg-gray-100/60 rounded-full mb-4">
