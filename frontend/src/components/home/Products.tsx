@@ -65,9 +65,9 @@ const Products = () => {
         {products.map((product) => (
           <ProductCard key={product.productId} product={product} />
         ))}
-      </div>
       {isFetching &&
         Array.from({ length: 4 }).map((_, idx) => <SkeletonCard key={idx} />)}
+      </div>
       {!hasMore && (
         <p className="text-center mt-4">No more products to load.</p>
       )}

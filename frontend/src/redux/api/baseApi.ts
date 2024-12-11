@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5002/api/v1",
+    baseUrl: "https://shop-ease-lyart.vercel.app/api/v1",
     credentials: "include",
     prepareHeaders: (headers) => {
       const token = Cookies.get("accessToken");

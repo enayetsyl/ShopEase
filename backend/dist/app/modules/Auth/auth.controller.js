@@ -29,14 +29,14 @@ const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, 
     const result = yield auth_service_1.AuthServices.login(req.body);
     const { accessToken, refreshToken, userWithoutPassword } = result;
     res.cookie("accessToken", accessToken, {
-        secure: false, // Disable for local development
-        httpOnly: false, // Ensure it can be accessed via JavaScript
-        sameSite: "lax", // Use 'lax' for local development
+        secure: true, // Disable for local development
+        httpOnly: true, // Ensure it can be accessed via JavaScript
+        sameSite: "strict", // Use 'lax' for local development
     });
     res.cookie("refreshToken", refreshToken, {
-        secure: false, // Disable for local development
-        httpOnly: false,
-        sameSite: "lax",
+        secure: true, // Disable for local development
+        httpOnly: true,
+        sameSite: "strict",
     });
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
@@ -78,13 +78,13 @@ const logout = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0,
     // Clear cookies
     res.clearCookie("accessToken", {
         httpOnly: true,
-        secure: false, // Set to `true` in production
-        sameSite: "lax",
+        secure: true, // Set to `true` in production
+        sameSite: "strict",
     });
     res.clearCookie("refreshToken", {
         httpOnly: true,
-        secure: false, // Set to `true` in production
-        sameSite: "lax",
+        secure: true, // Set to `true` in production
+        sameSite: "strict",
     });
     (0, sendResponse_1.default)(res, {
         statusCode: 200,

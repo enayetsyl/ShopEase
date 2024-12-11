@@ -19,11 +19,11 @@ const login  = catchAsync(async (req: Request, res: Response) => {
   const {accessToken, refreshToken, userWithoutPassword  } = result;
 
   res.cookie('refreshToken', refreshToken, {
-      secure: false,
+      secure: true,
       httpOnly: true
   });
   res.cookie('accessToken', accessToken, {
-      secure: false,
+      secure: true,
       httpOnly: true
   });
 

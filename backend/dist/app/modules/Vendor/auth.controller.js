@@ -29,11 +29,11 @@ const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, 
     const result = yield auth_service_1.AuthServices.login(req.body);
     const { accessToken, refreshToken, userWithoutPassword } = result;
     res.cookie('refreshToken', refreshToken, {
-        secure: false,
+        secure: true,
         httpOnly: true
     });
     res.cookie('accessToken', accessToken, {
-        secure: false,
+        secure: true,
         httpOnly: true
     });
     (0, sendResponse_1.default)(res, {
