@@ -1,3 +1,4 @@
+import BackToTop from "@/components/shared/BackToTop";
 import NavigationMenu from "@/components/shared/NavigationMenu";
 
 export default function Layout({
@@ -10,6 +11,7 @@ export default function Layout({
       <div className="max-w-7xl mx-auto">
         <NavigationMenu />
         <div className="pt-20">{children}</div>
+        <BackToTop />
       </div>
     </main>
   );
