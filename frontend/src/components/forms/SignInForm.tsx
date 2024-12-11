@@ -86,7 +86,7 @@ const SignInForm = () => {
             Remember Me
           </label>
         </div>
-        <Link href="/sign-in">
+        <Link href="/forgot-password">
           <span className="underline font-normal leading-7 text-foreground dark:text-muted-foreground">
             Forgot Password
           </span>

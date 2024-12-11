@@ -18,6 +18,7 @@ export const findUserByEmail  = async (email: string )=> {
     include:{vendor: true, customer: true}
   })
 
+
   if(!user) throw new ApiError(404, "User Not Found")
   return user;
 }

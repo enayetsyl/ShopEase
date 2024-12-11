@@ -1,92 +1,96 @@
 import { Secret } from "jsonwebtoken";
 import config from "../../../config";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
-import prisma from "../../../shared/prisma"
-import ApiError from "../../errors/ApiError"
+import prisma from "../../../shared/prisma";
+import ApiError from "../../errors/ApiError";
 import bcrypt from "bcrypt";
 import emailSender from "../../../helpers/emailSender";
-import { checkAccountStatus, findUserByEmail, findUserById } from "../../../helpers/userHelpers";
+import {
+  checkAccountStatus,
+  findUserByEmail,
+  findUserById,
+} from "../../../helpers/userHelpers";
 type TRegister = {
-  name: string,
-  email: string,
-  password: string,
-  role: "CUSTOMER" | "VENDOR" | "ADMIN"
-}
+  name: string;
+  email: string;
+  password: string;
+  role: "CUSTOMER" | "VENDOR" | "ADMIN";
+};
 type TLogin = {
-  email: string,
-  password: string,
-}
+  email: string;
+  password: string;
+};
 type TChangePassword = {
-  oldPassword: string,
-  newPassword: string,
-}
+  oldPassword: string;
+  newPassword: string;
+};
 
 const register = async (payload: TRegister) => {
   // Check user exist with email
   // hash password
   // save user
   // create vender/customer
-  const { name, email, password, role} = payload
+  const { name, email, password, role } = payload;
 
   const existingUser = await prisma.user.findUnique({
-    where:{
-      email
-    }
-})
+    where: {
+      email,
+    },
+  });
 
-if(existingUser){
-  throw new ApiError(400, "User with this email already exists" )
-}
+  if (existingUser) {
+    throw new ApiError(400, "User with this email already exists");
+  }
 
-const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-return await prisma.$transaction(async(p) =>{
-  const newUser = await p.user.create({
-    data: {
-      name, email, password: hashedPassword, role
-    }
-  })
-  
-  if(role === "VENDOR"){
-    await p.vendor.create({
+  return await prisma.$transaction(async (p) => {
+    const newUser = await p.user.create({
       data: {
         name,
-        email: newUser.email
-        
+        email,
+        password: hashedPassword,
+        role,
       },
     });
-  } else if (role === "CUSTOMER"){
-    await p.customer.create({
-      data:{
-        name, email
-      }
-    })
-  }  else if (role === "ADMIN"){
-    await p.admin.create({
-      data:{
-        name, email
-      }
-    })
-  }
+
+    if (role === "VENDOR") {
+      await p.vendor.create({
+        data: {
+          name,
+          email: newUser.email,
+        },
+      });
+    } else if (role === "CUSTOMER") {
+      await p.customer.create({
+        data: {
+          name,
+          email,
+        },
+      });
+    } else if (role === "ADMIN") {
+      await p.admin.create({
+        data: {
+          name,
+          email,
+        },
+      });
+    }
 
     // Exclude the password from the response
     const { password: _, ...userWithoutPassword } = newUser;
     return userWithoutPassword;
-
-
-})
-
-}
-
+  });
+};
 
 const login = async (payload: TLogin) => {
   // find user
   // check whether password correct
-  // generate access and refresh token 
+  // generate access and refresh token
   // return data
-  const { email, password} =  payload
+  const { email, password } = payload;
 
-  const user = await findUserByEmail(email)
+  const user = await findUserByEmail(email);
 
   // const user = await prisma.user.findUnique({
   //   where: { email}, include: {
@@ -97,88 +101,88 @@ const login = async (payload: TLogin) => {
 
   // if(!user) throw new ApiError(404, "User Not Found")
 
-  checkAccountStatus(user)
+  checkAccountStatus(user);
 
-  const isPasswordValid = await bcrypt.compare(password, user.password)
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  if(!isPasswordValid) throw new ApiError(401, "Invalid Credentials.")
+  if (!isPasswordValid) throw new ApiError(401, "Invalid Credentials.");
 
   // if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
 
-
   // if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
 
-  const { password: _, ...userWithoutPassword} = user
+  const { password: _, ...userWithoutPassword } = user;
 
-  const accessToken = jwtHelpers.generateToken(userWithoutPassword, config.jwt.jwt_secret as Secret, config.jwt.expires_in as string)
-  
-  const refreshToken = jwtHelpers.generateToken(userWithoutPassword, config.jwt.refresh_token_secret as Secret, config.jwt.refresh_token_expires_in as string)
+  const accessToken = jwtHelpers.generateToken(
+    userWithoutPassword,
+    config.jwt.jwt_secret as Secret,
+    config.jwt.expires_in as string
+  );
+
+  const refreshToken = jwtHelpers.generateToken(
+    userWithoutPassword,
+    config.jwt.refresh_token_secret as Secret,
+    config.jwt.refresh_token_expires_in as string
+  );
 
   return {
-    accessToken, refreshToken, userWithoutPassword
-  }
+    accessToken,
+    refreshToken,
+    userWithoutPassword,
+  };
+};
 
-}
 const changePassword = async (user: any, payload: TChangePassword) => {
   // find user
   // check old password
   // hash new password
   // update new password
-  const { newPassword, oldPassword} =  payload
-  const {  email } = user;
+  const { newPassword, oldPassword } = payload;
+  const { email } = user;
 
-  const userData = await findUserByEmail(email)
+  const userData = await findUserByEmail(email);
   // const userData = await prisma.user.findUnique({
   //   where: { email}
   // })
 
   // if(!userData) throw new ApiError(404, "User Not Found")
 
-  const isPasswordValid = await bcrypt.compare(oldPassword, userData.password)
+  const isPasswordValid = await bcrypt.compare(oldPassword, userData.password);
 
-  if(!isPasswordValid) throw new ApiError(401, "Invalid Credentials.")
+  if (!isPasswordValid) throw new ApiError(401, "Invalid Credentials.");
 
-  const hashedPassword = await bcrypt.hash(newPassword, 10)
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
 
   await prisma.user.update({
-    where: {email: userData.email},
+    where: { email: userData.email },
     data: {
       password: hashedPassword,
+    },
+  });
 
-    }
-  })
+  return;
+};
 
-  return
-
-}
-const forgotPassword = async (payload: {email: string}) => {
+const forgotPassword = async (payload: { email: string }) => {
   // get email
   // find user
   // generate token
   // generate link
   // send email
-  const user = await findUserByEmail(payload.email)
-  // const user = await prisma.user.findUnique({
-  //   where: {
-  //     email:payload.email    }, include :{
-  //       vendor: true,
-  //       customer: true
-  //     }
-  // })
+  const user = await findUserByEmail(payload.email);
 
-  // if(!user) throw new ApiError(404, "User Not Found")
+  checkAccountStatus(user);
 
-  checkAccountStatus(user)
-  // if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
-  
-  
-  // if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
+  const resetPasswordToken = jwtHelpers.generateToken(
+    { email: user.email, role: user.role },
+    config.jwt.reset_pass_secret as Secret,
+    config.jwt.reset_pass_token_expires_in as string
+  );
 
-  const resetPasswordToken = jwtHelpers.generateToken({email:user.email, role:user.role}, config.jwt.reset_pass_secret as Secret, config.jwt.reset_pass_token_expires_in as string)
+  const resetPasswordLink = `${config.reset_pass_link}?userId=${user.id}&token=${resetPasswordToken}`;
 
-  const resetPasswordLink = config.reset_pass_link+`userId=${user.id}&token=${resetPasswordToken}`
-
-  await emailSender(user.email,
+  await emailSender(
+    user.email,
     `
     <div>
     <p>Dear ${user.name}</p>
@@ -189,51 +193,46 @@ const forgotPassword = async (payload: {email: string}) => {
     </p>
     </div>
     `
-  )
+  );
+};
 
-
-}
-const resetPassword = async (token: string, payload: {id: string, password: string}) => {
+const resetPassword = async (
+  token: string,
+  payload: { id: string; password: string }
+) => {
   // find user with email
   // verify token
   // hash password
   // update password
 
-  const user = await findUserById(payload.id)
-  // const user = await prisma.user.findUnique(
-  //   {
-  //     where: {
-  //       id: payload.id
-  //     }, include:{
-  //       vendor: true, customer: true
-  //     }
-  //   }
-  // )
+  const user = await findUserById(payload.id);
 
-  // if(!user) throw new ApiError(404, "User Not Found")
 
-  checkAccountStatus(user)
+  checkAccountStatus(user);
 
-  // if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
-    
-  // if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
 
-  const isValidToken = jwtHelpers.verifyToken(token, config.jwt.reset_pass_secret as Secret)
 
-  if(!isValidToken) throw new ApiError(403, "Forbidden")
+  const isValidToken = jwtHelpers.verifyToken(
+    token,
+    config.jwt.reset_pass_secret as Secret
+  );
 
-  const hashedPassword = await bcrypt.hash(payload.password, 10)
+  console.log("isValidToken, ", isValidToken)
+
+  if (!isValidToken) throw new ApiError(403, "Forbidden");
+
+  const hashedPassword = await bcrypt.hash(payload.password, 10);
 
   await prisma.user.update({
-    where: {id: payload.id},
-    data: {password: hashedPassword}
-  })
-}
+    where: { id: payload.id },
+    data: { password: hashedPassword },
+  });
+};
 
 export const AuthServices = {
   register,
   login,
   changePassword,
   resetPassword,
-  forgotPassword
-}
+  forgotPassword,
+};

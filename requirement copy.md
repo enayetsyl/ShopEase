@@ -23,9 +23,7 @@
 
 1. **Home Page**
    - Prioritize products from followed shops for logged-in users.
-   - Infinite scrolling for product listing.
    - Filtering and searching functionalities (price range, category, keyword, etc.).
-   - Scroll-to-top button for better navigation.
 2. **Product Details Page**
 
    - Related products section showing products in the same category.

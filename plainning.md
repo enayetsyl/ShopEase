@@ -527,6 +527,7 @@ Audit Logs (Admin)
 - Suspend user  button should toggle. 
 - Vendor shop name, description and logo edit option should add. 
 - After data submit form field should be empty.
+- Price filtering
 
 
 
