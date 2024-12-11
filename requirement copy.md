@@ -37,9 +37,7 @@
    - **For Customers:** View their purchase history with product and order details.
 7. **Authentication**
    
-   
-     - **Password Management:** Change password after logging in.
-     - Reset password functionality via email.
+
 8. **Vendor Dashboard**
    - delete products.
 9. **Recent Products Page**

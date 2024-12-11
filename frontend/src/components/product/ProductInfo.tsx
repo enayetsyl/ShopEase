@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import FeatureCard from "./FeatureCard";
 import { features, randomColors, randomTags } from "@/constants";
 import { Separator } from "../ui/separator";
@@ -10,10 +10,11 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Badge } from "../ui/badge";
 import { SingleProductData } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "@/redux/slices/cartSlice";
+import { addToCart, replaceCart } from "@/redux/slices/cartSlice";
 import { useToast } from "@/hooks/use-toast";
 import { RootState } from "@/redux/store";
 import Link from "next/link";
+import ProductReplaceAlert from "../shared/ProductReplaceAlert";
 
 interface ProductInfoProps {
   product: SingleProductData;
@@ -28,6 +29,8 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
   setQuantity,
   renderStars,
 }) => {
+  const { shopId } = product;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const averageRating = product.reviews
     ? Math.round(
         product.reviews.reduce((sum, review) => sum + review.rating, 0) /
@@ -41,20 +44,34 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
 
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
-  const handleAddToCart = () => {
-    if (cartItems.length > 0 && cartItems[0].shopId !== product.shopId) {
-      toast({
-        description:
-          "You can only add products from the same vendor. Replace the cart or cancel the addition.",
-        variant: "destructive",
-      });
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // Prevent navigating to the product page
+    if (cartItems.length > 0 && cartItems[0].shopId !== shopId) {
+      setIsDialogOpen(true); // Open the dialog for vendor mismatch
       return;
     }
 
-    dispatch(addToCart({ product, quantity }));
+    // If no vendor conflict, add the product
+    dispatch(addToCart({ product, quantity: 1 }));
     toast({
-      description: `${product.name} successfully added to the cart!`,
+      description: `${name} successfully added to the cart!`,
     });
+  };
+
+  const handleReplaceCart = () => {
+    dispatch(replaceCart({ product, quantity: 1 })); // Replace the cart
+    toast({
+      description: `${name} successfully added to the cart!`,
+    });
+    setIsDialogOpen(false); // Close the dialog
+  };
+
+  const handleCancelAddition = () => {
+    toast({
+      description: "The product was not added to the cart.",
+      variant: "destructive",
+    });
+    setIsDialogOpen(false); // Close the dialog
   };
 
   return (
@@ -147,6 +164,14 @@ const ProductInfo: React.FC<ProductInfoProps> = ({
         <span className="text-sm text-muted-foreground">Tags: </span>
         <span className="text-sm">{productTags.join(", ")}</span>
       </div>
+      {isDialogOpen && (
+        <ProductReplaceAlert
+          isDialogOpen={isDialogOpen}
+          setIsDialogOpen={setIsDialogOpen}
+          handleReplaceCart={handleReplaceCart}
+          handleCancelAddition={handleCancelAddition}
+        />
+      )}
     </div>
   );
 };

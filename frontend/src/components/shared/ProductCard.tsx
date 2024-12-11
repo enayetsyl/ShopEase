@@ -5,9 +5,10 @@ import { Eye, ShoppingCart, Star } from "lucide-react";
 import { ProductData } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
-import { addToCart } from "@/redux/slices/cartSlice";
+import { addToCart, replaceCart } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/redux/store";
+import ProductReplaceAlert from "./ProductReplaceAlert";
 
 interface ProductCardProps {
   product: ProductData;
@@ -16,6 +17,7 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const { productId: id, name, price, image, shopId } = product;
   const [isHovered, setIsHovered] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const dispatch = useDispatch();
   const { toast } = useToast();
   const router = useRouter();
@@ -42,27 +44,33 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // Prevents navigating to the product page
+    e.preventDefault(); // Prevent navigating to the product page
     if (cartItems.length > 0 && cartItems[0].shopId !== shopId) {
-      // Log the error to verify the condition
-      console.error(
-        "Vendor mismatch: Cannot add products from different vendors.",
-      );
-
-      // Show an error toast
-      toast({
-        description:
-          "You can only add products from the same vendor. Replace the cart or cancel the addition.",
-        variant: "destructive",
-      });
+      setIsDialogOpen(true); // Open the dialog for vendor mismatch
       return;
     }
 
-    // If the vendor is the same or cart is empty, add the product
+    // If no vendor conflict, add the product
     dispatch(addToCart({ product, quantity: 1 }));
     toast({
       description: `${name} successfully added to the cart!`,
     });
+  };
+
+  const handleReplaceCart = () => {
+    dispatch(replaceCart({ product, quantity: 1 })); // Replace the cart
+    toast({
+      description: `${name} successfully added to the cart!`,
+    });
+    setIsDialogOpen(false); // Close the dialog
+  };
+
+  const handleCancelAddition = () => {
+    toast({
+      description: "The product was not added to the cart.",
+      variant: "destructive",
+    });
+    setIsDialogOpen(false); // Close the dialog
   };
 
   const handleQuickView = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -151,6 +159,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
             </div>
           </div>
         </div>
+        {/* AlertDialog for Vendor Mismatch */}
+        {isDialogOpen && (
+          <ProductReplaceAlert
+            isDialogOpen={isDialogOpen}
+            setIsDialogOpen={setIsDialogOpen}
+            handleReplaceCart={handleReplaceCart}
+            handleCancelAddition={handleCancelAddition}
+          />
+        )}
       </div>
     </Link>
   );
