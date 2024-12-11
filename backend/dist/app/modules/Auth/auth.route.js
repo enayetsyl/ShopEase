@@ -16,4 +16,5 @@ router.post("/login", auth_controller_1.AuthController.login);
 router.patch("/change-password", (0, auth_1.default)(client_1.UserRole.ADMIN, client_1.UserRole.CUSTOMER, client_1.UserRole.VENDOR), auth_controller_1.AuthController.changePassword);
 router.post("/forgot-password", auth_controller_1.AuthController.forgotPassword);
 router.post("/reset-password", auth_controller_1.AuthController.resetPassword);
+router.post("/logout", auth_controller_1.AuthController.logout);
 exports.AuthRoutes = router;

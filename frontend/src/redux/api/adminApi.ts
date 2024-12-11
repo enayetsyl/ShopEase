@@ -73,12 +73,12 @@ export const adminApi = baseApi.injectEndpoints({
     }),
     blacklistVendor: builder.mutation<
       null,
-      { shopId: string; isBlackListed : boolean }
+      { shopId: string; isBlackListed: boolean }
     >({
-      query: ({ shopId, isBlackListed  }) => ({
+      query: ({ shopId, isBlackListed }) => ({
         url: `/admin/shop/${shopId}`,
         method: "PATCH",
-        body: { isBlackListed  },
+        body: { isBlackListed },
       }),
       invalidatesTags: ["Shop"],
       transformResponse: (response: AdminApiResponse<null>) => response.data,

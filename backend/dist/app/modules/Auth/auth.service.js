@@ -39,8 +39,8 @@ const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password, role } = payload;
     const existingUser = yield prisma_1.default.user.findUnique({
         where: {
-            email
-        }
+            email,
+        },
     });
     if (existingUser) {
         throw new ApiError_1.default(400, "User with this email already exists");
@@ -49,29 +49,34 @@ const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     return yield prisma_1.default.$transaction((p) => __awaiter(void 0, void 0, void 0, function* () {
         const newUser = yield p.user.create({
             data: {
-                name, email, password: hashedPassword, role
-            }
+                name,
+                email,
+                password: hashedPassword,
+                role,
+            },
         });
         if (role === "VENDOR") {
             yield p.vendor.create({
                 data: {
                     name,
-                    email: newUser.email
+                    email: newUser.email,
                 },
             });
         }
         else if (role === "CUSTOMER") {
             yield p.customer.create({
                 data: {
-                    name, email
-                }
+                    name,
+                    email,
+                },
             });
         }
         else if (role === "ADMIN") {
             yield p.admin.create({
                 data: {
-                    name, email
-                }
+                    name,
+                    email,
+                },
             });
         }
         // Exclude the password from the response
@@ -82,7 +87,7 @@ const register = (payload) => __awaiter(void 0, void 0, void 0, function* () {
 const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     // find user
     // check whether password correct
-    // generate access and refresh token 
+    // generate access and refresh token
     // return data
     const { email, password } = payload;
     const user = yield (0, userHelpers_1.findUserByEmail)(email);
@@ -103,7 +108,9 @@ const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const accessToken = jwtHelpers_1.jwtHelpers.generateToken(userWithoutPassword, config_1.default.jwt.jwt_secret, config_1.default.jwt.expires_in);
     const refreshToken = jwtHelpers_1.jwtHelpers.generateToken(userWithoutPassword, config_1.default.jwt.refresh_token_secret, config_1.default.jwt.refresh_token_expires_in);
     return {
-        accessToken, refreshToken, userWithoutPassword
+        accessToken,
+        refreshToken,
+        userWithoutPassword,
     };
 });
 const changePassword = (user, payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -114,10 +121,6 @@ const changePassword = (user, payload) => __awaiter(void 0, void 0, void 0, func
     const { newPassword, oldPassword } = payload;
     const { email } = user;
     const userData = yield (0, userHelpers_1.findUserByEmail)(email);
-    // const userData = await prisma.user.findUnique({
-    //   where: { email}
-    // })
-    // if(!userData) throw new ApiError(404, "User Not Found")
     const isPasswordValid = yield bcrypt_1.default.compare(oldPassword, userData.password);
     if (!isPasswordValid)
         throw new ApiError_1.default(401, "Invalid Credentials.");
@@ -126,7 +129,7 @@ const changePassword = (user, payload) => __awaiter(void 0, void 0, void 0, func
         where: { email: userData.email },
         data: {
             password: hashedPassword,
-        }
+        },
     });
     return;
 });
@@ -137,19 +140,9 @@ const forgotPassword = (payload) => __awaiter(void 0, void 0, void 0, function* 
     // generate link
     // send email
     const user = yield (0, userHelpers_1.findUserByEmail)(payload.email);
-    // const user = await prisma.user.findUnique({
-    //   where: {
-    //     email:payload.email    }, include :{
-    //       vendor: true,
-    //       customer: true
-    //     }
-    // })
-    // if(!user) throw new ApiError(404, "User Not Found")
     (0, userHelpers_1.checkAccountStatus)(user);
-    // if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
-    // if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
     const resetPasswordToken = jwtHelpers_1.jwtHelpers.generateToken({ email: user.email, role: user.role }, config_1.default.jwt.reset_pass_secret, config_1.default.jwt.reset_pass_token_expires_in);
-    const resetPasswordLink = config_1.default.reset_pass_link + `userId=${user.id}&token=${resetPasswordToken}`;
+    const resetPasswordLink = `${config_1.default.reset_pass_link}?userId=${user.id}&token=${resetPasswordToken}`;
     yield (0, emailSender_1.default)(user.email, `
     <div>
     <p>Dear ${user.name}</p>
@@ -167,26 +160,15 @@ const resetPassword = (token, payload) => __awaiter(void 0, void 0, void 0, func
     // hash password
     // update password
     const user = yield (0, userHelpers_1.findUserById)(payload.id);
-    // const user = await prisma.user.findUnique(
-    //   {
-    //     where: {
-    //       id: payload.id
-    //     }, include:{
-    //       vendor: true, customer: true
-    //     }
-    //   }
-    // )
-    // if(!user) throw new ApiError(404, "User Not Found")
     (0, userHelpers_1.checkAccountStatus)(user);
-    // if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
-    // if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
     const isValidToken = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.reset_pass_secret);
+    console.log("isValidToken, ", isValidToken);
     if (!isValidToken)
         throw new ApiError_1.default(403, "Forbidden");
     const hashedPassword = yield bcrypt_1.default.hash(payload.password, 10);
     yield prisma_1.default.user.update({
         where: { id: payload.id },
-        data: { password: hashedPassword }
+        data: { password: hashedPassword },
     });
 });
 exports.AuthServices = {
@@ -194,5 +176,5 @@ exports.AuthServices = {
     login,
     changePassword,
     resetPassword,
-    forgotPassword
+    forgotPassword,
 };

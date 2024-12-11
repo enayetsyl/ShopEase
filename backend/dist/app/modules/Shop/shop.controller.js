@@ -16,6 +16,7 @@ exports.ShopController = void 0;
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const shop_service_1 = require("./shop.service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
+const pick_1 = __importDefault(require("../../../shared/pick"));
 const createShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield shop_service_1.ShopServices.createShop(req.user, req);
     (0, sendResponse_1.default)(res, {
@@ -45,12 +46,14 @@ const getAShopForShopDetailPage = (0, catchAsync_1.default)((req, res) => __awai
     });
 }));
 const getAllShops = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield shop_service_1.ShopServices.getAllShops();
+    const options = (0, pick_1.default)(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+    const result = yield shop_service_1.ShopServices.getAllShops(options);
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "All Shops fetched successfully",
-        data: result,
+        data: result.data,
+        meta: result.meta,
     });
 }));
 exports.ShopController = {

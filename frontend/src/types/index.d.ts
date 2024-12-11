@@ -335,8 +335,6 @@ export interface EditProductRequest {
   additionalImages: File[];
 }
 
-
-
 export interface CreateShopRequest {
   name: string;
   description: string;

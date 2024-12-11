@@ -11,7 +11,6 @@ import { baseApi } from "./baseApi";
 
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    
     createProduct: builder.mutation<
       ProductApiResponse,
       {

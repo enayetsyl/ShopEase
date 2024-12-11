@@ -28,10 +28,10 @@ const ForgotPassword = () => {
   });
 
   const onSubmit = async (data: ForgotPasswordData) => {
-    console.log('data',data)
+    console.log("data", data);
     try {
       const response = await forgotPassword(data).unwrap();
-      console.log('response', response)
+      console.log("response", response);
       toast({
         description: response.message,
       });

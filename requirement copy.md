@@ -22,14 +22,9 @@
 1. **Home Page**
    - Prioritize products from followed shops for logged-in users.
    - Filtering and searching functionalities (price range, category, keyword, etc.).
-2. **Product Details Page**
 
-   - Related products section showing products in the same category.
 
-4. **Cart Functionality**
-   - If attempting to add products from another vendor, show a warning with options:
-     - Replace the cart with the new product(s).
-     - Retain the current cart and cancel the addition.
+
 5. **Checkout**
 6. **Order History**
    - **For Customers:** View their purchase history with product and order details.

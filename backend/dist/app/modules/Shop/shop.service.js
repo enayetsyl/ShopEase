@@ -16,6 +16,7 @@ exports.ShopServices = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const fileUploader_1 = require("../../../helpers/fileUploader");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
+const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const createShop = (user, req) => __awaiter(void 0, void 0, void 0, function* () {
     //  upload file to cloudinary
     // save data into db
@@ -38,7 +39,8 @@ const getAShop = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new ApiError_1.default(404, "Shop not found");
     return shop;
 });
-const getAllShops = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllShops = (options) => __awaiter(void 0, void 0, void 0, function* () {
+    const { page, limit, skip } = paginationHelper_1.paginationHelper.calculatePagination(options);
     const shops = yield prisma_1.default.shop.findMany({
         where: { isBlackListed: false },
         include: {
@@ -53,10 +55,21 @@ const getAllShops = () => __awaiter(void 0, void 0, void 0, function* () {
                 },
             },
         },
+        skip,
+        take: limit,
+        orderBy: options.sortBy && options.sortOrder
+            ? { [options.sortBy]: options.sortOrder }
+            : { createdAt: "desc" },
     });
     if (!shops)
         throw new ApiError_1.default(404, "shops not found");
-    return shops;
+    const total = yield prisma_1.default.shop.count({
+        where: { isBlackListed: false },
+    });
+    return {
+        data: shops,
+        meta: { page, limit, total },
+    };
 });
 const getAShopForShopDetailPage = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const shop = yield prisma_1.default.shop.findUnique({

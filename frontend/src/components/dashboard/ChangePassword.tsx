@@ -11,8 +11,12 @@ import { useChangePasswordMutation } from "@/redux/api/authApi";
 // Define schema for validation using zod
 const changePasswordSchema = z
   .object({
-    oldPassword: z.string().min(8, { message: "Old password must be at least 8 characters long" }),
-    newPassword: z.string().min(8, { message: "New password must be at least 8 characters long" }),
+    oldPassword: z
+      .string()
+      .min(8, { message: "Old password must be at least 8 characters long" }),
+    newPassword: z
+      .string()
+      .min(8, { message: "New password must be at least 8 characters long" }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {

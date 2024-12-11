@@ -27,14 +27,13 @@ const productSchema = z.object({
     .optional(),
   categoryId: z.string().nonempty("Category is required"),
   inventory: z.number().min(0, "Inventory must be greater than or equal to 0"),
-  images: z
-  .custom<FileList>(
+  images: z.custom<FileList>(
     (value) =>
       typeof window !== "undefined" &&
       value instanceof FileList &&
       value.length >= 2 &&
       value.length <= 5,
-    { message: "You must upload between 2 and 5 images." }
+    { message: "You must upload between 2 and 5 images." },
   ),
 });
 

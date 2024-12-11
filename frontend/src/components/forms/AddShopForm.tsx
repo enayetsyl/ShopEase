@@ -20,14 +20,13 @@ const addShopSchema = z.object({
   shopDescription: z
     .string()
     .min(10, "Description must be at least 10 characters long."),
-    shopLogo: z
-    .custom<FileList>(
-      (value) =>
-        typeof window !== "undefined" &&
-        value instanceof FileList &&
-        value.length === 1,
-      { message: "Please upload exactly one logo." }
-    ),
+  shopLogo: z.custom<FileList>(
+    (value) =>
+      typeof window !== "undefined" &&
+      value instanceof FileList &&
+      value.length === 1,
+    { message: "Please upload exactly one logo." },
+  ),
 });
 
 type AddShopFormValues = z.infer<typeof addShopSchema>;

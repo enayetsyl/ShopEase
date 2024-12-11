@@ -46,7 +46,7 @@ export const shopApi = baseApi.injectEndpoints({
             productsQuantity,
             followers,
             isBlackListed,
-            vendorId: vendor?.id
+            vendorId: vendor?.id,
           };
         });
 

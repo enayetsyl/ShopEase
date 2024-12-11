@@ -41,7 +41,7 @@ const Sidebar = ({
     try {
       await logoutApi().unwrap();
       dispatch(logout());
-      router.push("/sign-in")
+      router.push("/sign-in");
     } catch (error) {
       console.error("Logout failed", error);
     }

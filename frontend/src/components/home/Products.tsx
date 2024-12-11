@@ -5,7 +5,6 @@ import Heading from "../shared/CustomHeading";
 import { ProductData } from "@/types";
 import SkeletonCard from "../shared/SkeletonCard";
 
-
 const Products = () => {
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState<ProductData[]>([]);
@@ -68,7 +67,7 @@ const Products = () => {
         ))}
       </div>
       {isFetching &&
-          Array.from({ length: 4 }).map((_, idx) => <SkeletonCard key={idx} />)}
+        Array.from({ length: 4 }).map((_, idx) => <SkeletonCard key={idx} />)}
       {!hasMore && (
         <p className="text-center mt-4">No more products to load.</p>
       )}

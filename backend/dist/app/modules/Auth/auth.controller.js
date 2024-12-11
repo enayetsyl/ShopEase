@@ -55,7 +55,8 @@ const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     });
 }));
 const forgotPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield auth_service_1.AuthServices.forgotPassword(req.body);
+    const { email } = req.body;
+    yield auth_service_1.AuthServices.forgotPassword(email);
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
@@ -73,10 +74,30 @@ const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: null,
     });
 }));
+const logout = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Clear cookies
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: false, // Set to `true` in production
+        sameSite: "lax",
+    });
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: false, // Set to `true` in production
+        sameSite: "lax",
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: 200,
+        success: true,
+        message: "User logged out successfully.",
+        data: null,
+    });
+}));
 exports.AuthController = {
     register,
     login,
     changePassword,
     resetPassword,
     forgotPassword,
+    logout,
 };
