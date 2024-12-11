@@ -4,6 +4,8 @@ import { DataTable } from "@/components/shared/DataTable";
 import { Button } from "@/components/ui/button";
 import { useBlacklistVendorMutation } from "@/redux/api/adminApi";
 import { useGetAllShopQuery } from "@/redux/api/shopApi";
+import { ShopRouteShopData } from "@/types";
+import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
 
 const AdminShops = () => {
@@ -24,7 +26,7 @@ const AdminShops = () => {
     if (page < totalPages) setPage((prev) => prev + 1);
   };
 
-  const columns = [
+  const columns: ColumnDef<ShopRouteShopData>[] = [
     {
       accessorKey: "name",
       header: "Shop Name",
@@ -66,8 +68,8 @@ const AdminShops = () => {
     },
   ];
 
-  const handleBlacklist = async (shopId, isBlackListed) => {
-    console.log('vendor id', shopId)
+  const handleBlacklist = async (shopId: string, isBlackListed: boolean) => {
+    console.log("vendor id", shopId);
     try {
       await blacklistVendor({ shopId, isBlackListed }).unwrap();
       console.log(

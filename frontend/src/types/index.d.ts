@@ -115,6 +115,7 @@ export interface ShopData {
   logo: string;
   products?: ProductData[];
   vendor?: VendorData;
+  isBlackListed?: boolean;
 }
 
 export interface ShopRouteShopData extends ShopData {
