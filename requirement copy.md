@@ -15,9 +15,7 @@
   
 3. **User (Customer)**
    - Compare up to three products at a time based on their attributes.
-   - **Receive a warning if attempting to add products from multiple vendors in the cart, with options:**
-     - Replace the cart with the new product(s).
-     - Retain the current cart and cancel the addition.
+
 
 ### **Features and Functionalities**
 

@@ -3,19 +3,25 @@
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useGetSingleProductQuery } from "@/redux/api/productApi";
+import {
+  useGetProductsQuery,
+  useGetSingleProductQuery,
+} from "@/redux/api/productApi";
 import ProductImages from "@/components/product/ProductImages";
 import ProductInfo from "@/components/product/ProductInfo";
 import ReviewSection from "@/components/product/ReviewSection";
 import { useDispatch } from "react-redux";
 import { addProductId } from "@/redux/slices/recentProductsSlice";
+import ProductCard from "@/components/shared/ProductCard";
+import SkeletonCard from "@/components/shared/SkeletonCard";
+import Heading from "@/components/shared/CustomHeading";
 
 export default function ProductDetails() {
   const { id } = useParams();
-  const { data: product, isLoading } = useGetSingleProductQuery({
-    id: id as string,
-  });
-
+  const { data: product, isLoading: isSingleProductLoading } =
+    useGetSingleProductQuery({
+      id: id as string,
+    });
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
 
@@ -25,7 +31,14 @@ export default function ProductDetails() {
     }
   }, [product, dispatch]);
 
-  if (isLoading) return <div>Loading...</div>;
+  const { data: relatedProducts, isLoading: isRelatedProductsLoading } =
+    useGetProductsQuery({
+      categoryId: product?.categoryId,
+    });
+
+
+  if (isSingleProductLoading || isRelatedProductsLoading)
+    return <div>Loading...</div>;
   if (!product) return <div>Product not found</div>;
 
   const renderStars = (rating: number) => {
@@ -56,6 +69,23 @@ export default function ProductDetails() {
 
       {/* Reviews Section */}
       <ReviewSection product={product} renderStars={renderStars} />
+      <div className="py-20">
+        <Heading
+          text="Related Products"
+          className="text-4xl lg:text-6xl text-center pb-20"
+        />
+        <div className="flex flex-wrap justify-center gap-6 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
+          {relatedProducts
+            ?.slice(0, 3)
+            .map((product) => (
+              <ProductCard key={product.productId} product={product} />
+            ))}
+          {isRelatedProductsLoading &&
+            Array.from({ length: 3 }).map((_, idx) => (
+              <SkeletonCard key={idx} />
+            ))}
+        </div>
+      </div>
     </div>
   );
 }
