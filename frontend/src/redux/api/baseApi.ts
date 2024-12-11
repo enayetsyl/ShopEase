@@ -1,13 +1,19 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 
+const getTokenFromDocumentCookie = () => {
+  const cookies = document.cookie.split("; ");
+  const accessToken = cookies.find((row) => row.startsWith("accessToken="));
+  return accessToken ? accessToken.split("=")[1] : null;
+};
+
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://shopease-w422.onrender.com/api/v1",
     credentials: "include",
     prepareHeaders: (headers) => {
-      const token = Cookies.get("accessToken");
+      const token = getTokenFromDocumentCookie();
       if (!token) {
         console.warn("Access token is missing.");
       }
