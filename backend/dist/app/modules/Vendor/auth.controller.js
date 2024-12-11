@@ -1,80 +1,67 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthController = void 0;
-const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
-const auth_service_1 = require("./auth.service");
-const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
-const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield auth_service_1.AuthServices.register(req.body);
-    (0, sendResponse_1.default)(res, {
-        statusCode: 201,
-        success: true,
-        message: "User Created Successfully.",
-        data: result
-    });
-}));
-const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield auth_service_1.AuthServices.login(req.body);
-    const { accessToken, refreshToken, userWithoutPassword } = result;
-    res.cookie('refreshToken', refreshToken, {
-        secure: true,
-        httpOnly: true
-    });
-    res.cookie('accessToken', accessToken, {
-        secure: true,
-        httpOnly: true
-    });
-    (0, sendResponse_1.default)(res, {
-        statusCode: 200,
-        success: true,
-        message: "User Successfully logged in.",
-        data: userWithoutPassword
-    });
-}));
-const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield auth_service_1.AuthServices.changePassword(req.user, req.body);
-    (0, sendResponse_1.default)(res, {
-        statusCode: 200,
-        success: true,
-        message: "Password changed successfully.",
-        data: ''
-    });
-}));
-const forgotPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield auth_service_1.AuthServices.forgotPassword(req.body);
-    (0, sendResponse_1.default)(res, {
-        statusCode: 200,
-        success: true,
-        message: "Check your email",
-        data: null
-    });
-}));
-const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.headers.authorization || "";
-    yield auth_service_1.AuthServices.resetPassword(token, req.body);
-    (0, sendResponse_1.default)(res, {
-        statusCode: 200,
-        success: true,
-        message: "Password reset successfully",
-        data: null
-    });
-}));
-exports.AuthController = {
-    register,
-    login,
-    changePassword,
-    resetPassword,
-    forgotPassword
-};
+// import  {Request, Response} from "express"
+// import catchAsync from "../../../shared/catchAsync"
+// import { AuthServices } from "./auth.service"
+// import sendResponse from "../../../shared/sendResponse"
+// const register  = catchAsync(async (req: Request, res: Response) => {
+//   const result = await AuthServices.register(req.body)
+//   sendResponse(res, {
+//     statusCode: 201,
+//     success: true,
+//     message: "User Created Successfully.",
+//     data: result
+//   })
+// })
+// const login  = catchAsync(async (req: Request, res: Response) => {
+//   const result = await AuthServices.login(req.body)
+//   const {accessToken, refreshToken, userWithoutPassword  } = result;
+//   res.cookie('refreshToken', refreshToken, {
+//       secure: true,
+//       httpOnly: true
+//   });
+//   res.cookie('accessToken', accessToken, {
+//       secure: true,
+//       httpOnly: true
+//   });
+//   sendResponse(res, {
+//     statusCode: 200,
+//     success: true,
+//     message: "User Successfully logged in.",
+//     data: userWithoutPassword
+//   })
+// })
+// const changePassword  = catchAsync(async (req: Request &{user?: any}, res: Response) => {
+//    await AuthServices.changePassword(req.user, req.body)
+//   sendResponse(res,{
+//     statusCode: 200,
+//     success: true,
+//     message: "Password changed successfully.",
+//     data: ''
+//   })
+// })
+// const forgotPassword  = catchAsync(async (req: Request, res: Response) => {
+//   await AuthServices.forgotPassword(req.body)
+//   sendResponse(res,{
+//     statusCode: 200,
+//     success: true,
+//     message: "Check your email",
+//     data: null
+//   })
+// })
+// const resetPassword  = catchAsync(async (req: Request, res: Response) => {
+//   const token = req.headers.authorization || ""
+//   await AuthServices.resetPassword(token, req.body)
+//   sendResponse(res,{
+//     statusCode: 200,
+//     success: true,
+//     message: "Password reset successfully",
+//     data: null
+//   })
+// })
+// export const AuthController = {
+//   register,
+//   login,
+//   changePassword,
+//   resetPassword,
+//   forgotPassword
+// }

@@ -21,12 +21,12 @@ const login = catchAsync(async (req: Request, res: Response) => {
   res.cookie("accessToken", accessToken, {
     secure: true, // Disable for local development
     httpOnly: true, // Ensure it can be accessed via JavaScript
-    sameSite: "strict", // Use 'lax' for local development
+    sameSite: true
   });
   res.cookie("refreshToken", refreshToken, {
     secure: true, // Disable for local development
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: true
   });
 
   sendResponse(res, {
@@ -80,12 +80,12 @@ const logout = catchAsync(async (req: Request, res: Response) => {
   res.clearCookie("accessToken", {
     httpOnly: true,
     secure: true, // Set to `true` in production
-    sameSite: "strict",
+    sameSite: true,
   });
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true, // Set to `true` in production
-    sameSite: "strict",
+    sameSite: true,
   });
 
   sendResponse(res, {
