@@ -5,26 +5,41 @@ import config from "../../config"
 import { Secret } from "jsonwebtoken"
 
 
-const auth = (...roles: string [])=>{
-  return async(req: Request & {user?: any}, res: Response, next: NextFunction)=>{
+const auth = (...roles: string[]) => {
+  return async (req: Request & { user?: any }, res: Response, next: NextFunction) => {
     try {
-      const token = req.headers.authorization
+      const authHeader = req.headers.authorization;
 
-      console.log('Token at be', token)
+      console.log("Token received at backend:", authHeader);
 
-      if(!token) throw new ApiError(401, "You are not authorized")
+      // Check if Authorization header exists
+      if (!authHeader) {
+        throw new ApiError(401, "You are not authorized. Missing Authorization header.");
+      }
 
-      const verifiedUser = jwtHelpers.verifyToken(token, config.jwt.jwt_secret as Secret)
-      req.user = verifiedUser
+      // Extract token (removing 'Bearer ' prefix)
+      const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader;
 
-      if(roles.length && !roles.includes(verifiedUser.role)) throw new ApiError(403, "Forbidden")
+      // Verify token
+      const verifiedUser = jwtHelpers.verifyToken(token, config.jwt.jwt_secret as Secret);
+      if (!verifiedUser) {
+        throw new ApiError(401, "Invalid token or verification failed.");
+      }
 
-      next()
+      // Attach user to request object
+      req.user = verifiedUser;
 
+      // Role validation
+      if (roles.length && (!verifiedUser.role || !roles.includes(verifiedUser.role))) {
+        throw new ApiError(403, "Forbidden: You do not have the required permissions.");
+      }
+
+      next();
     } catch (error) {
-      next(error)
+      next(error);
     }
-  }
-}
+  };
+};
+
 
 export default auth
