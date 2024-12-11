@@ -49,6 +49,7 @@ const changePassword = catchAsync(
     });
   }
 );
+
 const forgotPassword = catchAsync(async (req: Request, res: Response) => {
   const { email } = req.body;
   await AuthServices.forgotPassword(email);

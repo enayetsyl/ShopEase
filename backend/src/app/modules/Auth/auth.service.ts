@@ -141,11 +141,6 @@ const changePassword = async (user: any, payload: TChangePassword) => {
   const { email } = user;
 
   const userData = await findUserByEmail(email);
-  // const userData = await prisma.user.findUnique({
-  //   where: { email}
-  // })
-
-  // if(!userData) throw new ApiError(404, "User Not Found")
 
   const isPasswordValid = await bcrypt.compare(oldPassword, userData.password);
 

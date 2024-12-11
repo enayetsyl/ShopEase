@@ -12,6 +12,7 @@ import CustomerOrders from "@/components/dashboard/customer/CustomerOrders";
 import RecentProducts from "@/components/dashboard/customer/RecentProducts";
 import { SidebarItems } from "@/types";
 import { Truck, Package, Shield } from "lucide-react";
+import ChangePassword from "@/components/dashboard/ChangePassword";
 
 export const allowedRoles = {
   admin: ["ADMIN"],
@@ -26,11 +27,14 @@ export const sidebarItems: SidebarItems = {
     { label: "Orders", component: VendorOrders },
     { label: "Review", component: VendorReviews },
     { label: "Flash Sale", component: VendorFlashSale },
+    { label: "Change Password", component: ChangePassword },
   ],
   CUSTOMER: [
     { label: "Orders", component: CustomerOrders },
     { label: "Recent Products", component: RecentProducts },
     { label: "Cart", component: Cart },
+
+    { label: "Change Password", component: ChangePassword },
   ],
   ADMIN: [
     { label: "Users", component: User },
@@ -38,6 +42,7 @@ export const sidebarItems: SidebarItems = {
     { label: "Shops", component: AdminShops },
     // { label: "Orders", component: AdminOrders },
     { label: "Transactions", component: Transactions },
+    { label: "Change Password", component: ChangePassword },
   ],
 };
 
