@@ -19,6 +19,7 @@ const auth = (...roles) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const token = req.headers.authorization;
+            console.log('Token at be', token);
             if (!token)
                 throw new ApiError_1.default(401, "You are not authorized");
             const verifiedUser = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.jwt_secret);

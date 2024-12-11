@@ -12,7 +12,7 @@ export const baseApi = createApi({
         console.warn("Access token is missing.");
       }
       if (token) {
-        headers.set("Authorization", `${token}`);
+        headers.set("Authorization", `Bearer ${token}`);
       }
 
       return headers;
