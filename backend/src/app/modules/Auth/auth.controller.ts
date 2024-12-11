@@ -18,7 +18,6 @@ const login = catchAsync(async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken, userWithoutPassword } = result;
 
-
   res.cookie("accessToken", accessToken, {
     secure: false, // Disable for local development
     httpOnly: false, // Ensure it can be accessed via JavaScript
@@ -51,8 +50,7 @@ const changePassword = catchAsync(
   }
 );
 const forgotPassword = catchAsync(async (req: Request, res: Response) => {
-  const {email } = req.body
-  console.log('req', req.body)
+  const { email } = req.body;
   await AuthServices.forgotPassword(email);
 
   sendResponse(res, {
@@ -97,12 +95,11 @@ const logout = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 export const AuthController = {
   register,
   login,
   changePassword,
   resetPassword,
   forgotPassword,
-  logout
+  logout,
 };
