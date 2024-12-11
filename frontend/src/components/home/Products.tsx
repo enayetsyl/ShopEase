@@ -3,6 +3,8 @@ import ProductCard from "../shared/ProductCard";
 import { useGetProductsQuery } from "@/redux/api/productApi";
 import Heading from "../shared/CustomHeading";
 import { ProductData } from "@/types";
+import SkeletonCard from "../shared/SkeletonCard";
+
 
 const Products = () => {
   const [page, setPage] = useState(1);
@@ -45,7 +47,13 @@ const Products = () => {
   }, [isFetching, hasMore]);
 
   if (isLoading && page === 1) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center gap-4 flex-wrap">
+        {Array.from({ length: 10 }).map((_, idx) => (
+          <SkeletonCard key={idx} />
+        ))}
+      </div>
+    );
   }
 
   return (
@@ -59,7 +67,8 @@ const Products = () => {
           <ProductCard key={product.productId} product={product} />
         ))}
       </div>
-      {isFetching && <p>Loading more products...</p>}
+      {isFetching &&
+          Array.from({ length: 4 }).map((_, idx) => <SkeletonCard key={idx} />)}
       {!hasMore && (
         <p className="text-center mt-4">No more products to load.</p>
       )}

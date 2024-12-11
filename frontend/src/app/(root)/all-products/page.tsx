@@ -2,6 +2,7 @@
 import ProductFilters from "@/components/allProducts/ProductFilter";
 import Heading from "@/components/shared/CustomHeading";
 import ProductCard from "@/components/shared/ProductCard";
+import SkeletonCard from "@/components/shared/SkeletonCard";
 import { useGetProductsQuery } from "@/redux/api/productApi";
 import { useSearchParams } from "next/navigation";
 import React, { Suspense, useEffect, useRef, useState } from "react";
@@ -39,7 +40,7 @@ const AllProductContent = () => {
           setPage((prev) => prev + 1);
         }
       },
-      { threshold: 1 }
+      { threshold: 1 },
     );
 
     if (observerRef.current) observer.observe(observerRef.current);
@@ -48,6 +49,16 @@ const AllProductContent = () => {
       if (observerRef.current) observer.unobserve(observerRef.current);
     };
   }, [isFetching, hasMore]);
+
+  if (isLoading && page === 1) {
+    return (
+      <div className="flex flex-wrap justify-center gap-6 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
+        {Array.from({ length: 10 }).map((_, idx) => (
+          <SkeletonCard key={idx} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="pb-20">
@@ -61,15 +72,19 @@ const AllProductContent = () => {
           {products.map((product) => (
             <ProductCard key={product.productId} product={product} />
           ))}
+          {isFetching &&
+            Array.from({ length: 4 }).map((_, idx) => (
+              <SkeletonCard key={idx} />
+            ))}
         </div>
-        {isFetching && <p className="text-center mt-4">Loading more products...</p>}
-        {!hasMore && <p className="text-center mt-4">No more products to load.</p>}
+        {!hasMore && (
+          <p className="text-center mt-4">No more products to load.</p>
+        )}
       </div>
       <div ref={observerRef} className="h-10"></div> {/* Observer target */}
     </div>
   );
 };
-
 
 const AllProduct = () => (
   <Suspense
