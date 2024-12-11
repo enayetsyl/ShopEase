@@ -12,12 +12,15 @@ import {
 } from "@/components/ui/sheet"; // Adjust based on your setup
 import { Button } from "@/components/ui/button";
 import { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { sidebarItems } from "@/constants";
 import { NavItem } from "@/types";
-import { Menu } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import CustomButton from "../shared/CustomButton";
 import Image from "next/image";
+import { useLogoutMutation } from "@/redux/api/authApi";
+import { logout } from "@/redux/slices/authSlice";
+import { useRouter } from "next/navigation";
 
 const Sidebar = ({
   setActiveComponent,
@@ -28,8 +31,21 @@ const Sidebar = ({
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
   const role = user?.role as "ADMIN" | "VENDOR" | "CUSTOMER";
+  const dispatch = useDispatch();
+  const [logoutApi] = useLogoutMutation();
+  const router = useRouter();
 
   const navItems: NavItem[] = sidebarItems[role];
+
+  const handleLogout = async () => {
+    try {
+      await logoutApi().unwrap();
+      dispatch(logout());
+      router.push("/sign-in")
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   return (
     <>
@@ -64,6 +80,13 @@ const Sidebar = ({
               </CustomButton>
             );
           })}
+          <CustomButton
+            className="w-full text-left py-3 px-4 mb-2 rounded-md bg-muted text-muted-foreground hover:bg-primary-foreground hover:text-white dark:hover:bg-primary dark:hover:text-black"
+            onClick={handleLogout}
+          >
+            <LogOut className="mr-2" />
+            Logout
+          </CustomButton>
         </div>
       </div>
 
@@ -120,7 +143,13 @@ const Sidebar = ({
           </SheetHeader>
 
           <SheetClose asChild>
-            <Button className="mt-4 text-white border-white">Close</Button>
+            <CustomButton
+              className="w-full text-left py-3 px-4 mb-2 rounded-md bg-muted text-muted-foreground hover:bg-primary-foreground hover:text-white"
+              onClick={handleLogout}
+            >
+              <LogOut className="mr-2" />
+              Logout
+            </CustomButton>
           </SheetClose>
         </SheetContent>
       </Sheet>
