@@ -516,7 +516,17 @@ Audit Logs (Admin)
 
 
 
-
+### Task remaining to implement
+- Loading state adding
+- Skeleton adding
+- Interface file organized
+- All interface transferred to the index.d.ts
+- Admin shop page columns transferred to separate file
+- totalPages, nextPage, previousPage DRY concept apply.
+- Separate admin route created for isBlackList so that it can be toggle by admin.
+- Suspend user  button should toggle. 
+- Vendor shop name, description and logo edit option should add. 
+- After data submit form field should be empty.
 
 
 

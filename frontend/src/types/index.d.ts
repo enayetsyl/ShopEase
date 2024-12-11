@@ -281,6 +281,12 @@ export interface VendorProductData {
   image: string[];
 }
 
+export interface VendorProductActions extends VendorProductData {
+  handleEdit: (product: VendorProductData) => void;
+  handleDuplicate: (product: VendorProductData) => Promise<void>;
+  handleFlashSale: (product: VendorProductData) => void;
+}
+
 export interface SingleProductData {
   productId: string;
   name: string;
@@ -329,11 +335,7 @@ export interface EditProductRequest {
   additionalImages: File[];
 }
 
-export interface VendorProductActions extends VendorProductData {
-  handleEdit: (product: VendorProductData) => void;
-  handleDuplicate: (product: VendorProductData) => Promise<void>;
-  handleFlashSale: (product: VendorProductData) => void;
-}
+
 
 export interface CreateShopRequest {
   name: string;

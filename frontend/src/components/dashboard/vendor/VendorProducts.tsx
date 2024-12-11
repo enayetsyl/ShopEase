@@ -76,12 +76,22 @@ const VendorProducts = () => {
   };
 
   const tableData: VendorProductActions[] =
-    data?.data.map((product: VendorProductData) => ({
-      ...product,
-      handleEdit: () => handleEdit(product),
-      handleDuplicate: async () => handleDuplicate(),
-      handleFlashSale: () => handleFlashSale(product),
-    })) || [];
+  data?.data.map((product: VendorProductData) => ({
+    ...product,
+    handleEdit: () => handleEdit(product),
+    handleDuplicate: async () => { // Ensure it is async
+      const productWithActions: VendorProductActions = {
+        ...product,
+        handleEdit: () => handleEdit(product),
+        handleDuplicate: async () => handleDuplicate(), // Make this async
+        handleFlashSale: () => handleFlashSale(product),
+      };
+      setSelectedProduct(productWithActions); // Pass a valid VendorProductActions object
+      setIsAlertOpen(true); // Open the confirmation dialog
+    },
+    handleFlashSale: () => handleFlashSale(product),
+  })) || [];
+
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
 
