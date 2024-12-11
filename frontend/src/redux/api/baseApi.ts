@@ -8,7 +8,9 @@ export const baseApi = createApi({
     credentials: "include",
     prepareHeaders: (headers) => {
       const token = Cookies.get("accessToken");
-
+      if (!token) {
+        console.warn("Access token is missing.");
+      }
       if (token) {
         headers.set("Authorization", `${token}`);
       }
