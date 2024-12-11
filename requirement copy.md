@@ -9,7 +9,6 @@
 
 1. **Admin**
    - Full control over the platform, including monitoring and moderation.
-   - Blacklist vendor shops to restrict their operations.
   
 2. **Vendor**
    - Create and manage their shop (name, logo, description, etc.).

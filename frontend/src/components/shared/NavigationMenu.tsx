@@ -23,9 +23,11 @@ import { RootState } from "@/redux/store";
 import Link from "next/link";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useLogoutMutation } from "@/redux/api/authApi";
 
 const NavigationMenu = () => {
   const dispatch = useDispatch();
+  const [logoutApi] = useLogoutMutation();
   const user = useSelector((state: RootState) => state.auth.user);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const cartItemCount = cartItems.reduce(
@@ -33,8 +35,13 @@ const NavigationMenu = () => {
     0,
   );
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    try {
+      await logoutApi().unwrap();
+      dispatch(logout());
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   return (

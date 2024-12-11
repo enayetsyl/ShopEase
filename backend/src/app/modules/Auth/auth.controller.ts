@@ -73,10 +73,33 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const logout = catchAsync(async (req: Request, res: Response) => {
+  // Clear cookies
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: false, // Set to `true` in production
+    sameSite: "lax",
+  });
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: false, // Set to `true` in production
+    sameSite: "lax",
+  });
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User logged out successfully.",
+    data: null,
+  });
+});
+
+
 export const AuthController = {
   register,
   login,
   changePassword,
   resetPassword,
   forgotPassword,
+  logout
 };
