@@ -154,6 +154,11 @@ export interface AllShopsApiResponse {
   }[];
   message: string;
   success: boolean;
+  meta: {
+    page: number;
+    limit: number;
+    total: number;
+  };
 }
 
 export interface ProductApiResponse {

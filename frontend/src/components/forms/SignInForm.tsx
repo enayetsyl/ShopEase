@@ -33,6 +33,7 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (data: SignInData) => {
+    console.log("login user data", data);
     try {
       const response = await loginUser(data).unwrap();
       toast({

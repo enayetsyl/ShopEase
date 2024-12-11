@@ -3,6 +3,8 @@ import { Request } from "express";
 import { TFile } from "../../types/file";
 import { fileUploader } from "../../../helpers/fileUploader";
 import ApiError from "../../errors/ApiError";
+import { TPaginationOptions } from "../../types/pagination";
+import { paginationHelper } from "../../../helpers/paginationHelper";
 
 const createShop = async (user: any, req: Request) => {
   //  upload file to cloudinary
@@ -33,7 +35,8 @@ const getAShop = async (payload: any) => {
   return shop;
 };
 
-const getAllShops = async () => {
+const getAllShops = async (options: TPaginationOptions) => {
+  const { page, limit, skip } = paginationHelper.calculatePagination(options);
   const shops = await prisma.shop.findMany({
     where: { isBlackListed: false },
     include: {
@@ -48,14 +51,27 @@ const getAllShops = async () => {
         },
       },
     },
+    skip,
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : { createdAt: "desc" },
   });
 
   if (!shops) throw new ApiError(404, "shops not found");
-  return shops;
+
+  const total = await prisma.shop.count({
+    where: { isBlackListed: false },
+  });
+
+  return {
+    data: shops,
+    meta: { page, limit, total },
+  };
 };
 
 const getAShopForShopDetailPage = async (payload: string) => {
-
   const shop = await prisma.shop.findUnique({
     where: { id: payload },
     include: {

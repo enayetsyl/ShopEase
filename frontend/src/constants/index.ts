@@ -1,6 +1,7 @@
 import Category from "@/components/dashboard/admin/Category";
 import Transactions from "@/components/dashboard/admin/Transactions";
 import User from "@/components/dashboard/admin/User";
+import AdminShops from "@/components/dashboard/admin/AdminShops";
 import VendorOrders from "@/components/dashboard/vendor/VendorOrders";
 import VendorProducts from "@/components/dashboard/vendor/VendorProducts";
 import VendorReviews from "@/components/dashboard/vendor/VendorReviews";
@@ -34,7 +35,7 @@ export const sidebarItems: SidebarItems = {
   ADMIN: [
     { label: "Users", component: User },
     { label: "Category", component: Category },
-    // { label: "Products", component: AdminProducts },
+    { label: "Shops", component: AdminShops },
     // { label: "Orders", component: AdminOrders },
     { label: "Transactions", component: Transactions },
   ],

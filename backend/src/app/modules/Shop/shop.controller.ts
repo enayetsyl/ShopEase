@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import { ShopServices } from "./shop.service";
 import sendResponse from "../../../shared/sendResponse";
+import pick from "../../../shared/pick";
 
 const createShop = catchAsync(
   async (req: Request & { user?: any }, res: Response) => {
@@ -41,12 +42,14 @@ const getAShopForShopDetailPage = catchAsync(
 );
 
 const getAllShops = catchAsync(async (req: Request, res: Response) => {
-  const result = await ShopServices.getAllShops();
+  const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
+  const result = await ShopServices.getAllShops(options);
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "All Shops fetched successfully",
-    data: result,
+    data: result.data,
+    meta: result.meta,
   });
 });
 

@@ -18,30 +18,39 @@ export const shopApi = baseApi.injectEndpoints({
       },
       providesTags: ["Shop"],
     }),
-    getAllShop: builder.query<ShopRouteShopData[], void>({
-      query: () => "/shop/all",
+
+    getAllShop: builder.query<
+      { data: ShopRouteShopData[]; meta: AllShopsApiResponse["meta"] },
+      { page: number; limit: number }
+    >({
+      query: ({ page, limit }) => `/shop/all?page=${page}&limit=${limit}`,
       transformResponse: (response: AllShopsApiResponse) => {
-        return response.data.map((shop) => {
+        const transformedData = response.data.map((shop) => {
           const {
             id: shopId,
             name,
             logo,
             description,
             products,
+            isBlackListed,
             vendor,
           } = shop;
           const productsQuantity = products?.length ?? 0;
           const followers = vendor?.follows?.length ?? 0;
-          const shopData = {
+
+          return {
             shopId,
             name,
             description,
             logo,
             productsQuantity,
             followers,
+            isBlackListed,
+            vendorId: vendor?.id
           };
-          return shopData;
         });
+
+        return { data: transformedData, meta: response.meta };
       },
       providesTags: ["Shop"],
     }),

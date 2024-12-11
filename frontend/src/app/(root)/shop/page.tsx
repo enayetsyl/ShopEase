@@ -5,7 +5,8 @@ import { useGetAllShopQuery } from "@/redux/api/shopApi";
 import React from "react";
 
 const Shop = () => {
-  const { data } = useGetAllShopQuery();
+  const { data } = useGetAllShopQuery({ page: 1, limit: 10 });
+  console.log('data', data)
 
   return (
     <>
@@ -17,7 +18,7 @@ const Shop = () => {
       </div>
 
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {data && data.map((shop) => <ShopCard key={shop.shopId} shop={shop} />)}
+        {data && data?.data.map((shop) => <ShopCard key={shop.shopId} shop={shop} />)}
       </div>
     </>
   );
