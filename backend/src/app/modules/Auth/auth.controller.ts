@@ -19,14 +19,14 @@ const login = catchAsync(async (req: Request, res: Response) => {
   const { accessToken, refreshToken, userWithoutPassword } = result;
 
   res.cookie("accessToken", accessToken, {
-    secure: true, // Disable for local development
-    httpOnly: true, // Ensure it can be accessed via JavaScript
-    sameSite: true
+    secure: true, 
+    httpOnly: false, 
+    sameSite: "none"
   });
   res.cookie("refreshToken", refreshToken, {
-    secure: true, // Disable for local development
-    httpOnly: true,
-    sameSite: true
+    secure: true, 
+    httpOnly: false, 
+    sameSite: "none"
   });
 
   sendResponse(res, {
@@ -78,14 +78,14 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
 const logout = catchAsync(async (req: Request, res: Response) => {
   // Clear cookies
   res.clearCookie("accessToken", {
-    httpOnly: true,
-    secure: true, // Set to `true` in production
-    sameSite: true,
+    secure: true, 
+    httpOnly: false, 
+    sameSite: "none"
   });
   res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: true, // Set to `true` in production
-    sameSite: true,
+    secure: true, 
+    httpOnly: false, 
+    sameSite: "none"
   });
 
   sendResponse(res, {
