@@ -8,11 +8,7 @@ const app: Application = express();
 // CORS configuration
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://shop-ease-8a83-fe.vercel.app",
-      
-    ],
+    origin: "*",
     credentials: true, // Allow cookies and credentials
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
