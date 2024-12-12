@@ -12,7 +12,6 @@ const AdminShops = () => {
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
   const { data, isLoading } = useGetAllShopQuery({ page: 1, limit: 10 });
-  console.log("data in admin", data);
   const [blacklistVendor, { isLoading: isBlacklisting }] =
     useBlacklistVendorMutation();
 
@@ -69,7 +68,6 @@ const AdminShops = () => {
   ];
 
   const handleBlacklist = async (shopId: string, isBlackListed: boolean) => {
-    console.log("vendor id", shopId);
     try {
       await blacklistVendor({ shopId, isBlackListed }).unwrap();
       console.log(

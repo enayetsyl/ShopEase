@@ -35,7 +35,6 @@ const SignInForm = () => {
   const onSubmit = async (data: SignInData) => {
     try {
       const response = await loginUser(data).unwrap();
-      console.log('response', response)
       toast({
         description: `${response.message}`,
       });

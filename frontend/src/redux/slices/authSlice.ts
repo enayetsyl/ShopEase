@@ -52,10 +52,7 @@ const authSlice = createSlice({
       const refreshToken = action.payload.refreshToken;
 
       state.user = customizedUser;
-      console.log('customize user', customizeUser)
-      console.log('accessToken', accessToken)
-      console.log('refreshToken', refreshToken)
-
+     
       // Save user data to localStorage
       if (typeof window !== "undefined") {
         localStorage.setItem("auth", JSON.stringify(customizedUser));

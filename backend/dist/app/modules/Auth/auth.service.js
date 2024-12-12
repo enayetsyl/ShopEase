@@ -153,7 +153,6 @@ const resetPassword = (token, payload) => __awaiter(void 0, void 0, void 0, func
     const user = yield (0, userHelpers_1.findUserById)(payload.id);
     (0, userHelpers_1.checkAccountStatus)(user);
     const isValidToken = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.reset_pass_secret);
-    console.log("isValidToken, ", isValidToken);
     if (!isValidToken)
         throw new ApiError_1.default(403, "Forbidden");
     const hashedPassword = yield bcrypt_1.default.hash(payload.password, 10);
