@@ -13,14 +13,12 @@ app.use(
       "https://shop-ease-8a83-fe.vercel.app",
       "https://shop-ease-fm2s1pdzp-md-enayetur-rahmans-projects.vercel.app",
     ],
-    credentials: true,
+    credentials: true, // Allow cookies and credentials
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// Handle preflight requests
-app.options("*", cors());
 app.use(cookieParser());
 
 //parser
