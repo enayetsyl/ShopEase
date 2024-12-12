@@ -16,10 +16,11 @@ app.use((0, cors_1.default)({
         "https://shop-ease-8a83-fe.vercel.app",
         "https://shop-ease-fm2s1pdzp-md-enayetur-rahmans-projects.vercel.app",
     ],
+    credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
-// Handle preflight requests for all routes
+// Handle preflight requests
 app.options("*", (0, cors_1.default)());
 app.use((0, cookie_parser_1.default)());
 //parser
