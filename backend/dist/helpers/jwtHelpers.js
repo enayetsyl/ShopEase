@@ -8,13 +8,16 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const generateToken = (payload, secret, expiresIn) => {
     const token = jsonwebtoken_1.default.sign(payload, secret, {
         algorithm: "HS256",
-        expiresIn
+        expiresIn,
     });
     return token;
 };
 const verifyToken = (token, secret) => {
-    return jsonwebtoken_1.default.verify(token, secret);
+    const tokenWithoutQuotes = token.replace(/^"|"$/g, "");
+    const verifiedUser = jsonwebtoken_1.default.verify(tokenWithoutQuotes, secret);
+    return verifiedUser;
 };
 exports.jwtHelpers = {
-    generateToken, verifyToken
+    generateToken,
+    verifyToken,
 };

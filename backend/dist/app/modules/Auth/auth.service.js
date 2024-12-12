@@ -91,19 +91,10 @@ const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     // return data
     const { email, password } = payload;
     const user = yield (0, userHelpers_1.findUserByEmail)(email);
-    // const user = await prisma.user.findUnique({
-    //   where: { email}, include: {
-    //     vendor: true,
-    //     customer: true,
-    //   },
-    // })
-    // if(!user) throw new ApiError(404, "User Not Found")
     (0, userHelpers_1.checkAccountStatus)(user);
     const isPasswordValid = yield bcrypt_1.default.compare(password, user.password);
     if (!isPasswordValid)
         throw new ApiError_1.default(401, "Invalid Credentials.");
-    // if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
-    // if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
     const { password: _ } = user, userWithoutPassword = __rest(user, ["password"]);
     const accessToken = jwtHelpers_1.jwtHelpers.generateToken(userWithoutPassword, config_1.default.jwt.jwt_secret, config_1.default.jwt.expires_in);
     const refreshToken = jwtHelpers_1.jwtHelpers.generateToken(userWithoutPassword, config_1.default.jwt.refresh_token_secret, config_1.default.jwt.refresh_token_expires_in);
