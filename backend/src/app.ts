@@ -11,7 +11,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://shop-ease-8a83-fe.vercel.app",
-      "https://shop-ease-fm2s1pdzp-md-enayetur-rahmans-projects.vercel.app",
+      
     ],
     credentials: true, // Allow cookies and credentials
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
