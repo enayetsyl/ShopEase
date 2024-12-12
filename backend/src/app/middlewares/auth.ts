@@ -11,7 +11,7 @@ const auth = (...roles: string[]) => {
     next: NextFunction
   ) => {
     try {
-      const authHeader = req.headers.authorization;
+      const token = req.headers.authorization
 
       if(!token) throw new ApiError(401, "You are not authorized")
 

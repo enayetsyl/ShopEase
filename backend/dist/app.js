@@ -11,13 +11,16 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 // CORS configuration
 app.use((0, cors_1.default)({
-    origin: ['http://localhost:3000', 'https://shop-ease-8a83-fe.vercel.app'],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: [
+        "http://localhost:3000",
+        "https://shop-ease-8a83-fe.vercel.app",
+        "https://shop-ease-fm2s1pdzp-md-enayetur-rahmans-projects.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }));
 // Handle preflight requests for all routes
-app.options('*', (0, cors_1.default)());
+app.options("*", (0, cors_1.default)());
 app.use((0, cookie_parser_1.default)());
 //parser
 app.use(express_1.default.json());
