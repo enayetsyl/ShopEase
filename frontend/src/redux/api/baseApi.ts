@@ -12,7 +12,7 @@ export const baseApi = createApi({
     // baseUrl: "https://shopease-w422.onrender.com/api/v1",
     baseUrl: "https://shop-ease-beryl-two.vercel.app/api/v1",
     // baseUrl: "http://localhost:5002/api/v1",
-    credentials: "include",
+    // credentials: "include",
     prepareHeaders: (headers) => {
       const token = getTokenFromLS();
 

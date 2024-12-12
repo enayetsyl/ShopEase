@@ -10,11 +10,22 @@ const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalEr
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 // CORS configuration
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://shop-ease-8a83-fe.vercel.app"
+];
 app.use((0, cors_1.default)({
-    origin: "*",
-    credentials: true, // Allow cookies and credentials
+    origin: function (origin, callback) {
+        if (allowedOrigins.includes(origin || "")) {
+            callback(null, origin);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    // credentials: true, // Allow credentials (cookies, auth headers)
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use((0, cookie_parser_1.default)());
 //parser
