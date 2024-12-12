@@ -12,14 +12,19 @@ cloudinary.config({
 })
 
 const storage = multer.diskStorage({
-  destination: function(req,file,cb){
-    cb(null, path.join(process.cwd(), 
-  "uploads"))
+  destination: function (req, file, cb) {
+    const uploadPath = path.join(process.cwd(), "uploads");
+    // Check if the folder exists; if not, create it
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
   },
-  filename: function(req, file, cb){
-    cb(null, file.originalname)
-  }
-})
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
 
 const upload = multer({storage: storage})
 

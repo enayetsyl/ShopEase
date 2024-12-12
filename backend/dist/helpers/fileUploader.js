@@ -25,11 +25,16 @@ cloudinary_1.v2.config({
 });
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path_1.default.join(process.cwd(), "uploads"));
+        const uploadPath = path_1.default.join(process.cwd(), "uploads");
+        // Check if the folder exists; if not, create it
+        if (!fs_1.default.existsSync(uploadPath)) {
+            fs_1.default.mkdirSync(uploadPath, { recursive: true });
+        }
+        cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
-    }
+    },
 });
 const upload = (0, multer_1.default)({ storage: storage });
 const uploadToCloudinary = (file) => __awaiter(void 0, void 0, void 0, function* () {
