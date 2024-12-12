@@ -18,22 +18,13 @@ const login = catchAsync(async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken, userWithoutPassword } = result;
 
-  res.cookie("accessToken", accessToken, {
-    secure: false, // Disable for local development
-    httpOnly: false, // Ensure it can be accessed via JavaScript
-    sameSite: "lax", // Use 'lax' for local development
-  });
-  res.cookie("refreshToken", refreshToken, {
-    secure: false, // Disable for local development
-    httpOnly: false,
-    sameSite: "lax",
-  });
+
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "User Successfully logged in.",
-    data: userWithoutPassword,
+    data: {userWithoutPassword, accessToken, refreshToken},
   });
 });
 

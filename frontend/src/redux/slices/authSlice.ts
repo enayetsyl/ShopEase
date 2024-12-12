@@ -1,4 +1,4 @@
-import { AuthState, BackendUser, User } from "@/types";
+import { AuthState, BackendUser, User, UserWithoutPassword } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const getInitialUser = (): User | null => {
@@ -13,7 +13,7 @@ const initialState: AuthState = {
   user: getInitialUser(),
 };
 
-const customizeUser = (user: BackendUser): User => {
+const customizeUser = (user: UserWithoutPassword): User => {
   const { name, email, id: userId, role, vendor, customer } = user;
 
   // Determine the source of profilePhoto
@@ -47,13 +47,17 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth(state, action: PayloadAction<BackendUser>) {
-      const customizedUser = customizeUser(action.payload);
+      const customizedUser = customizeUser(action.payload.userWithoutPassword);
+      const accessToken = action.payload.accessToken;
+      const refreshToken = action.payload.refreshToken;
 
       state.user = customizedUser;
 
       // Save user data to localStorage
       if (typeof window !== "undefined") {
         localStorage.setItem("auth", JSON.stringify(customizedUser));
+        localStorage.setItem("accessToken", JSON.stringify(accessToken));
+        localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
       }
     },
     logout(state) {
@@ -62,6 +66,8 @@ const authSlice = createSlice({
       // Remove user data from localStorage
       if (typeof window !== "undefined") {
         localStorage.removeItem("auth");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
       }
     },
   },
