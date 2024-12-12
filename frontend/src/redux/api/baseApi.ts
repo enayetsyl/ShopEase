@@ -17,7 +17,7 @@ export const baseApi = createApi({
       const token = getTokenFromLS();
 
       if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+        headers.set("Authorization", `${token}`);
       }
 
       return headers;
