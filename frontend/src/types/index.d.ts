@@ -31,13 +31,19 @@ export interface Customer {
   payments: object[];
 }
 
-export interface BackendUser {
+export interface UserWithoutPassword {
   id: string;
   email: string;
   role: "ADMIN" | "VENDOR" | "CUSTOMER";
   name: string;
   vendor?: Vendor | null;
   customer?: Customer | null;
+}
+
+export interface BackendUser {
+  accessToken: string;
+  refreshToken: string;
+  userWithoutPassword: UserWithoutPassword;
 }
 
 export interface AuthState {

@@ -10,7 +10,8 @@ const getTokenFromDocumentCookie = () => {
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://shopease-w422.onrender.com/api/v1",
+    // baseUrl: "https://shopease-w422.onrender.com/api/v1",
+    baseUrl: "http://localhost:5002/api/v1",
     credentials: "include",
     prepareHeaders: (headers) => {
       const token = getTokenFromDocumentCookie();

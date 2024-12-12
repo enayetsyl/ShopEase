@@ -14,7 +14,16 @@ const initialState: AuthState = {
 };
 
 const customizeUser = (user: BackendUser): User => {
-  const { name, email, id: userId, role, vendor, customer } = user;
+
+  const {
+    name,
+    email,
+    id: userId,
+    role,
+    vendor,
+    customer,
+  } = user.userWithoutPassword;
+
 
   // Determine the source of profilePhoto
   const profilePhoto = vendor?.profilePhoto || customer?.profilePhoto || null;
@@ -47,13 +56,21 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth(state, action: PayloadAction<BackendUser>) {
+      // console.log("action.payload", action.payload);
       const customizedUser = customizeUser(action.payload);
+      const accessToken = action.payload.accessToken;
+      const refreshToken = action.payload.refreshToken;
 
       state.user = customizedUser;
+      console.log('customize user', customizeUser)
+      console.log('accessToken', accessToken)
+      console.log('refreshToken', refreshToken)
 
       // Save user data to localStorage
       if (typeof window !== "undefined") {
         localStorage.setItem("auth", JSON.stringify(customizedUser));
+        localStorage.setItem("accessToken", JSON.stringify(accessToken));
+        localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
       }
     },
     logout(state) {
@@ -62,6 +79,8 @@ const authSlice = createSlice({
       // Remove user data from localStorage
       if (typeof window !== "undefined") {
         localStorage.removeItem("auth");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
       }
     },
   },
