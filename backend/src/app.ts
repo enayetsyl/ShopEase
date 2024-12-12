@@ -6,15 +6,21 @@ import cookieParser from "cookie-parser";
 
 const app: Application = express();
 // CORS configuration
-app.use(cors({
-  origin: ['http://localhost:3000', 'https://shop-ease-8a83-fe.vercel.app'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://shop-ease-8a83-fe.vercel.app",
+      "https://shop-ease-fm2s1pdzp-md-enayetur-rahmans-projects.vercel.app",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // Handle preflight requests for all routes
-app.options('*', cors());
+app.options("*", cors());
 app.use(cookieParser());
 
 //parser
