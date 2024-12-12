@@ -28,21 +28,11 @@ const register = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
 const login = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthServices.login(req.body);
     const { accessToken, refreshToken, userWithoutPassword } = result;
-    res.cookie("accessToken", accessToken, {
-        secure: true,
-        httpOnly: false,
-        sameSite: "none"
-    });
-    res.cookie("refreshToken", refreshToken, {
-        secure: true,
-        httpOnly: false,
-        sameSite: "none"
-    });
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
         message: "User Successfully logged in.",
-        data: userWithoutPassword,
+        data: { userWithoutPassword, accessToken, refreshToken },
     });
 }));
 const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

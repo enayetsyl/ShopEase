@@ -92,24 +92,12 @@ const login = async (payload: TLogin) => {
 
   const user = await findUserByEmail(email);
 
-  // const user = await prisma.user.findUnique({
-  //   where: { email}, include: {
-  //     vendor: true,
-  //     customer: true,
-  //   },
-  // })
-
-  // if(!user) throw new ApiError(404, "User Not Found")
-
   checkAccountStatus(user);
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) throw new ApiError(401, "Invalid Credentials.");
 
-  // if(user.role === "VENDOR" && (user.vendor?.isDeleted || user.vendor?.isSuspended)) throw new ApiError (403, "Vendor account is suspended or deleted. ")
-
-  // if(user.role === "CUSTOMER" && (user.customer?.isDeleted || user.customer?.isSuspended)) throw new ApiError (403, "Customer account is suspended or deleted. ")
 
   const { password: _, ...userWithoutPassword } = user;
 
@@ -124,6 +112,7 @@ const login = async (payload: TLogin) => {
     config.jwt.refresh_token_secret as Secret,
     config.jwt.refresh_token_expires_in as string
   );
+
 
   return {
     accessToken,

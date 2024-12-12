@@ -40,13 +40,14 @@ const SignInForm = () => {
         description: `${response.message}`,
       });
 
-      const user = response.data;
-      dispatch(setAuth(user));
-      if (response.data.role === "VENDOR") {
+      const user = response?.data?.userWithoutPassword;
+
+      dispatch(setAuth(response.data));
+      if (user?.role === "VENDOR") {
         router.push("/dashboard/vendor");
-      } else if (response.data.role === "CUSTOMER") {
+      } else if (user?.role === "CUSTOMER") {
         router.push("/dashboard/customer");
-      } else if (response.data.role === "ADMIN") {
+      } else if (user?.role === "ADMIN") {
         router.push("/dashboard/admin");
       }
     } catch (err: any) {

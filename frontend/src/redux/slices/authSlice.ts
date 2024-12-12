@@ -1,4 +1,4 @@
-import { AuthState, BackendUser, User } from "@/types";
+import { AuthState, BackendUser, User, UserWithoutPassword } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const getInitialUser = (): User | null => {
@@ -13,17 +13,8 @@ const initialState: AuthState = {
   user: getInitialUser(),
 };
 
-const customizeUser = (user: BackendUser): User => {
-
-  const {
-    name,
-    email,
-    id: userId,
-    role,
-    vendor,
-    customer,
-  } = user.userWithoutPassword;
-
+const customizeUser = (user: UserWithoutPassword): User => {
+  const { name, email, id: userId, role, vendor, customer } = user;
 
   // Determine the source of profilePhoto
   const profilePhoto = vendor?.profilePhoto || customer?.profilePhoto || null;
@@ -56,8 +47,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth(state, action: PayloadAction<BackendUser>) {
-      // console.log("action.payload", action.payload);
-      const customizedUser = customizeUser(action.payload);
+      const customizedUser = customizeUser(action.payload.userWithoutPassword);
       const accessToken = action.payload.accessToken;
       const refreshToken = action.payload.refreshToken;
 

@@ -1,10 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import Cookies from "js-cookie";
 
-const getTokenFromDocumentCookie = () => {
-  const cookies = document.cookie.split("; ");
-  const accessToken = cookies.find((row) => row.startsWith("accessToken="));
-  return accessToken ? accessToken.split("=")[1] : null;
+const getTokenFromLS = () => {
+  const token = localStorage.getItem("accessToken");
+
+  return token ? token : null;
 };
 
 export const baseApi = createApi({
@@ -14,10 +13,8 @@ export const baseApi = createApi({
     baseUrl: "http://localhost:5002/api/v1",
     credentials: "include",
     prepareHeaders: (headers) => {
-      const token = getTokenFromDocumentCookie();
-      if (!token) {
-        console.warn("Access token is missing.");
-      }
+      const token = getTokenFromLS();
+
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
@@ -25,6 +22,7 @@ export const baseApi = createApi({
       return headers;
     },
   }),
+
   tagTypes: [
     "Auth",
     "Admin",

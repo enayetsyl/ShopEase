@@ -46,6 +46,7 @@ export interface BackendUser {
   userWithoutPassword: UserWithoutPassword;
 }
 
+
 export interface AuthState {
   user: User | null;
 }
