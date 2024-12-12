@@ -47,26 +47,12 @@ export const sidebarItems: SidebarItems = {
 };
 
 export const selectButtonCategories = [
-  { id: "05d3a670-3197-4137-912d-d57c50581f96", name: "Home Appliances" },
-  { id: "34915d79-3115-4e7c-bd5b-96d7eb0a0b6a", name: "Baby Products" },
-  { id: "3b02d0b2-63d0-4e2b-b999-5228fa3b1045", name: "Jewellery" },
-  { id: "563efe82-f40e-48b4-bacd-745916862a48", name: "Electronics" },
-  { id: "5b25f29a-552e-4a20-9698-37a6b76be460", name: "Toys & Games" },
-  { id: "6c134d5e-9835-43da-bf17-19e8b23010b8", name: "Garden & Outdoor" },
-  { id: "71814689-5f7b-471b-9ebb-d0e9b4bfeca1", name: "Furniture" },
-  { id: "7bf4a97e-3eba-4388-bee6-e5055dd3cdd9", name: "Books & Stationery" },
-  { id: "8835fd34-bc22-44f6-a13a-d7f1c2eb6507", name: "Footwear" },
-  { id: "88e54436-9b11-4d70-982f-584e17cc3db9", name: "Watches" },
-  { id: "9822c8d2-22a8-4009-8332-ce82d3123a61", name: "Travel & Luggage" },
-  { id: "a6a1d24c-af45-41e6-840a-7645ce8e3bc8", name: "Health & Beauty" },
-  { id: "aa9bab83-7895-4d5f-8b08-2cf6d8c4dbc4", name: "Fashion" },
-  { id: "afe89159-9a3d-440e-8368-95a36bd69b1c", name: "Automotive" },
-  { id: "be5da69d-98cd-43f6-9ce9-9910317bedd6", name: "Mobile Accessories" },
-  { id: "ce1ea95f-ad0e-46b7-af5f-6326f7156256", name: "Kitchen & Dining" },
-  { id: "d88a07f6-c0d8-4fd8-95e4-01e1c0979eff", name: "Office Supplies" },
-  { id: "f40b4165-188e-4b28-af01-f6efc85d1c47", name: "Sports & Fitness" },
-  { id: "f56fa167-039a-4a6d-92e8-8e1e0dfe928b", name: "Pet Supplies" },
-  { id: "ff745c9f-706f-4446-a183-fc83055609b2", name: "Groceries" },
+  { id: "5f2afe7a-58d4-442f-9e2f-f430f69c3583", name: "Electronics" },
+  { id: "6c69c238-926f-4e75-87a5-73824d335fc8", name: "Fashion" },
+  { id: "d277e6cc-06a0-4b9b-9c4e-3d2f8d362f8b", name: "Home & Kitchen" },
+  { id: "4392db03-5479-42f9-900f-8aefd70a04fd", name: "Beauty & Personal Care" },
+  { id: "dfe36168-781f-4c77-a6f2-224199b3bfb6", name: "Sports & Outdoors" },
+  
 ];
 
 export const cardCategories = [
