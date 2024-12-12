@@ -10,7 +10,7 @@ export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     // baseUrl: "https://shopease-w422.onrender.com/api/v1",
-    baseUrl: "https://shop-ease-lyart.vercel.app/api/v1",
+    baseUrl: "https://shop-ease-fm2s1pdzp-md-enayetur-rahmans-projects.vercel.app/api/v1",
     // baseUrl: "http://localhost:5002/api/v1",
     credentials: "include",
     prepareHeaders: (headers) => {
