@@ -44,6 +44,19 @@ const NavigationMenu = () => {
     }
   };
 
+  const getDashboardPath = () => {
+    switch (user?.role) {
+      case "ADMIN":
+        return "/dashboard/admin";
+      case "VENDOR":
+        return "/dashboard/vendor";
+      case "CUSTOMER":
+        return "/dashboard/customer";
+      default:
+        return "/"; 
+    }
+  };
+
   return (
     <nav className="max-w-7xl fixed shadow-lg mx-auto w-full pt-1 z-40">
       <Menubar>
@@ -109,7 +122,7 @@ const NavigationMenu = () => {
                 <MenubarContent className="">
                   <MenubarItem>
                     <Link
-                      href="/dashboard"
+                      href={getDashboardPath()}
                       className="flex items-center gap-2 px-2 py-2 hover:bg-gray-100 cursor-pointer"
                     >
                       <LayoutDashboard />

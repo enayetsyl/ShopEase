@@ -517,7 +517,7 @@ Audit Logs (Admin)
 
 
 ### Task remaining to implement
-- Loading state adding
+- Loading state adding (shop page, flash sale page, product details page)
 - Skeleton adding
 - Interface file organized
 - All interface transferred to the index.d.ts
@@ -528,6 +528,9 @@ Audit Logs (Admin)
 - Vendor shop name, description and logo edit option should add. 
 - After data submit form field should be empty.
 - Price filtering
+- AI integration
+- Voice search integration
+- Proper error message should be shown for follow, unfollow and review 
 
 
 
