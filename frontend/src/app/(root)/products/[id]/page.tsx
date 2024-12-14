@@ -15,6 +15,7 @@ import { addProductId } from "@/redux/slices/recentProductsSlice";
 import ProductCard from "@/components/shared/ProductCard";
 import SkeletonCard from "@/components/shared/SkeletonCard";
 import Heading from "@/components/shared/CustomHeading";
+import ProductDetailsSkeleton from "@/components/product/ProductDetailsSkeleton";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -36,9 +37,9 @@ export default function ProductDetails() {
       categoryId: product?.categoryId,
     });
 
-
-  if (isSingleProductLoading || isRelatedProductsLoading)
-    return <div>Loading...</div>;
+  if (isSingleProductLoading) {
+    return <ProductDetailsSkeleton />;
+  }
   if (!product) return <div>Product not found</div>;
 
   const renderStars = (rating: number) => {
