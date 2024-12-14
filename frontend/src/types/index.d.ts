@@ -46,7 +46,6 @@ export interface BackendUser {
   userWithoutPassword: UserWithoutPassword;
 }
 
-
 export interface AuthState {
   user: User | null;
 }
@@ -510,13 +509,16 @@ export interface FollowResponse {
   };
 }
 
-// Error type
-export interface FollowError {
+export interface ErrorData {
   success: boolean;
   message: string;
   error?: {
     statusCode: number;
   };
+}
+// Error type
+export interface FollowError {
+  data: ErrorData;
 }
 
 export interface FollowerCountResponse {

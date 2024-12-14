@@ -45,10 +45,11 @@ const ShopDetail: React.FC = () => {
       refetch();
     } catch (error) {
       console.error("error in following", error);
+   
       const followError = error as FollowError;
       toast({
         title: "Error",
-        description: followError.message,
+        description: followError.data.message,
         variant: "destructive",
       });
     }
@@ -69,7 +70,7 @@ const ShopDetail: React.FC = () => {
       const unfollowError = error as FollowError;
       toast({
         title: "Error",
-        description: unfollowError.message,
+        description: unfollowError.data.message,
         variant: "destructive",
       });
     }

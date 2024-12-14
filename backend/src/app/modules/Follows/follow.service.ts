@@ -1,14 +1,6 @@
-import { Prisma } from "@prisma/client";
-import { paginationHelper } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 import ApiError from "../../errors/ApiError";
-import { TPaginationOptions } from "../../types/pagination";
-import { Request } from "express";
-import { TFile } from "../../types/file";
-import { fileUploader } from "../../../helpers/fileUploader";
-import { TProductFilterRequest } from "./follow.type";
-import { productSearchableFields } from "./follow.constant";
-import { findProductById } from "../../../helpers/productHelpers";
+
 
 const follow = async (user: any, id: { vendorId: string }) => {
   const customerId = user.customer.id;

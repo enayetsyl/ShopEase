@@ -7,7 +7,7 @@ import React from "react";
 
 const Shop = () => {
   const { data, isLoading } = useGetAllShopQuery({ page: 1, limit: 10 });
-  console.log("data", data);
+ 
 
   return (
     <>
