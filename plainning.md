@@ -517,8 +517,7 @@ Audit Logs (Admin)
 
 
 ### Task remaining to implement
-- Loading state adding (shop page, flash sale page, product details page)
-- Skeleton adding
+
 - Interface file organized
 - All interface transferred to the index.d.ts
 - Admin shop page columns transferred to separate file

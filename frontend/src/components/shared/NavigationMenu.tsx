@@ -58,7 +58,7 @@ const NavigationMenu = () => {
   };
 
   return (
-    <nav className="max-w-7xl fixed shadow-lg mx-auto w-full pt-1 z-40">
+    <nav className="max-w-[1440px] fixed shadow-lg mx-auto w-full pt-1 z-40">
       <Menubar>
         <div className="flex justify-between items-center w-full">
           {/* Fixed Menu Items */}

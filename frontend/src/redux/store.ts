@@ -3,6 +3,8 @@ import { baseApi } from "./api/baseApi";
 import authReducer from "@/redux/slices/authSlice";
 import cartReducer from "@/redux/slices/cartSlice";
 import recentProductsReducer from "@/redux/slices/recentProductsSlice";
+import chatReducer from "@/redux/slices/chatSlice";
+
 
 export const makeStore = () => {
   return configureStore({
@@ -10,6 +12,7 @@ export const makeStore = () => {
       auth: authReducer,
       cart: cartReducer,
       recentProducts: recentProductsReducer,
+      chat: chatReducer,
       [baseApi.reducerPath]: baseApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
