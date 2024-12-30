@@ -66,20 +66,24 @@ const AllProductContent = () => {
         text="Our Products"
         className="text-4xl lg:text-6xl text-center pb-20"
       />
-      <ProductFilters />
-      <div className="pt-20">
-        <div className="flex flex-wrap justify-center gap-6 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.productId} product={product} />
-          ))}
-          {isFetching &&
-            Array.from({ length: 4 }).map((_, idx) => (
-              <SkeletonCard key={idx} />
-            ))}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-y-8 md:gap-x-8 relative min-h-screen">
+        <div className="col-span-1 sticky top-20 self-start">
+          <ProductFilters />
         </div>
-        {!hasMore && (
-          <p className="text-center mt-4">No more products to load.</p>
-        )}
+        <div className="col-span-1 md:col-span-2 lg:col-span-3">
+          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <ProductCard key={product.productId} product={product} />
+            ))}
+            {isFetching &&
+              Array.from({ length: 3 }).map((_, idx) => (
+                <SkeletonCard key={idx} />
+              ))}
+          </div>
+          {!hasMore && (
+            <p className="text-center mt-4">No more products to load.</p>
+          )}
+        </div>
       </div>
       <div ref={observerRef} className="h-10"></div> {/* Observer target */}
     </div>

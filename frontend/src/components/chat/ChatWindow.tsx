@@ -81,7 +81,11 @@ const ChatWindow = () => {
 
   return (
     <div className="fixed bottom-2 lg:bottom-4 right-16">
-      <Popover onOpenChange={(isOpen) => (isOpen ? handlePopoverOpen() : handlePopoverClose())}>
+      <Popover
+        onOpenChange={(isOpen) =>
+          isOpen ? handlePopoverOpen() : handlePopoverClose()
+        }
+      >
         <PopoverTrigger className="p-3 rounded-full bg-primary text-primary-foreground shadow-lg cursor-pointer">
           <MessageCircle className="w-6 h-6" />
         </PopoverTrigger>

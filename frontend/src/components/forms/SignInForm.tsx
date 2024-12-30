@@ -57,6 +57,10 @@ const SignInForm = () => {
       });
     }
   };
+
+  const guestSubmit = () =>{
+
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
       <CustomInput
@@ -107,6 +111,7 @@ const SignInForm = () => {
       >
         {isLoading ? "Login In" : "Login Now"}
       </CustomButton>
+      <button className="bg-black text-white w-full rounded-md py-4 px-2 opacity-90 hover:opacity-100 font-medium text-lg duration-300">Guest Login</button>
     </form>
   );
 };
