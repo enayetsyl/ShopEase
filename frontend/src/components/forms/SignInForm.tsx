@@ -63,7 +63,7 @@ const SignInForm = () => {
         icon={<FaRegEnvelope />}
         placeholder="Email Address"
         type="email"
-        inputClassName="bg-white py-8 focus-visible:ring-0"
+        inputClassName="border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground py-8"
         {...register("email")}
         error={errors.email?.message as string | undefined}
       />
@@ -72,7 +72,7 @@ const SignInForm = () => {
         icon={<IoKeyOutline />}
         placeholder="Password"
         type="password"
-        inputClassName="bg-white py-8 focus-visible:ring-0"
+        inputClassName="border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground py-8"
         {...register("password")}
         error={errors.password?.message as string | undefined}
       />

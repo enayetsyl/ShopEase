@@ -20,6 +20,7 @@ model User {
   customer      Customer?
   vendor        Vendor?
   recentProduct RecentProduct[]
+  chat          Chat[]
 
   @@map("users")
 }
@@ -239,6 +240,14 @@ model RecentProduct {
   product   Product  @relation(fields: [productId], references: [id])
 
   @@map("recent_products")
+}
+
+model Chat {
+  id        String   @id @default(uuid())
+  userId    String
+  message   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 enum PaymentStatus {
