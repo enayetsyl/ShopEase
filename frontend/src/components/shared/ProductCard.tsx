@@ -79,7 +79,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   return (
-    <Link href={`/products/${id}`}>
+    <Link href={`/products/${id}`} className="flex justify-center items-center">
       <div
         className="group relative h-[420px] w-[300px] cursor-pointer overflow-hidden rounded-lg bg-white transition-all duration-300 hover:bg-gray-50 dark:bg-black"
         onMouseEnter={() => setIsHovered(true)}

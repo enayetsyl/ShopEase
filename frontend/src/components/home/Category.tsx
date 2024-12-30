@@ -5,7 +5,7 @@ import CategorySelectOption from "./CategorySelectOption";
 const Category = () => {
   return (
     <section className="py-16 px-4">
-      <div className="flex flex-col lg:flex-row justify-start items-center lg:gap-20">
+      <div className="flex flex-col lg:flex-row justify-between items-center lg:gap-20">
         <h2 className="text-2xl lg:text-5xl font-bold text-black dark:text-white mb-10">
           Top <span className="text-primary">Categories</span>
         </h2>

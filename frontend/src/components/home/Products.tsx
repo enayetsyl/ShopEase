@@ -61,7 +61,7 @@ const Products = () => {
         text="Our Products"
         className="text-4xl lg:text-6xl text-center pb-20"
       />
-      <div className="flex flex-wrap justify-center gap-6 sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
         {products.map((product) => (
           <ProductCard key={product.productId} product={product} />
         ))}
