@@ -1,54 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
 import ProductCard from "../shared/ProductCard";
 import { useGetProductsQuery } from "@/redux/api/productApi";
 import Heading from "../shared/CustomHeading";
 import { ProductData } from "@/types";
 import SkeletonCard from "../shared/SkeletonCard";
+import Link from "next/link";
 
 const Products = () => {
-  const [page, setPage] = useState(1);
-  const [products, setProducts] = useState<ProductData[]>([]);
-  const [hasMore, setHasMore] = useState(true);
+  const { data, isLoading, isFetching } = useGetProductsQuery({
+    page: 1,
+    limit: 4,
+  });
 
-  const { data, isLoading, isFetching } = useGetProductsQuery(
-    { page, limit: 10 },
-    { skip: !hasMore },
-  );
-
-  const observerRef = useRef(null);
-
-  // Append new products to the existing list
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setProducts((prev) => [...prev, ...data]);
-      if (data.length < 10) {
-        setHasMore(false); // No more products to load
-      }
-    }
-  }, [data]);
-
-  // Intersection Observer for detecting bottom of the list
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isFetching && hasMore) {
-          setPage((prev) => prev + 1); // Load the next page
-        }
-      },
-      { threshold: 1 },
-    );
-
-    if (observerRef.current) observer.observe(observerRef.current);
-
-    return () => {
-      if (observerRef.current) observer.unobserve(observerRef.current);
-    };
-  }, [isFetching, hasMore]);
-
-  if (isLoading && page === 1) {
+  if (isLoading) {
     return (
       <div className="flex justify-center gap-4 flex-wrap">
-        {Array.from({ length: 10 }).map((_, idx) => (
+        {Array.from({ length: 4 }).map((_, idx) => (
           <SkeletonCard key={idx} />
         ))}
       </div>
@@ -62,16 +28,21 @@ const Products = () => {
         className="text-4xl lg:text-6xl text-center pb-20"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:grid-cols-3 xl:grid-cols-4">
-        {products.map((product) => (
+        {data?.map((product: ProductData) => (
           <ProductCard key={product.productId} product={product} />
         ))}
-      {isFetching &&
-        Array.from({ length: 4 }).map((_, idx) => <SkeletonCard key={idx} />)}
+        {isFetching &&
+          Array.from({ length: 4 }).map((_, idx) => <SkeletonCard key={idx} />)}
       </div>
-      {!hasMore && (
-        <p className="text-center mt-4">No more products to load.</p>
-      )}
-      <div ref={observerRef} className="h-10"></div> {/* Observer Target */}
+
+      <div className="flex justify-center items-center mt-6">
+        <Link
+          href="/all-products"
+          className="bg-black text-white py-3 px-8 font-medium rounded-md bg-opacity-90 hover:bg-opacity-100 duration-300"
+        >
+          View All
+        </Link>
+      </div>
     </div>
   );
 };

@@ -53,7 +53,6 @@ const CategorySelectOption = ({
 
   return (
     <div className="flex items-center gap-4 mb-4 pb-5">
-      <h2 className="text-sm lg:text-2xl font-bold">Browse Categories</h2>
       <Select
         onValueChange={(value) =>
           router.push(`/all-products?categoryId=${value}`)

@@ -8,6 +8,7 @@ import {
   LogIn,
   LogOut,
   LayoutDashboard,
+  PackageSearch,
 } from "lucide-react";
 
 import {
@@ -53,7 +54,7 @@ const NavigationMenu = () => {
       case "CUSTOMER":
         return "/dashboard/customer";
       default:
-        return "/"; 
+        return "/";
     }
   };
 
@@ -77,6 +78,14 @@ const NavigationMenu = () => {
                 <Link href="/shop" className="flex items-center gap-1">
                   <Store />
                   Shop
+                </Link>
+              </MenubarTrigger>
+            </MenubarMenu>
+            <MenubarMenu>
+              <MenubarTrigger>
+                <Link href="/all-products" className="flex items-center gap-1">
+                  <PackageSearch />
+                  All Products
                 </Link>
               </MenubarTrigger>
             </MenubarMenu>

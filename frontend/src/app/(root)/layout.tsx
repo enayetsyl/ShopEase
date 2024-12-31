@@ -1,5 +1,6 @@
 import ChatWindow from "@/components/chat/ChatWindow";
 import BackToTop from "@/components/shared/BackToTop";
+import Footer from "@/components/shared/Footer";
 import NavigationMenu from "@/components/shared/NavigationMenu";
 
 export default function Layout({
@@ -14,6 +15,7 @@ export default function Layout({
         <div className="pt-20">{children}</div>
         <ChatWindow />
         <BackToTop />
+        <Footer />
       </div>
     </main>
   );
