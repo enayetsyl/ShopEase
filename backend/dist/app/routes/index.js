@@ -14,6 +14,7 @@ const order_route_1 = require("../modules/Order/order.route");
 const follow_route_1 = require("../modules/Follows/follow.route");
 const reviews_route_1 = require("../modules/Reviews/reviews.route");
 const recentProduct_route_1 = require("../modules/RecentProduct/recentProduct.route");
+const chatbot_route_1 = require("../modules/Chatbot/chatbot.route");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
@@ -55,6 +56,10 @@ const moduleRoutes = [
     {
         path: "/recent-products",
         route: recentProduct_route_1.RecentProductRoutes,
+    },
+    {
+        path: "/chat-bot",
+        route: chatbot_route_1.ChatBotRoutes,
     },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

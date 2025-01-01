@@ -6,8 +6,20 @@ import serviceFour from "../../../public/images/icon-4.webp";
 import Image from "next/image";
 import Heading from "../shared/CustomHeading";
 
-const WhyChooseUs = () => {
-  const serviceData = [
+// Define a type for the service object
+interface Service {
+  img: { src: string }; 
+  title: string;
+  desc: string;
+}
+
+// Component Props type for the Card component
+interface CardProps {
+  service: Service;
+}
+
+const WhyChooseUs: React.FC  = () => {
+  const serviceData: Service[] = [
     {
       img: serviceOne,
       title: "BIG DISCOUNTS",
@@ -30,7 +42,7 @@ const WhyChooseUs = () => {
     },
   ];
 
-  const Card = ({ service }) => {
+  const Card: React.FC<CardProps> = ({ service }) => {
     const { img, title, desc } = service;
     return (
       <div className="flex flex-col gap-y-4 md:px-4">

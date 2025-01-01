@@ -28,4 +28,5 @@ exports.default = {
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
 };
