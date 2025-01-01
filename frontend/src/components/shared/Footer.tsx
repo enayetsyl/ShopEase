@@ -43,9 +43,17 @@ const Footer = () => {
         ))}
       </div>
       <div className="flex gap-8 items-center my-2">
+     
+        <Link href="https://www.facebook.com/profile.php?id=100094416483981" target="_blank">
         <Facebook />
-        <Instagram />
+        </Link>
+        <Link href="https://www.instagram.com/enayetflweb/" target="_blank">
+          <Instagram />
+        </Link>
+        <Link href="https://x.com/enayetu_syl" target="_blank">
         <Twitter />
+        </Link>
+        
       </div>
 
       <p className="text-sm opacity-50 my-6 text-center">
