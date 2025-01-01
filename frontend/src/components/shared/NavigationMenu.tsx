@@ -45,8 +45,8 @@ const NavigationMenu = () => {
     }
   };
 
-  const getDashboardPath = () => {
-    switch (user?.role) {
+  const getDashboardPath = (role?: "ADMIN" | "VENDOR" | "CUSTOMER") => {
+    switch (role) {
       case "ADMIN":
         return "/dashboard/admin";
       case "VENDOR":
@@ -57,6 +57,33 @@ const NavigationMenu = () => {
         return "/";
     }
   };
+  
+  const dashboardLink = getDashboardPath(user?.role);
+  
+   // Reusable Menu Item Component
+   const MenuItem = ({
+    href,
+    icon: Icon,
+    label,
+    children,
+  }: {
+    href: string;
+    icon?: React.ElementType;
+    label?: string;
+    children?: React.ReactNode;
+  }) => (
+    <MenubarMenu>
+      <MenubarTrigger>
+        <Link href={href} className="flex items-center gap-1">
+          {Icon && <Icon />}
+          {label}
+        </Link>
+      </MenubarTrigger>
+      {children}
+    </MenubarMenu>
+  );
+
+
 
   return (
     <nav className="max-w-[1440px] fixed shadow-lg mx-auto w-full pt-1 z-40">
@@ -64,53 +91,17 @@ const NavigationMenu = () => {
         <div className="flex justify-between items-center w-full">
           {/* Fixed Menu Items */}
           <div className="flex items-center flex-grow">
-            <MenubarMenu>
-              <MenubarTrigger>
-                <Link href="/" className="flex items-center gap-1">
-                  <House />
-                  Home
-                </Link>
-              </MenubarTrigger>
-            </MenubarMenu>
-
-            <MenubarMenu>
-              <MenubarTrigger>
-                <Link href="/shop" className="flex items-center gap-1">
-                  <Store />
-                  Shop
-                </Link>
-              </MenubarTrigger>
-            </MenubarMenu>
-            <MenubarMenu>
-              <MenubarTrigger>
-                <Link href="/all-products" className="flex items-center gap-1">
-                  <PackageSearch />
-                  All Products
-                </Link>
-              </MenubarTrigger>
-            </MenubarMenu>
-
-            <MenubarMenu>
-              <MenubarTrigger>
-                <Link href="/flash-sale" className="flex items-center gap-1">
-                  <Zap />
-                  Flash Sale
-                </Link>
-              </MenubarTrigger>
-            </MenubarMenu>
-
-            <MenubarMenu>
-              <MenubarTrigger>
-                <Link href="/cart" className=" relative flex items-center ">
-                  <ShoppingCart size={20} />
-                  {cartItemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold">
-                      {cartItemCount}
-                    </span>
-                  )}
-                </Link>
-              </MenubarTrigger>
-            </MenubarMenu>
+            <MenuItem href="/" icon={House} label="Home" />
+            <MenuItem href="/shop" icon={Store} label="Shop" />
+            <MenuItem href="/all-products" icon={PackageSearch} label="All Products" />
+            <MenuItem href="/flash-sale" icon={Zap} label="Flash Sale" />
+            <MenuItem href="/cart" icon={ShoppingCart}>
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-xs font-bold">
+                  {cartItemCount}
+                </span>
+              )}
+            </MenuItem>
           </div>
 
           {/* Conditional Menu: Login or Avatar */}
@@ -118,20 +109,20 @@ const NavigationMenu = () => {
             <MenubarMenu>
               {!user ? (
                 <MenubarTrigger>
-                  <Link href="/sign-in" className="flex items-center gap-1 ">
+                  <Link href="/sign-in" className="flex items-center gap-1">
                     <LogIn />
                   </Link>
                 </MenubarTrigger>
               ) : (
                 <MenubarTrigger>
-                  <CircleUserRound size={24} className=" hover:text-black" />
+                  <CircleUserRound size={24} className="hover:text-black" />
                 </MenubarTrigger>
               )}
               {user && (
-                <MenubarContent className="">
+                <MenubarContent>
                   <MenubarItem>
                     <Link
-                      href={getDashboardPath()}
+                      href={dashboardLink}
                       className="flex items-center gap-2 px-2 py-2 hover:bg-gray-100 cursor-pointer"
                     >
                       <LayoutDashboard />
