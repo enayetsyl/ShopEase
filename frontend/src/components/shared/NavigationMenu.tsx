@@ -57,11 +57,11 @@ const NavigationMenu = () => {
         return "/";
     }
   };
-  
+
   const dashboardLink = getDashboardPath(user?.role);
-  
-   // Reusable Menu Item Component
-   const MenuItem = ({
+
+  // Reusable Menu Item Component
+  const MenuItem = ({
     href,
     icon: Icon,
     label,
@@ -83,8 +83,6 @@ const NavigationMenu = () => {
     </MenubarMenu>
   );
 
-
-
   return (
     <nav className="max-w-[1440px] fixed shadow-lg mx-auto w-full pt-1 z-40">
       <Menubar>
@@ -93,7 +91,11 @@ const NavigationMenu = () => {
           <div className="flex items-center flex-grow">
             <MenuItem href="/" icon={House} label="Home" />
             <MenuItem href="/shop" icon={Store} label="Shop" />
-            <MenuItem href="/all-products" icon={PackageSearch} label="All Products" />
+            <MenuItem
+              href="/all-products"
+              icon={PackageSearch}
+              label="All Products"
+            />
             <MenuItem href="/flash-sale" icon={Zap} label="Flash Sale" />
             <MenuItem href="/cart" icon={ShoppingCart}>
               {cartItemCount > 0 && (
