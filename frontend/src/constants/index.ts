@@ -47,13 +47,13 @@ export const sidebarItems: SidebarItems = {
 };
 
 export const selectButtonCategories = [
-  { id: "5f2afe7a-58d4-442f-9e2f-f430f69c3583", name: "Electronics" },
-  { id: "6c69c238-926f-4e75-87a5-73824d335fc8", name: "Fashion" },
-  { id: "d277e6cc-06a0-4b9b-9c4e-3d2f8d362f8b", name: "Home & Kitchen" },
-  { id: "4392db03-5479-42f9-900f-8aefd70a04fd", name: "Beauty & Personal Care" },
-  { id: "dfe36168-781f-4c77-a6f2-224199b3bfb6", name: "Sports & Outdoors" },
-  
+  { id: "5f2afe7a-58d4-442f-9e2f-f430f69c3583", name: "Electronics", count: 9, icon: "🔊" },
+  { id: "6c69c238-926f-4e75-87a5-73824d335fc8", name: "Fashion", count: 15, icon: "👗" },
+  { id: "d277e6cc-06a0-4b9b-9c4e-3d2f8d362f8b", name: "Home & Kitchen", count: 20, icon: "🪑" },
+  { id: "4392db03-5479-42f9-900f-8aefd70a04fd", name: "Beauty & Personal Care", count: 12, icon: "💄" },
+  { id: "dfe36168-781f-4c77-a6f2-224199b3bfb6", name: "Sports & Outdoors", count: 8, icon: "⚽" }
 ];
+
 
 export const cardCategories = [
   { id: 1, title: "Driftwood Table Decor", count: 20, icon: "🪑" },

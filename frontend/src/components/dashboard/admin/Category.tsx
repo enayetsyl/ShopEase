@@ -3,7 +3,7 @@ import CustomButton from "@/components/shared/CustomButton";
 import Heading from "@/components/shared/CustomHeading";
 import { DataTable } from "@/components/shared/DataTable";
 import { AdminCategoryTableColumns } from "@/components/shared/tableColumnDef/AdminCategoryTableColumns";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import {
   Category as ICategory,
@@ -14,6 +14,7 @@ import {
 import { Pencil, Trash } from "lucide-react";
 import React, { useState } from "react";
 import EditCategoryInfoModal from "./category/EditCategoryInfoModal";
+import AddCategoryModal from "./category/AddCategoryModal";
 
 const Category = () => {
   const [page, setPage] = useState(1);
@@ -21,11 +22,9 @@ const Category = () => {
   const { data } = useGetCategoriesQuery({ page, limit });
   const [updateCategory, { isLoading }] = useUpdateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
-  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
-    null,
-  );
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(    null,  );
   const [isEditOpen, setIsEditOpen] = useState(false);
-
+  const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
   const { toast } = useToast();
 
   const totalPages = Math.ceil((data?.meta?.total || 0) / limit);
@@ -111,8 +110,22 @@ const Category = () => {
         title="Category Page"
       />
       <div className="p-5 pb-20">
-        <div className="flex justify-center items-center pt-10 pb-20">
+      <div className="flex justify-between items-center pt-10 pb-10">
           <Heading text="Categories" className="text-4xl lg:text-6xl" />
+          {/* <Dialog
+            open={isAddCategoryOpen}
+            onOpenChange={setIsAddCategoryOpen}
+          >
+            <DialogTrigger asChild>
+              <CustomButton
+                className="bg-primary text-white"
+                onClick={() => setIsAddCategoryOpen(true)}
+              >
+                Add Category
+              </CustomButton>
+            </DialogTrigger>
+            <AddCategoryModal onClose={() => setIsAddCategoryOpen(false)} />
+          </Dialog> */}
         </div>
         <DataTable
           data={data?.data || []}
